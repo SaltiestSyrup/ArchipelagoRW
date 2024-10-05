@@ -26,6 +26,7 @@ Currently, randomization assumes you are playing Survivor's campaign.
 ## Is the Archipelago mod compatible with other mods or DLC?
 
 - **More Slugcats Expansion** (Downpour): (UNIMPLEMENTED)
+(Currently, MSC is *required*.  This will change.)
 Tokens, regions, and passages added are fully supported.
 **Make sure you set the DLC setting correctly in your YAML!**
 
@@ -56,21 +57,18 @@ Though the Mark is required for the pearls to make progress towards to The Schol
 it is not necessary for the checks.
 
 - **Echoes**
-(UNIMPLEMENTED)
 Each Echo is its own check.
 You do not need the Mark of Communication to check an Echo.
 However, having the Mark will allow the Echo to impart a (partial) item hint.
 
 - **Passages**
-(UNIMPLEMENTED)
 Completing a Passage is a check.
 Note that which Passages are logically possible depends on
 whether you enabled `Passage progress without Survivor` in the YAML.
 _The Wanderer_ additionally awards a check for each pip (each region hibernated in).
 
 - **Food quest**
-(UNIMPLEMENTED)
-If enabled, every 3 points toward the food quest is a check.
+If enabled, every point toward the food quest is a check.
 The food quest can be made to appear even if not playing Gourmand's campaign.
 
 ## What items are added to the pool?
