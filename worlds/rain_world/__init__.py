@@ -1,7 +1,9 @@
 import random
 
+from Options import OptionGroup
 from .events import all_events
-from .items import RainWorldItem, all_items, RainWorldItemData  # data used below to add items to the World
+from .general_helpers import flounder2, normalize
+from .items import RainWorldItem, all_items, RainWorldItemData
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Item, ItemClassification, Tutorial, LocationProgressType
 from . import constants, state_helpers
@@ -10,6 +12,7 @@ from .classes import location_name_to_id, RainWorldRegion, RegionData
 from .regions_new import all_regions, all_connections
 from .locations_new import all_locations, location_map
 from .rules import all_rules
+from Utils import visualize_regions
 
 
 class RainWorldWebWorld(WebWorld):
@@ -21,6 +24,7 @@ class RainWorldWebWorld(WebWorld):
         "setup/en",
         ["alphappy"]
     )]
+    option_groups = options.option_groups
 
 
 class RainWorldWorld(World):
@@ -59,13 +63,14 @@ class RainWorldWorld(World):
 
         self.location_count = len(all_locations)
 
-        priority_locs = ["FQ|12"]
-        for name in priority_locs:
-            self.multiworld.get_location(name, self.player).progress_type = LocationProgressType.PRIORITY
-
         for n in range(self.options.maximum_required_food_quest_pips + 1, 23):
             self.multiworld.get_location(f'FQ|{n}', self.player).progress_type = (
                 LocationProgressType.EXCLUDED)
+
+        if self.options.passage_progress_without_survivor:
+            self.multiworld.get_region('Menu', self.player).connect(
+                self.multiworld.get_region('PPwS Passages', self.player)
+            )
 
         # menu_region = Region("Menu", self.player, self.multiworld)
         #
@@ -104,7 +109,7 @@ class RainWorldWorld(World):
                 item.precollect += 1
 
         all_items["Karma cap increase"].count += self.options.extra_karma_cap_increases
-        all_items["Karma cap increase"].precollect += self.options.starting_karma - 1
+        # all_items["Karma cap increase"].precollect += self.options.starting_karma - 1
 
         for item_data in items.all_items.values():
             for i in range(item_data.count):
@@ -115,8 +120,47 @@ class RainWorldWorld(World):
                     self.multiworld.push_precollected(item_data.generate_item(self.player))
                     item_data.precollect -= 1
 
-        for _ in range(self.location_count - added_items):
-            self.multiworld.itempool.append(self.create_item("Rock"))
+        remaining_slots = self.location_count - added_items
+        trap_fraction = self.options.pct_traps / 100
+
+        nontrap_weights = normalize({
+            "Rock": self.options.wt_rocks / 100,
+            "Spear": self.options.wt_spears / 100,
+            "Grenade": self.options.wt_grenades / 100,
+            "Fuit": self.options.wt_fruit / 100,
+        })
+
+        trap_weights = normalize({
+            "Stun Trap": self.options.wt_stuns / 100,
+            "Zoomies Trap": self.options.wt_zoomies / 100,
+            "Timer Trap": self.options.wt_timers / 100,
+            "Red Lizard Trap": self.options.wt_redlizard / 100,
+            "Red Centipede Trap": self.options.wt_redcentipede / 100,
+            "Spitter Spider Trap": self.options.wt_spitterspider / 100
+        })
+
+        d: dict[str, float] = {}
+        d.update({k: v * (1 - trap_fraction) for k, v in nontrap_weights.items()})
+        d.update({k: v * trap_fraction for k, v in trap_weights.items()})
+
+        self.multiworld.itempool += [self.create_item(e) for e in flounder2(d, remaining_slots)]
+        #
+        # filler_weight_total = sum(items.filler_weights.values())
+        # for item_name, weight in items.filler_weights.items():
+        #     amt = int(fillers_to_add * weight / filler_weight_total)
+        #     for _ in range(amt):
+        #         self.multiworld.itempool.append(self.create_item(item_name))
+        #     added_items += amt
+        #
+        # trap_weight_total = sum(items.trap_weights.values())
+        # for item_name, weight in items.trap_weights.items():
+        #     amt = int(traps_to_add * weight / trap_weight_total)
+        #     for _ in range(amt):
+        #         self.multiworld.itempool.append(self.create_item(item_name))
+        #     added_items += amt
+
+        # for _ in range(self.location_count - added_items):
+        #     self.multiworld.itempool.append(self.create_item("Rock"))
 
     def set_rules(self) -> None:
         ascension_item = Item("Ascension", ItemClassification.progression, None, self.player)
@@ -126,5 +170,4 @@ class RainWorldWorld(World):
         for data in all_rules:
             data.make(self.player, self.multiworld)
 
-        from Utils import visualize_regions
         visualize_regions(self.multiworld.get_region("Menu", self.player), "my_world.puml", show_locations=False)

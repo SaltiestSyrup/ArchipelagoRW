@@ -25,11 +25,11 @@ all_rules: list[LocationAccessRule] = [
 ]
 
 all_rules += [
-    LocationAccessRule(f"Wa|{p}", state_helpers.wanderer_factory_factory(p))
+    LocationAccessRule(f"Wa|{p:0>2}", state_helpers.wanderer_factory_factory(p))
     for p in range(1, 14)
 ]
 
 all_rules += [
-    LocationAccessRule(f"FQ|{p}", state_helpers.food_quest_factory_factory(p))
+    LocationAccessRule(f"FQ|{p:0>2}", state_helpers.food_quest_factory_factory(p))
     for p in range(1, 23)
 ]

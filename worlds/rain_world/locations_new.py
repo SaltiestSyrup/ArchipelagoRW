@@ -191,10 +191,10 @@ all_locations: list[LocationData] = [
     Passage("Chieftain", "Late Passages", 5040),
     Passage("Hunter", "Late Passages", 5041),
     Passage("Monk", "Late Passages", 5042),
-    Passage("Nomad", "Late Passages", 5043),  # TODO who was responsible for making this one honestly
+    # Passage("Nomad", "Late Passages", 5043),  # TODO who was responsible for making this one honestly
     Passage("Outlaw", "Late Passages", 5044),
     Passage("Saint", "Late Passages", 5045),
-    Passage("Scholar", "Late Passages", 5046),
+    # Passage("Scholar", "Late Passages", 5046),  # TODO
 
     Echo("CC", "Chimney Canopy", 5070, ""),
     Echo("SH", "Shaded Citadel", 5071, ""),
@@ -207,6 +207,6 @@ all_locations: list[LocationData] = [
 ]
 
 # food quest, 5101 - 5123
-all_locations += [LocationData(f"FQ|{n}", f"FQ|{n}", "Food Quest", 5100 + n) for n in range(1, 23)]
+all_locations += [LocationData(f"FQ|{n:0>2}", f"FQ|{n:0>2}", "Food Quest", 5100 + n) for n in range(1, 23)]
 # wanderer pips, 5151 - 5164
-all_locations += [LocationData(f"Wa|{n}", f"Wa|{n}", "PPwS Passages", 5150 + n) for n in range(1, 14)]
+all_locations += [LocationData(f"Wa|{n:0>2}", f"Wa|{n:0>2}", "PPwS Passages", 5150 + n) for n in range(1, 14)]

@@ -77,7 +77,7 @@ all_regions = [
 
 all_connections = [
     ConnectionData("Menu", "Early Passages"),
-    ConnectionData("Menu", "PPwS Passages"),
+    ConnectionData("Late Passages", "PPwS Passages"),  # default connect PPwS to late to require survivor
     ConnectionData("Menu", "Food Quest"),
     ConnectionData("Early Passages", "Late Passages", state_helpers.haves_survivor_factory),
     ConnectionData("Menu", "Outskirts"),

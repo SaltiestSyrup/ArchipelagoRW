@@ -30,15 +30,26 @@ def max_karma_factory_factory(karma: int) -> Callable[[int], Callable[[Collectio
     return max_karma_factory
 
 
+LIZARDS = [
+    "Blue Liz", "Green Liz", "Pink Liz", "White Liz", "Red Liz", "Cyan Liz", "Black Liz", "Caramel Liz", "Yellow Liz"
+]
+
+
 def lizard_factory_factory(count: int):
     def lizard_factory(player: int):
         def lizard_inner(state: CollectionState) -> bool:
-            return state.has_from_list_unique(
-                ["Blue Liz", "Green Liz", "Pink Liz", "White Liz", "Red Liz", "Cyan Liz", "Black Liz", "Caramel Liz", "Yellow Liz"],
-                player, count
-            )
+            return state.has_from_list_unique(LIZARDS, player, count)
         return lizard_inner
     return lizard_factory
+
+
+def lizard_passage_factory_factory(count: int, ppws: bool):
+    def lizard_passage_factory(player: int):
+        def lizard_passage_inner(state: CollectionState) -> bool:
+            return ((ppws or state.can_reach_location("Pa|Survivor", player)) and
+                    state.has_from_list_unique(LIZARDS, player, count))
+        return lizard_passage_inner
+    return lizard_passage_factory
 
 
 def wanderer_factory_factory(count: int):
@@ -61,6 +72,12 @@ def haves_survivor_factory(player: int):
     return haves_survivor_inner
 
 
+def haves_survivor_or_ppws_factory(player: int):
+    def haves_survivor_inner(state: CollectionState) -> bool:
+        return state.can_reach_location('Pa|Survivor', player)
+    return haves_survivor_inner
+
+
 def food_quest_factory_factory(count: int):
     def food_quest_factory(player: int):
         def food_quest_inner(state: CollectionState) -> bool:
@@ -75,3 +92,4 @@ def food_quest_factory_factory(count: int):
             )
         return food_quest_inner
     return food_quest_factory
+

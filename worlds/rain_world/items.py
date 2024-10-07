@@ -1,5 +1,5 @@
 from BaseClasses import Item, ItemClassification
-from typing import NamedTuple, Optional, Dict
+from typing import Optional, Dict
 from . import constants
 
 
@@ -47,6 +47,18 @@ all_items: Dict[str, RainWorldItemData] = {
     #################################################################
     # FILLER
     "Rock": RainWorldItemData("Rock", 200 + offset, ItemClassification.filler, 0),
+    "Spear": RainWorldItemData("Spear", 201 + offset, ItemClassification.filler, 0),
+    "Grenade": RainWorldItemData("Grenade", 202 + offset, ItemClassification.filler, 0),
+    "Fuit": RainWorldItemData("Fuit", 203 + offset, ItemClassification.filler, 0),
+
+    #################################################################
+    # TRAPS
+    "Stun Trap": RainWorldItemData("Stun Trap", 300 + offset, ItemClassification.trap, 0),
+    "Zoomies Trap": RainWorldItemData("Zoomies Trap", 301 + offset, ItemClassification.trap, 0),
+    "Timer Trap": RainWorldItemData("Timer Trap", 302 + offset, ItemClassification.trap, 0),
+    "Red Lizard Trap": RainWorldItemData("Red Lizard Trap", 303 + offset, ItemClassification.trap, 0),
+    "Red Centipede Trap": RainWorldItemData("Red Centipede Trap", 304 + offset, ItemClassification.trap, 0),
+    "Spitter Spider Trap": RainWorldItemData("Spitter Spider Trap", 305 + offset, ItemClassification.trap, 0),
 }
 
 item_name_to_id: Dict[str, int] = {
