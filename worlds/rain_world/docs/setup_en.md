@@ -10,32 +10,36 @@ You can use the [game options page](/games/Risk%20of%20Rain%202/player-options) 
 website to generate a YAML using a graphical interface.
 You can also edit this file directly if you understand the format.
 
-## 2. Enable the Archipelago mod
+## 2. Enable the Dev Console and Archipelago mods
 
 ### Option A: Install via Steam Workshop
 
-Subscribe to the Archipelago mod on the Workshop (LINK TODO),
-enable the mod in the Remix menu, then restart Rain World.
+1. Subscribe to the Dev Console mod
+[on the Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=2920528044).
+2. Subscribe to the Archipelago mod on the Workshop (TODO).
+3. Enable both in the in-game Remix menu.
+4. Restart Rain World.
 
-The mod can be automatically updated through the Workshop.
+### Option B: Install as local mods
 
-### Option B: Install as a local mod
+1. Download Dev Console [from GitHub](https://github.com/SlimeCubed/DevConsole).
+2. From that repository, copy the folder `Remix\slime-cubed.devconsole`
+to `Rain World\RainWorld_Data\StreamingAssets\mods\slime-cubed.devconsole`.
+3. Download the Archipelago mod from GitHub (TODO).
+4. From that repository, copy the folder `mod`
+to `Rain World\RainWorld_Data\StreamingAssets\mods\archipelago`.
+5. Enable both in the in-game Remix menu.
+6. Restart Rain World.
 
-Download the mod folder from the GitHub repository (LINK TODO)
-and place it in `Rain World\RainWorld_Data\StreamingAssets\mods`.
-Enable the mod in the Remix menu, then restart Rain World.
-
-The mod will not be automatically updated.
-Updates will require you to re-download from the GitHub repository.
-
-## 3. Test that the mod is working
+## 3. Test that the mods are working
 
 There are three things that should always happen when the mod is working as intended:
-1. Clicking on Archipelago in the Remix menu should open its Remix interface
+1. The Dev Console should open when its keybind is pressed.
+By default, it is <code>`</code> (backtick / backquote),
+but this can be changed in its Remix menu.
+2. (UNIMPLEMENTED) Clicking on Archipelago in the Remix menu should open its Remix interface
 (as opposed to warning that the mod does not define a Remix interface).
-2. Opening the Story select menu should show the interface for connecting to an Archipelago room.
-3. `Rain World\BepInEx\LogOutput.log` should contain a line that reads
-`[Debug  :Archipelago] Initialization completed without exception`.
+3. Dev Console autocomplete should recommend the commands `apconnect` and `apdisconnect` as you type them.
 
 ## 4. Set Remix settings
 
@@ -48,18 +52,27 @@ For all other Rain World Remix settings, the choice is yours.
 
 ## 5. Join an Archipelago room
 
-On the Story select screen, you should see an interface
-for entering the information necessary to connect to an Archipelago room (IMAGE TODO):
- - Name: your name in the multiworld. This must match the name in the YAML.
- - Password: the password for the room.  Leave blank if the room has no password.
- - Server: URL to the room's host, including port number.
-This usually looks something like `archipelago.gg:12345` or `localhost:38281`.
+When the Archipelago room is open, open the Dev Console and connect by sending the command
+`apconnect <HOST> <NAME> <PASSWORD>`.
+- `<HOST>` should include the port number.
+- `<NAME>` must *exactly* match the name in your settings YAML.
+- `<PASSWORD>` must *exactly* match the room password, but can be omitted if no password was set.
 
-Click `CONNECT` and the status text should change to the room.
-At that point, you can start the Story campaign to begin.
+For instance, the command might look like `apconnect localhost:38281 hunter`
+or `apconnect archipelago.gg:22222 monk ErraticPulse5`.
+
+A message should be returned indicating a successful connection.
+At that point, you can start a Story campaign to begin.
 
 The client will remain connected if you go back out to the main menu or any other menu.
-It will not remain connected if you close or hot-reload the game (e.g., via Rain Reloader).
+It may not remain connected if you close or hot-reload the game (e.g., via Rain Reloader),
+or if the host address or port number changes.
+To disconnect, run the command `apdisconnect`.
+
+You can use `apsay` to send a text message to the room.
+This works like the regular text client;
+for instance, you can `!hint` an item by sending, e.g.,
+`apsay !hint key to outskirts`.
 
 For details on everything that gets randomized,
 see the [game description page](en_Rain%20World.md).
