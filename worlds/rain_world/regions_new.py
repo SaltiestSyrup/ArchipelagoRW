@@ -48,6 +48,8 @@ all_regions = [
     RegionData("PPwS Passages", "(P2)"),
     RegionData("Late Passages", "(P3)"),
     RegionData("Food Quest", "(FQ)"),
+    RegionData("Starting region", "START"),
+
     RegionData("Outskirts", "SU"),
     RegionData("Outskirts filtration", "SU^"),
     RegionData("Industrial Complex", "HI"),
@@ -80,7 +82,7 @@ all_connections = [
     ConnectionData("Late Passages", "PPwS Passages"),  # default connect PPwS to late to require survivor
     ConnectionData("Menu", "Food Quest"),
     ConnectionData("Early Passages", "Late Passages", state_helpers.haves_survivor_factory),
-    ConnectionData("Menu", "Outskirts"),
+    ConnectionData("Menu", "Starting region"),
 
     ConnectionData("Outskirts filtration", "Outskirts"),
     Gate("Outskirts", "Industrial Complex", 3),

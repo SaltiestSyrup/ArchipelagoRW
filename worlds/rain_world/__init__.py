@@ -1,6 +1,7 @@
 import random
+from typing import Mapping, Any
 
-from Options import OptionGroup
+from .constants import REGION_CODE_DICT
 from .events import all_events
 from .general_helpers import flounder2, normalize
 from .items import RainWorldItem, all_items, RainWorldItemData
@@ -47,6 +48,7 @@ class RainWorldWorld(World):
     # }
 
     location_count = 0
+    starting_region = 'SU'
 
     def create_regions(self):
         for data in all_regions:
@@ -71,6 +73,12 @@ class RainWorldWorld(World):
             self.multiworld.get_region('Menu', self.player).connect(
                 self.multiworld.get_region('PPwS Passages', self.player)
             )
+
+        if self.options.random_starting_shelter:
+            self.starting_region = random.choice(['SU', 'HI', 'DS', 'LF'])
+
+        start = self.multiworld.get_region(REGION_CODE_DICT[self.starting_region], self.player)
+        self.multiworld.get_region('Starting region', self.player).connect(start)
 
         # menu_region = Region("Menu", self.player, self.multiworld)
         #
@@ -171,3 +179,8 @@ class RainWorldWorld(World):
             data.make(self.player, self.multiworld)
 
         visualize_regions(self.multiworld.get_region("Menu", self.player), "my_world.puml", show_locations=False)
+
+    def fill_slot_data(self) -> Mapping[str, Any]:
+        d = self.options.as_dict("which_world_state")
+        d['STARTING_SHELTER'] = self.starting_region
+        return d
