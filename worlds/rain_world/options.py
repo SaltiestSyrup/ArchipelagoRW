@@ -32,6 +32,19 @@ class WhichWorldstate(Choice):
     default = 1
 
 
+class FoodQuestMode(Choice):
+    """How food quest checks are awarded.
+
+    In **per-count** mode, checks are associated with total numbers of food quest items
+    (e.g. `FQ|02` is always the second food quest check, regardless of which foods are consumed).
+
+    In **per-food** mode, each food has its own check (e.g., blue fruit is always `FQ|02`)."""
+    rich_text_doc = True
+    display_name = "(UNIMPLEMENTED) Food quest mode"
+    option_per_count = 0
+    option_per_food = 1
+
+
 class RegionKeys(Range):
     """Number of random region keys to start with."""
     display_name = "Starting region keys"
@@ -166,6 +179,7 @@ class RainWorldOptions(PerGameCommonOptions):
     passage_progress_without_survivor: PassageProgressWithoutSurvivor
     more_slugcats_expansion_enabled: MoreSlugcatsExpansionEnabled
     which_worldstate: WhichWorldstate
+    food_quest_mode: FoodQuestMode
 
     region_keys: RegionKeys
     random_starting_shelter: RandomStartingShelter
@@ -190,7 +204,10 @@ class RainWorldOptions(PerGameCommonOptions):
 
 
 option_groups = [
-    OptionGroup("Important", [PassageProgressWithoutSurvivor, MoreSlugcatsExpansionEnabled, WhichWorldstate]),
+    OptionGroup(
+        "Important",
+        [PassageProgressWithoutSurvivor, MoreSlugcatsExpansionEnabled, WhichWorldstate, FoodQuestMode]
+    ),
     OptionGroup("Start settings", [RegionKeys, RandomStartingShelter], True),
     OptionGroup("Progression item settings", [ExtraKarmaCapIncreases], True),
     OptionGroup("Location settings", [MaximumRequiredFoodQuestPips, PassagePriority], True),

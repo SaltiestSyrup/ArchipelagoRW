@@ -181,6 +181,6 @@ class RainWorldWorld(World):
         visualize_regions(self.multiworld.get_region("Menu", self.player), "my_world.puml", show_locations=False)
 
     def fill_slot_data(self) -> Mapping[str, Any]:
-        d = self.options.as_dict("which_world_state")
+        d = self.options.as_dict("which_world_state", "food_quest_mode")
         d['STARTING_SHELTER'] = self.starting_region
         return d
