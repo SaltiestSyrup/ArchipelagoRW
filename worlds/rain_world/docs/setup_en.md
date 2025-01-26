@@ -1,5 +1,11 @@
 # Rain World Setup Guide
 
+## 0. Add the Rain World APWorld
+
+The APWorld for Rain World is self-contained in `worlds/rain_world`.
+You can either clone this fork or copy `worlds/rain_world`
+to an existing Archipelago source.
+
 ## 1. Create a YAML settings file
 ### What is a YAML and why do I need one?
 You can see the [basic multiworld setup guide](/tutorial/Archipelago/setup/en) here on the Archipelago website to learn 
@@ -25,7 +31,7 @@ You can also edit this file directly if you understand the format.
 1. Download Dev Console [from GitHub](https://github.com/SlimeCubed/DevConsole).
 2. From that repository, copy the folder `Remix\slime-cubed.devconsole`
 to `Rain World\RainWorld_Data\StreamingAssets\mods\slime-cubed.devconsole`.
-3. Download the Archipelago mod from GitHub (TODO).
+3. Download the Archipelago mod [from GitHub](https://github.com/alphappy/ArchipelagoRWMod).
 4. From that repository, copy the folder `mod`
 to `Rain World\RainWorld_Data\StreamingAssets\mods\archipelago`.
 5. Enable both in the in-game Remix menu.

@@ -82,7 +82,7 @@ Randomization adds the following _progression items_ to the pool:
 ### Filler
 Randomization adds the following _filler items_ to the pool:
 - (UNIMPLEMENTED) A Passage token (for fast travel) for each Passage
-- (UNIMPLEMENTED) Several physical objects, such as rocks, spears, grenades, singularity bombs,
+- Several physical objects, such as rocks, spears, grenades, singularity bombs,
 vulture masks, white (non-unique) pearls, and batflies.
 - (UNIMPLEMENTED) Direct increase to food
 - (UNIMPLEMENTED) Direct increase to karma
@@ -93,18 +93,18 @@ Randomization adds the following _trap items_ to the pool.
 Although they are "traps," many of them can be exploited for personal gain
 (or are neutral in the first place).
 The only thing that all traps have in common is that they affect the game world instantly.
-- (UNIMPLEMENTED) **Stun**: Slugcat is briefly stunned.
+- **Stun**: Slugcat is briefly stunned.
 - (UNIMPLEMENTED) **Flood**: the current room rapidly fills with water.
 The water drains after some time or after the cycle ends.
-- (UNIMPLEMENTED) **Creature**: a dangerous creature spawns in an adjacent room.
+- **Creature**: a dangerous creature spawns in an adjacent room.
 This may be a Red Lizard, Red Centipede, Spitter Spider, any type of Vulture, or an Elite Scavenger.
 The creature is immediately aware of Slugcat's position.
-- (UNIMPLEMENTED) **Timer**: the current cycle timer is shortened.
+- **Timer**: the current cycle timer is shortened.
 - (UNIMPLEMENTED) **Rain**: rain starts and quickly becomes deadly to anything directly exposed.
 The rain ends after some time.
 - (UNIMPLEMENTED) **Gravity**: Slugcat's personal gravity is reduced, possibly to zero.
 Their gravity returns to normal after some time.
-- (UNIMPLEMENTED) **Zoomies**: Slugcat and/or creatures around them suddenly start moving much faster.
+- **Zoomies**: Slugcat and/or creatures around them suddenly start moving much faster.
 The effect wears off after entering a pipe.
 - (UNIMPLEMENTED) **Fog**: a thick fog obscures view.  The fog wears off after some time.
 - (UNIMPLEMENTED) **Darkness**: the world is suddenly enveloped in darkness like that of the Shaded Citadel.
