@@ -25,24 +25,26 @@ offset: int = constants.FIRST_ID
 all_items: Dict[str, RainWorldItemData] = {
     #################################################################
     # PROGRESSION
-    "Karma cap increase": RainWorldItemData("Karma cap increase", offset, ItemClassification.progression, 8),
+    "Karma": RainWorldItemData("Karma", offset, ItemClassification.progression, 8),
     "Ascension": RainWorldItemData("Ascension", None, ItemClassification.progression_skip_balancing, 0),
 
-    "Key to SU": RainWorldItemData("Key to Outskirts", 1 + offset, ItemClassification.progression),
-    "Key to HI": RainWorldItemData("Key to Industrial Complex", 2 + offset, ItemClassification.progression),
-    "Key to DS": RainWorldItemData("Key to Drainage System", 3 + offset, ItemClassification.progression),
-    "Key to GW": RainWorldItemData("Key to Garbage Wastes", 4 + offset, ItemClassification.progression),
-    "Key to SL": RainWorldItemData("Key to Shoreline", 5 + offset, ItemClassification.progression),
-    "Key to VS": RainWorldItemData("Key to Pipeyard", 6 + offset, ItemClassification.progression),
-    "Key to SH": RainWorldItemData("Key to Shaded Citadel", 7 + offset, ItemClassification.progression),
-    "Key to UW": RainWorldItemData("Key to The Exterior", 8 + offset, ItemClassification.progression),
-    "Key to SS": RainWorldItemData("Key to Five Pebbles", 9 + offset, ItemClassification.progression),
-    "Key to CC": RainWorldItemData("Key to Chimney Canopy", 10 + offset, ItemClassification.progression),
-    "Key to SI": RainWorldItemData("Key to Sky Islands", 11 + offset, ItemClassification.progression),
-    "Key to LF": RainWorldItemData("Key to Farm Arrays", 12 + offset, ItemClassification.progression),
-    "Key to SB": RainWorldItemData("Key to Subterranean", 13 + offset, ItemClassification.progression),
-    "Key to MS": RainWorldItemData("Key to Submerged Superstructure", 14 + offset, ItemClassification.progression),
-    "Key to OE": RainWorldItemData("Key to Outer Expanse", 15 + offset, ItemClassification.progression),
+    #################################################################
+    # REGION KEYS
+    # "Key to SU": RainWorldItemData("Key to Outskirts", 1 + offset, ItemClassification.progression),
+    # "Key to HI": RainWorldItemData("Key to Industrial Complex", 2 + offset, ItemClassification.progression),
+    # "Key to DS": RainWorldItemData("Key to Drainage System", 3 + offset, ItemClassification.progression),
+    # "Key to GW": RainWorldItemData("Key to Garbage Wastes", 4 + offset, ItemClassification.progression),
+    # "Key to SL": RainWorldItemData("Key to Shoreline", 5 + offset, ItemClassification.progression),
+    # "Key to VS": RainWorldItemData("Key to Pipeyard", 6 + offset, ItemClassification.progression),
+    # "Key to SH": RainWorldItemData("Key to Shaded Citadel", 7 + offset, ItemClassification.progression),
+    # "Key to UW": RainWorldItemData("Key to The Exterior", 8 + offset, ItemClassification.progression),
+    # "Key to SS": RainWorldItemData("Key to Five Pebbles", 9 + offset, ItemClassification.progression),
+    # "Key to CC": RainWorldItemData("Key to Chimney Canopy", 10 + offset, ItemClassification.progression),
+    # "Key to SI": RainWorldItemData("Key to Sky Islands", 11 + offset, ItemClassification.progression),
+    # "Key to LF": RainWorldItemData("Key to Farm Arrays", 12 + offset, ItemClassification.progression),
+    # "Key to SB": RainWorldItemData("Key to Subterranean", 13 + offset, ItemClassification.progression),
+    # "Key to MS": RainWorldItemData("Key to Submerged Superstructure", 14 + offset, ItemClassification.progression),
+    # "Key to OE": RainWorldItemData("Key to Outer Expanse", 15 + offset, ItemClassification.progression),
 
     #################################################################
     # FILLER
@@ -61,6 +63,25 @@ all_items: Dict[str, RainWorldItemData] = {
     "Spitter Spider Trap": RainWorldItemData("Spitter Spider Trap", 305 + offset, ItemClassification.trap, 0),
 }
 
+#################################################################
+# GATES
+gate_shorts = [
+    "LF_SU", "SU_DS", "OE_SU", "SU_HI",
+    "HI_VS", "HI_CC", "HI_GW", "HI_SH",
+    "DS_SB", "DS_CC", "DS_GW",
+    "SI_CC", "CC_UW",
+    "GW_SL", "GW_SH",
+    "SH_SL", "SH_UW",
+    "SB_VS", "SI_VS", "SL_VS",
+    "UW_SL", "MS_SL", "SL_MS", "SB_SL",
+    "SI_LF",
+    "LF_SB", "SB_OE",
+    "UW_SS", "SS_UW", "UW_LC",
+]
+for i, gate in enumerate(gate_shorts):
+    all_items[f"GATE_{gate}"] = RainWorldItemData(f"GATE_{gate}", 500 + i, ItemClassification.progression)
+
+#################################################################
 item_name_to_id: Dict[str, int] = {
     k: v.code for k, v in all_items.items()
 }

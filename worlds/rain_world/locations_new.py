@@ -2,6 +2,7 @@ from typing import Dict, List, NamedTuple, Optional, TYPE_CHECKING, Any, Callabl
 
 from BaseClasses import CollectionState, Location, Region, MultiWorld
 from worlds.rain_world.constants import FIRST_ID, REGION_CODE_DICT
+from .game_data import food_quest_items
 
 location_map: dict[str, int] = {}
 
@@ -32,22 +33,23 @@ class PhysicalLocation(LocationData):
 
 class Token(PhysicalLocation):
     def __init__(self, name: str, color: str, region: str, offset: int, room: str):
-        super().__init__(f"CT|{color}|{name}", f"CT|{color}|{name}", region, offset, room)
+        adjusted_name = f"{'S-' if color == 'red' else ('L-' if color == 'gold' else '')}{name}"
+        super().__init__(f"Token-{adjusted_name}", f"Token-{adjusted_name}", region, offset, room)
 
 
 class Pearl(PhysicalLocation):
     def __init__(self, name: str, color: str, region: str, offset: int, room: str):
-        super().__init__(f"Pe|{name}", f"Pe|{name}", region, offset, room)
+        super().__init__(f"Pearl-{name}", f"Pearl-{name}", region, offset, room)
 
 
 class Echo(PhysicalLocation):
     def __init__(self, ghost: str, region: str, offset: int, room: str):
-        super().__init__(f"Ec|{ghost}", f"Ec|{ghost}", region, offset, room)
+        super().__init__(f"Echo-{ghost}", f"Echo-{ghost}", region, offset, room)
 
 
 class Passage(LocationData):
     def __init__(self, name: str, region: str, offset: int):
-        super().__init__(f"Pa|{name}", f"Pa|{name}", region, offset)
+        super().__init__(f"Passage-{name}", f"Passage-{name}", region, offset)
 
 
 all_locations: list[LocationData] = [
@@ -207,6 +209,8 @@ all_locations: list[LocationData] = [
 ]
 
 # food quest, 5101 - 5123
-all_locations += [LocationData(f"FQ|{n:0>2}", f"FQ|{n:0>2}", "Food Quest", 5100 + n) for n in range(1, 23)]
+all_locations += [LocationData(f"FoodQuest-{s}", f"FoodQuest-{s}", "Food Quest", 5100 + n)
+                  for n, s in enumerate(food_quest_items)]
+
 # wanderer pips, 5151 - 5164
-all_locations += [LocationData(f"Wa|{n:0>2}", f"Wa|{n:0>2}", "PPwS Passages", 5150 + n) for n in range(1, 14)]
+# all_locations += [LocationData(f"Wa|{n:0>2}", f"Wa|{n:0>2}", "PPwS Passages", 5150 + n) for n in range(1, 14)]

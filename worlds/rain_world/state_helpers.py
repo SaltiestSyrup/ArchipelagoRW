@@ -1,18 +1,26 @@
 from typing import Callable
 
 from BaseClasses import CollectionState
+from . import game_data
 
 
 def max_karma_at_least(karma: int, player: int) -> Callable[[CollectionState], bool]:
     def max_karma_at_least_inner(state: CollectionState) -> bool:
-        return state.has("Karma cap increase", player, karma - (1 if karma < 6 else 2))
+        return state.has("Karma", player, karma - (1 if karma < 6 else 2))
     return max_karma_at_least_inner
 
 
 def karma_and_key(player: int, karma: int, region: str) -> Callable[[CollectionState], bool]:
     def karma_and_key_inner(state: CollectionState) -> bool:
-        return (state.has("Karma cap increase", player, karma - (1 if karma < 6 else 2))
+        return (state.has("Karma", player, karma - (1 if karma < 6 else 2))
                 and state.has(f"Key to {region}", player))
+    return karma_and_key_inner
+
+
+def karma_and_gate(player: int, karma: int, gate_name: str) -> Callable[[CollectionState], bool]:
+    def karma_and_key_inner(state: CollectionState) -> bool:
+        return (state.has("Karma", player, karma - (1 if karma < 6 else 2))
+                and state.has(f"GATE_{gate_name}", player))
     return karma_and_key_inner
 
 
@@ -25,7 +33,7 @@ def ascension(player: int) -> Callable[[CollectionState], bool]:
 def max_karma_factory_factory(karma: int) -> Callable[[int], Callable[[CollectionState], bool]]:
     def max_karma_factory(player: int):
         def max_karma_inner(state: CollectionState) -> bool:
-            return state.has("Karma cap increase", player, karma - (1 if karma < 6 else 2))
+            return state.has("Karma", player, karma - (1 if karma < 6 else 2))
         return max_karma_inner
     return max_karma_factory
 
@@ -46,7 +54,7 @@ def lizard_factory_factory(count: int):
 def lizard_passage_factory_factory(count: int, ppws: bool):
     def lizard_passage_factory(player: int):
         def lizard_passage_inner(state: CollectionState) -> bool:
-            return ((ppws or state.can_reach_location("Pa|Survivor", player)) and
+            return ((ppws or state.can_reach_location("Passage-Survivor", player)) and
                     state.has_from_list_unique(LIZARDS, player, count))
         return lizard_passage_inner
     return lizard_passage_factory
@@ -62,19 +70,19 @@ def wanderer_factory_factory(count: int):
 
 def pilgrim_factory(player: int):
     def pilgrim_inner(state: CollectionState) -> bool:
-        return all(state.can_reach_location(f'Ec|{r}', player) for r in ['CC', 'SI', 'LF', 'SB', 'SH', 'UW'])
+        return all(state.can_reach_location(f'Echo-{r}', player) for r in ['CC', 'SI', 'LF', 'SB', 'SH', 'UW'])
     return pilgrim_inner
 
 
 def haves_survivor_factory(player: int):
     def haves_survivor_inner(state: CollectionState) -> bool:
-        return state.can_reach_location('Pa|Survivor', player)
+        return state.can_reach_location('Passage-Survivor', player)
     return haves_survivor_inner
 
 
 def haves_survivor_or_ppws_factory(player: int):
     def haves_survivor_inner(state: CollectionState) -> bool:
-        return state.can_reach_location('Pa|Survivor', player)
+        return state.can_reach_location('Passage-Survivor', player)
     return haves_survivor_inner
 
 
@@ -90,6 +98,14 @@ def food_quest_factory_factory(count: int):
                  ],
                 player, count
             )
+        return food_quest_inner
+    return food_quest_factory
+
+
+def food_quest_factory_factory_2(item: str) -> Callable[[int], Callable[[CollectionState], bool]]:
+    def food_quest_factory(player: int) -> Callable[[CollectionState], bool]:
+        def food_quest_inner(state: CollectionState) -> bool:
+            return state.has_from_list([f'Access-{region}' for region in game_data.OBJECTS[item]], player, 1)
         return food_quest_inner
     return food_quest_factory
 

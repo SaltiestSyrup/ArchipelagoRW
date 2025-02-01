@@ -2,7 +2,7 @@ from typing import NamedTuple, Callable
 
 from BaseClasses import Region, CollectionState, MultiWorld
 from . import state_helpers
-from .state_helpers import karma_and_key, max_karma_factory_factory
+from .state_helpers import max_karma_factory_factory, karma_and_gate
 
 
 class ConnectionData:
@@ -24,14 +24,15 @@ class Gate(ConnectionData):
     """
     Represents a karma gate connection between actual regions.
     """
-    def __init__(self, source: str, dest: str, cost: int):
+    def __init__(self, source: str, dest: str, cost: int, gate_name: str):
         super().__init__(source, dest)
         self.cost = cost
+        self.gate_name = gate_name
 
     def make(self, player: int, multiworld: MultiWorld):
         source = multiworld.get_region(self.source, player)
         dest = multiworld.get_region(self.dest, player)
-        source.connect(dest, rule=karma_and_key(player, self.cost, self.dest))
+        source.connect(dest, rule=karma_and_gate(player, self.cost, self.gate_name))
 
 
 class RegionData(NamedTuple):
@@ -85,79 +86,79 @@ all_connections = [
     ConnectionData("Menu", "Starting region"),
 
     ConnectionData("Outskirts filtration", "Outskirts"),
-    Gate("Outskirts", "Industrial Complex", 3),
-    Gate("Outskirts", "Drainage System", 4),
-    Gate("Outskirts", "Farm Arrays", 5),
+    Gate("Outskirts", "Industrial Complex", 3, "SU_HI"),
+    Gate("Outskirts", "Drainage System", 4, "SU_DS"),
+    Gate("Outskirts", "Farm Arrays", 5, "LF_SU"),
 
-    Gate("Industrial Complex", "Outskirts", 2),
-    Gate("Industrial Complex", "Garbage Wastes", 2),
-    Gate("Industrial Complex", "Chimney Canopy", 3),
-    Gate("Industrial Complex", "Shaded Citadel", 5),
-    Gate("Industrial Complex", "Pipeyard", 4),
+    Gate("Industrial Complex", "Outskirts", 2, "SU_HI"),
+    Gate("Industrial Complex", "Garbage Wastes", 2, "HI_GW"),
+    Gate("Industrial Complex", "Chimney Canopy", 3, "HI_CC"),
+    Gate("Industrial Complex", "Shaded Citadel", 5, "HI_SH"),
+    Gate("Industrial Complex", "Pipeyard", 4, "HI_VS"),
 
-    Gate("Garbage Wastes", "Drainage System", 3),
-    Gate("Garbage Wastes", "Industrial Complex", 2),
-    Gate("Garbage Wastes", "Shoreline", 3),
-    Gate("Garbage Wastes", "Shaded Citadel", 4),
+    Gate("Garbage Wastes", "Drainage System", 3, "DS_GW"),
+    Gate("Garbage Wastes", "Industrial Complex", 2, "HI_GW"),
+    Gate("Garbage Wastes", "Shoreline", 3, "GW_SL"),
+    Gate("Garbage Wastes", "Shaded Citadel", 4, "GW_SH"),
 
-    Gate("Drainage System", "Outskirts", 2),
-    Gate("Drainage System", "Garbage Wastes", 1),
-    Gate("Drainage System", "Subterranean", 4),
-    Gate("Drainage System", "Chimney Canopy", 5),
+    Gate("Drainage System", "Outskirts", 2, "SU_DS"),
+    Gate("Drainage System", "Garbage Wastes", 1, "DS_GW"),
+    Gate("Drainage System", "Subterranean", 4, "DS_SB"),
+    Gate("Drainage System", "Chimney Canopy", 5, "DS_CC"),
 
     ConnectionData("Subterranean ravine", "Subterranean"),
-    Gate("Subterranean", "Drainage System", 1),
-    Gate("Subterranean", "Shoreline", 2),
-    Gate("Subterranean", "Pipeyard", 3),
-    Gate("Subterranean", "Outer Expanse", 1),
+    Gate("Subterranean", "Drainage System", 1, "DS_SB"),
+    Gate("Subterranean", "Shoreline", 2, "SB_SL"),
+    Gate("Subterranean", "Pipeyard", 3, "SB_VS"),
+    Gate("Subterranean", "Outer Expanse", 1, "OE_SB"),
 
-    Gate("Farm Arrays", "Outskirts", 2),
-    Gate("Farm Arrays", "Sky Islands", 3),
-    Gate("Farm Arrays", "Subterranean ravine", 4),
+    Gate("Farm Arrays", "Outskirts", 2, "LF_SU"),
+    Gate("Farm Arrays", "Sky Islands", 3, "SI_LF"),
+    Gate("Farm Arrays", "Subterranean ravine", 4, "LF_SB"),
 
-    Gate("Sky Islands", "Chimney Canopy", 3),
-    Gate("Sky Islands", "Farm Arrays", 3),
-    Gate("Sky Islands", "Pipeyard", 3),
+    Gate("Sky Islands", "Chimney Canopy", 3, "SI_CC"),
+    Gate("Sky Islands", "Farm Arrays", 3, "SI_LF"),
+    Gate("Sky Islands", "Pipeyard", 3, "SI_VS"),
 
-    Gate("Chimney Canopy", "Industrial Complex", 3),
-    Gate("Chimney Canopy", "Sky Islands", 2),
-    Gate("Chimney Canopy", "The Exterior", 4),
-    Gate("Chimney Canopy", "Drainage System", 3),
+    Gate("Chimney Canopy", "Industrial Complex", 3, "HI_CC"),
+    Gate("Chimney Canopy", "Sky Islands", 2, "SI_CC"),
+    Gate("Chimney Canopy", "The Exterior", 4, "CC_UW"),
+    Gate("Chimney Canopy", "Drainage System", 3, "DS_CC"),
 
-    Gate("The Exterior", "Chimney Canopy", 1),
-    Gate("The Exterior", "Shaded Citadel", 1),
-    Gate("The Exterior", "Five Pebbles above puppet", 1),
-    Gate("The Exterior", "Five Pebbles", 5),
+    Gate("The Exterior", "Chimney Canopy", 1, "CC_UW"),
+    Gate("The Exterior", "Shaded Citadel", 1, "SH_UW"),
+    Gate("The Exterior", "Five Pebbles above puppet", 1, "SS_UW"),
+    Gate("The Exterior", "Five Pebbles", 5, "UW_SS"),
 
-    Gate("Shaded Citadel", "Industrial Complex", 1),
-    Gate("Shaded Citadel", "Shoreline", 3),
-    Gate("Shaded Citadel", "The Exterior", 1),
-    Gate("Shaded Citadel", "Garbage Wastes", 2),
+    Gate("Shaded Citadel", "Industrial Complex", 1, "HI_SH"),
+    Gate("Shaded Citadel", "Shoreline", 3, "SH_SL"),
+    Gate("Shaded Citadel", "The Exterior", 1, "SH_UW"),
+    Gate("Shaded Citadel", "Garbage Wastes", 2, "GW_SH"),
 
-    Gate("Shoreline", "Garbage Wastes", 2),
-    Gate("Shoreline", "Shaded Citadel", 2),
-    Gate("Shoreline", "Subterranean", 5),
-    Gate("Shoreline", "Pipeyard", 3),
-    Gate("Shoreline", "Submerged Superstructure", 5),
-    Gate("Shoreline", "Bitter Aerie", 6),
+    Gate("Shoreline", "Garbage Wastes", 2, "GW_SL"),
+    Gate("Shoreline", "Shaded Citadel", 2, "GW_SH"),
+    Gate("Shoreline", "Subterranean", 5, "SB_SL"),
+    Gate("Shoreline", "Pipeyard", 3, "SL_VS"),
+    Gate("Shoreline", "Submerged Superstructure", 5, "SL_MS"),
+    # Gate("Shoreline", "Bitter Aerie", 6, "MS_SL"),
     ConnectionData("Shoreline above Moon", "Shoreline"),
 
-    Gate("Pipeyard", "Industrial Complex", 2),
-    Gate("Pipeyard", "Shoreline", 3),
-    Gate("Pipeyard", "Subterranean", 5),
-    Gate("Pipeyard", "Sky Islands", 4),
+    Gate("Pipeyard", "Industrial Complex", 2, "HI_VS"),
+    Gate("Pipeyard", "Shoreline", 3, "SL_VS"),
+    Gate("Pipeyard", "Subterranean", 5, "SB_VS"),
+    Gate("Pipeyard", "Sky Islands", 4, "SI_VS"),
 
-    Gate("Five Pebbles", "The Exterior", 1),
-    Gate("Five Pebbles above puppet", "The Exterior", 1),
+    Gate("Five Pebbles", "The Exterior", 1, "UW_SS"),
+    Gate("Five Pebbles above puppet", "The Exterior", 1, "SS_UW"),
     ConnectionData("Five Pebbles", "Five Pebbles above puppet"),
 
-    Gate("Outer Expanse", "Subterranean", 5),
+    Gate("Outer Expanse", "Subterranean", 5, "SB_OE"),
     ConnectionData("Outer Expanse", "Outer Expanse filtration"),
-    Gate("Outer Expanse filtration", "Outskirts filtration", 1),
+    Gate("Outer Expanse filtration", "Outskirts filtration", 1, "OE_SU"),
 
-    Gate("Bitter Aerie", "Shoreline above Moon", 5),
-    Gate("Shoreline above Moon", "Bitter Aerie", 6),
-    Gate("Submerged Superstructure", "Shoreline", 1),
+    Gate("Bitter Aerie", "Shoreline above Moon", 5, "SL_MS"),
+    Gate("Shoreline above Moon", "Bitter Aerie", 6, "SL_MS"),
+    Gate("Submerged Superstructure", "Shoreline", 1, "MS_SL"),
 
     ConnectionData("Subterranean", "Void Sea", max_karma_factory_factory(10))
 ]

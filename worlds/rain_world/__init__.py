@@ -65,9 +65,9 @@ class RainWorldWorld(World):
 
         self.location_count = len(all_locations)
 
-        for n in range(self.options.maximum_required_food_quest_pips + 1, 23):
-            self.multiworld.get_location(f'FQ|{n}', self.player).progress_type = (
-                LocationProgressType.EXCLUDED)
+        # for n in range(self.options.maximum_required_food_quest_pips + 1, 23):
+        #     self.multiworld.get_location(f'FQ|{n}', self.player).progress_type = (
+        #         LocationProgressType.EXCLUDED)
 
         if self.options.passage_progress_without_survivor:
             self.multiworld.get_region('Menu', self.player).connect(
@@ -110,13 +110,13 @@ class RainWorldWorld(World):
     def create_items(self) -> None:
         added_items = 0
 
-        if self.options.region_keys > 0:
-            item: RainWorldItemData
-            for item in random.sample([v for k, v in all_items.items() if k.startswith("Key to")],
-                                      k=self.options.region_keys.value):
-                item.precollect += 1
+        # if self.options.region_keys > 0:
+        #     item: RainWorldItemData
+        #     for item in random.sample([v for k, v in all_items.items() if k.startswith("Key to")],
+        #                               k=self.options.region_keys.value):
+        #         item.precollect += 1
 
-        all_items["Karma cap increase"].count += self.options.extra_karma_cap_increases
+        all_items["Karma"].count += self.options.extra_karma_cap_increases
         # all_items["Karma cap increase"].precollect += self.options.starting_karma - 1
 
         for item_data in items.all_items.values():
