@@ -18,10 +18,10 @@ def karma_and_key(player: int, karma: int, region: str) -> Callable[[CollectionS
 
 
 def karma_and_gate(player: int, karma: int, gate_name: str) -> Callable[[CollectionState], bool]:
-    def karma_and_key_inner(state: CollectionState) -> bool:
+    def karma_and_gate_inner(state: CollectionState) -> bool:
         return (state.has("Karma", player, karma - (1 if karma < 6 else 2))
                 and state.has(f"GATE_{gate_name}", player))
-    return karma_and_key_inner
+    return karma_and_gate_inner
 
 
 def ascension(player: int) -> Callable[[CollectionState], bool]:
@@ -38,32 +38,25 @@ def max_karma_factory_factory(karma: int) -> Callable[[int], Callable[[Collectio
     return max_karma_factory
 
 
-LIZARDS = [
-    "Blue Liz", "Green Liz", "Pink Liz", "White Liz", "Red Liz", "Cyan Liz", "Black Liz", "Caramel Liz", "Yellow Liz"
-]
-
-
-def lizard_factory_factory(count: int):
+def lizard_factory_factory(count: int, dragonslayer: bool):
     def lizard_factory(player: int):
         def lizard_inner(state: CollectionState) -> bool:
-            return state.has_from_list_unique(LIZARDS, player, count)
+            return state.has_from_list_unique(
+                (game_data.dragonslayer_msc if state.has("MSC", player) else game_data.dragonslayer_vanilla)
+                if dragonslayer else game_data.lizards_any,
+                player, count)
         return lizard_inner
     return lizard_factory
-
-
-def lizard_passage_factory_factory(count: int, ppws: bool):
-    def lizard_passage_factory(player: int):
-        def lizard_passage_inner(state: CollectionState) -> bool:
-            return ((ppws or state.can_reach_location("Passage-Survivor", player)) and
-                    state.has_from_list_unique(LIZARDS, player, count))
-        return lizard_passage_inner
-    return lizard_passage_factory
 
 
 def wanderer_factory_factory(count: int):
     def wanderer_factory(player: int):
         def wanderer_inner(state: CollectionState) -> bool:
-            return state.has("Region", player, count)
+            # TODO only story regions
+            return state.has_from_list_unique(
+                [f"Access-{region}" for region in game_data.general.REGION_CODE_DICT.keys()],
+                player, count
+            )
         return wanderer_inner
     return wanderer_factory
 
@@ -102,10 +95,19 @@ def food_quest_factory_factory(count: int):
     return food_quest_factory
 
 
-def food_quest_factory_factory_2(item: str) -> Callable[[int], Callable[[CollectionState], bool]]:
-    def food_quest_factory(player: int) -> Callable[[CollectionState], bool]:
-        def food_quest_inner(state: CollectionState) -> bool:
-            return state.has_from_list([f'Access-{region}' for region in game_data.OBJECTS[item]], player, 1)
-        return food_quest_inner
-    return food_quest_factory
+def has(item: str) -> Callable[[int], Callable[[CollectionState], bool]]:
+    def has_inner(player: int) -> Callable[[CollectionState], bool]:
+        def has_inner_inner(state: CollectionState) -> bool:
+            return state.has(item, player)
+        return has_inner_inner
+    return has_inner
+
+
+def has_some(items: list[str], count: int) -> Callable[[int], Callable[[CollectionState], bool]]:
+    def inner(player: int) -> Callable[[CollectionState], bool]:
+        def inner_inner(state: CollectionState) -> bool:
+            return state.has_from_list_unique(items, player, count)
+        return inner_inner
+    return inner
+
 

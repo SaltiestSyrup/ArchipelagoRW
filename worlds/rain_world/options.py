@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
-from Options import PerGameCommonOptions, Toggle, Range, OptionGroup, Choice
+from Options import PerGameCommonOptions, Toggle, Range, OptionGroup, Choice, Visibility, ProgressionBalancing
+from .game_data.general import scug_names
 
 
 class PassageProgressWithoutSurvivor(Toggle):
@@ -19,7 +20,7 @@ class MoreSlugcatsExpansionEnabled(Toggle):
 
 class WhichWorldstate(Choice):
     """Which campaign / worldstate you will start in.  Downpour must be enabled to pick a Downpour slugcat."""
-    display_name = "(UNIMPLEMENTED) Starting scug"
+    display_name = "Starting scug"
     option_monk = 0
     option_survivor = 1
     option_hunter = 2
@@ -30,6 +31,32 @@ class WhichWorldstate(Choice):
     option_saint = 7
     option_sofanthiel = 8
     default = 1
+
+
+class WhichGamestate(Choice):
+    """Which campaign / worldstate you will start in."""
+    display_name = "Game state"
+    option_monk_vanilla = 0
+    option_survivor_vanilla = 1
+    option_hunter_vanilla = 2
+
+    option_monk_msc = 10
+    option_survivor_msc = 11
+    option_hunter_msc = 12
+    option_gourmand = 13
+    option_artificer = 14
+    option_rivulet = 15
+    option_spearmaster = 16
+    option_saint = 17
+    option_sofanthiel = 18
+
+    default = 1
+
+    @classmethod
+    def get_option_name(cls, value: int) -> str:
+        if value < 19:
+            return f"{scug_names[value]}{' (Vanilla)' if value < 10 else (' (MSC)' if value < 13 else '')}"
+        return f"{value}"
 
 
 class FoodQuestMode(Choice):
@@ -60,9 +87,32 @@ class RandomStartingShelter(Toggle):
     default = True
 
 
+class RandomStartingRegion(Choice):
+    """Where Slugcat will initially spawn."""
+    display_name = "Random starting shelter"
+    option_default_starting_point = 0
+
+    option_outskirts = 1
+    option_industrial_complex = 2
+    option_drainage_system = 3
+    option_garbage_wastes = 4
+    option_shoreline = 5
+    option_shaded_citadel = 6
+    option_the_exterior = 7
+    option_five_pebbles = 8
+    option_chimney_cannopy = 9
+    option_sky_islands = 10
+    option_farm_arrays = 11
+    option_subterranean = 12
+
+    option_pipeyard = 20
+
+    default = 0
+
+
 class PassagePriority(Range):
     """Number of Passage completion checks that are marked as priority checks,
-    guaranteeing that they will contain a progression item."""
+    increasing the chance that they will contain progression items."""
     display_name = "Priority Passages"
     range_start = 0
     range_end = 14
@@ -174,18 +224,28 @@ class WtTrapSpitterSpider(Range):
     default = 30
 
 
+class Accessibility(Choice):
+    """
+    Unused
+    """
+    display_name = "Accessibility"
+    rich_text_doc = True
+    visibility = Visibility.none
+    option_minimal = 2
+    alias_none = 2
+    default = 2
+
+
 @dataclass
 class RainWorldOptions(PerGameCommonOptions):
-    passage_progress_without_survivor: PassageProgressWithoutSurvivor
-    more_slugcats_expansion_enabled: MoreSlugcatsExpansionEnabled
-    which_worldstate: WhichWorldstate
-    food_quest_mode: FoodQuestMode
+    accessibility: Accessibility
 
-    region_keys: RegionKeys
-    random_starting_shelter: RandomStartingShelter
+    passage_progress_without_survivor: PassageProgressWithoutSurvivor
+    which_gamestate: WhichGamestate
+
+    random_starting_region: RandomStartingRegion
 
     passage_priority: PassagePriority
-    maximum_required_food_quest_pips: MaximumRequiredFoodQuestPips
     extra_karma_cap_increases: ExtraKarmaCapIncreases
 
     pct_traps: PctTraps
@@ -206,11 +266,11 @@ class RainWorldOptions(PerGameCommonOptions):
 option_groups = [
     OptionGroup(
         "Important",
-        [PassageProgressWithoutSurvivor, MoreSlugcatsExpansionEnabled, WhichWorldstate, FoodQuestMode]
+        [ProgressionBalancing, PassageProgressWithoutSurvivor, WhichGamestate]
     ),
-    OptionGroup("Start settings", [RegionKeys, RandomStartingShelter], True),
+    OptionGroup("Start settings", [RandomStartingRegion], True),
     OptionGroup("Progression item settings", [ExtraKarmaCapIncreases], True),
-    OptionGroup("Location settings", [MaximumRequiredFoodQuestPips, PassagePriority], True),
+    OptionGroup("Location settings", [PassagePriority], True),
     OptionGroup("Filler item relative weights", [PctTraps, WtRock, WtSpear, WtGrenade, WtFruit], True),
     OptionGroup(
         "Trap relative weights",

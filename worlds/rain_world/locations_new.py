@@ -2,7 +2,7 @@ from typing import Dict, List, NamedTuple, Optional, TYPE_CHECKING, Any, Callabl
 
 from BaseClasses import CollectionState, Location, Region, MultiWorld
 from worlds.rain_world.constants import FIRST_ID, REGION_CODE_DICT
-from .game_data import food_quest_items
+from .game_data.general import food_quest_items
 
 location_map: dict[str, int] = {}
 
@@ -181,22 +181,27 @@ all_locations: list[LocationData] = [
     Token("JungleLeech", "blue", "Outer Expanse", 1406, "RUIN06"),
     Pearl("OE", "", "Outer Expanse", 1420, "SPIRE"),
 
+    # Passages which never require Survivor to earn.
     Passage("Martyr", "Early Passages", 5000),
     Passage("Mother", "Early Passages", 5001),
     Passage("Pilgrim", "Early Passages", 5002),
     Passage("Survivor", "Early Passages", 5003),
 
+    # Passages which require Survivor only if PPwS is disabled.
     Passage("DragonSlayer", "PPwS Passages", 5020),
     Passage("Friend", "PPwS Passages", 5021),
-    # Passage("Wanderer", "PPwS Passages", 5022),
+    Passage("Wanderer", "PPwS Passages", 5022),
 
+    # Passages which always require Survivor.
     Passage("Chieftain", "Late Passages", 5040),
     Passage("Hunter", "Late Passages", 5041),
     Passage("Monk", "Late Passages", 5042),
-    # Passage("Nomad", "Late Passages", 5043),  # TODO who was responsible for making this one honestly
-    Passage("Outlaw", "Late Passages", 5044),
-    Passage("Saint", "Late Passages", 5045),
-    # Passage("Scholar", "Late Passages", 5046),  # TODO
+    Passage("Outlaw", "Late Passages", 5043),
+    Passage("Saint", "Late Passages", 5044),
+    Passage("Scholar", "Late Passages", 5045),  # TODO
+
+    # Passages where the dependence on Survivor is royally screwed up.
+    Passage("Nomad", "Late Passages", 5046),  # TODO who was responsible for making this one honestly
 
     Echo("CC", "Chimney Canopy", 5070, ""),
     Echo("SH", "Shaded Citadel", 5071, ""),
@@ -213,4 +218,4 @@ all_locations += [LocationData(f"FoodQuest-{s}", f"FoodQuest-{s}", "Food Quest",
                   for n, s in enumerate(food_quest_items)]
 
 # wanderer pips, 5151 - 5164
-# all_locations += [LocationData(f"Wa|{n:0>2}", f"Wa|{n:0>2}", "PPwS Passages", 5150 + n) for n in range(1, 14)]
+all_locations += [LocationData(f"Wanderer-{n}", f"Wanderer-{n}", "PPwS Passages", 5150 + n) for n in range(1, 14)]

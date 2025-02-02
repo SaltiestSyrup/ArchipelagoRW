@@ -25,26 +25,21 @@ offset: int = constants.FIRST_ID
 all_items: Dict[str, RainWorldItemData] = {
     #################################################################
     # PROGRESSION
-    "Karma": RainWorldItemData("Karma", offset, ItemClassification.progression, 8),
     "Ascension": RainWorldItemData("Ascension", None, ItemClassification.progression_skip_balancing, 0),
+    "Karma": RainWorldItemData("Karma", offset, ItemClassification.progression, 8),
 
     #################################################################
-    # REGION KEYS
-    # "Key to SU": RainWorldItemData("Key to Outskirts", 1 + offset, ItemClassification.progression),
-    # "Key to HI": RainWorldItemData("Key to Industrial Complex", 2 + offset, ItemClassification.progression),
-    # "Key to DS": RainWorldItemData("Key to Drainage System", 3 + offset, ItemClassification.progression),
-    # "Key to GW": RainWorldItemData("Key to Garbage Wastes", 4 + offset, ItemClassification.progression),
-    # "Key to SL": RainWorldItemData("Key to Shoreline", 5 + offset, ItemClassification.progression),
-    # "Key to VS": RainWorldItemData("Key to Pipeyard", 6 + offset, ItemClassification.progression),
-    # "Key to SH": RainWorldItemData("Key to Shaded Citadel", 7 + offset, ItemClassification.progression),
-    # "Key to UW": RainWorldItemData("Key to The Exterior", 8 + offset, ItemClassification.progression),
-    # "Key to SS": RainWorldItemData("Key to Five Pebbles", 9 + offset, ItemClassification.progression),
-    # "Key to CC": RainWorldItemData("Key to Chimney Canopy", 10 + offset, ItemClassification.progression),
-    # "Key to SI": RainWorldItemData("Key to Sky Islands", 11 + offset, ItemClassification.progression),
-    # "Key to LF": RainWorldItemData("Key to Farm Arrays", 12 + offset, ItemClassification.progression),
-    # "Key to SB": RainWorldItemData("Key to Subterranean", 13 + offset, ItemClassification.progression),
-    # "Key to MS": RainWorldItemData("Key to Submerged Superstructure", 14 + offset, ItemClassification.progression),
-    # "Key to OE": RainWorldItemData("Key to Outer Expanse", 15 + offset, ItemClassification.progression),
+    # GAMESTATE
+    "MSC": RainWorldItemData("MSC", offset + 100, ItemClassification.progression, 0),
+    "Scug-Yellow": RainWorldItemData("Scug-Yellow", offset + 110, ItemClassification.progression, 0),
+    "Scug-White": RainWorldItemData("Scug-White", offset + 111, ItemClassification.progression, 0),
+    "Scug-Red": RainWorldItemData("Scug-Red", offset + 112, ItemClassification.progression, 0),
+    "Scug-Gourmand": RainWorldItemData("Scug-Gourmand", offset + 113, ItemClassification.progression, 0),
+    "Scug-Artificer": RainWorldItemData("Scug-Artificer", offset + 114, ItemClassification.progression, 0),
+    "Scug-Rivulet": RainWorldItemData("Scug-Rivulet", offset + 115, ItemClassification.progression, 0),
+    "Scug-Spear": RainWorldItemData("Scug-Spear", offset + 116, ItemClassification.progression, 0),
+    "Scug-Saint": RainWorldItemData("Scug-Saint", offset + 117, ItemClassification.progression, 0),
+    "Scug-Inv": RainWorldItemData("Scug-Inv", offset + 118, ItemClassification.progression, 0),
 
     #################################################################
     # FILLER

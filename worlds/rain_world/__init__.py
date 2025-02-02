@@ -2,8 +2,8 @@ import random
 from typing import Mapping, Any
 
 from .constants import REGION_CODE_DICT
-from .events import all_events
-from .general_helpers import flounder2, normalize
+from .events import all_events, object_events
+from .utils import normalize, flounder2
 from .items import RainWorldItem, all_items, RainWorldItemData
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Item, ItemClassification, Tutorial, LocationProgressType
@@ -14,6 +14,7 @@ from .regions_new import all_regions, all_connections
 from .locations_new import all_locations, location_map
 from .rules import all_rules
 from Utils import visualize_regions
+from .game_data.general import scug_names, default_starting_regions, prioritizable_passages, regions
 
 
 class RainWorldWebWorld(WebWorld):
@@ -63,21 +64,44 @@ class RainWorldWorld(World):
         for data in all_events:
             data.make(self.player, self.multiworld)
 
+        for data in object_events:
+            data.make(self.player, self.multiworld)
+
         self.location_count = len(all_locations)
 
+        #################################################################
+        # PRIORITY PASSAGES
+        passage_locations = [
+            loc for loc in
+            [self.multiworld.get_location(f'Passage-{passage}', self.player) for passage in prioritizable_passages]
+            if loc.progress_type == LocationProgressType.DEFAULT
+        ]
+
+        num = max(0, min(self.options.passage_priority.value, len(passage_locations)))
+
+        for passage in random.sample(passage_locations, num):
+            passage.progress_type = LocationProgressType.PRIORITY
+
+        #################################################################
         # for n in range(self.options.maximum_required_food_quest_pips + 1, 23):
         #     self.multiworld.get_location(f'FQ|{n}', self.player).progress_type = (
         #         LocationProgressType.EXCLUDED)
 
+        #################################################################
+        # PPWS: add a new free connection if PPWS is enabled.
         if self.options.passage_progress_without_survivor:
             self.multiworld.get_region('Menu', self.player).connect(
                 self.multiworld.get_region('PPwS Passages', self.player)
             )
 
-        if self.options.random_starting_shelter:
-            self.starting_region = random.choice(['SU', 'HI', 'DS', 'LF'])
+        #################################################################
+        # STARTING REGION
+        if self.options.random_starting_region.value == 0:
+            self.starting_region = default_starting_regions[scug_names[self.options.which_gamestate.value]]
+        else:
+            self.starting_region = regions[self.options.random_starting_region.value]
 
-        start = self.multiworld.get_region(REGION_CODE_DICT[self.starting_region], self.player)
+        start = self.multiworld.get_region(self.starting_region, self.player)
         self.multiworld.get_region('Starting region', self.player).connect(start)
 
         # menu_region = Region("Menu", self.player, self.multiworld)
@@ -110,15 +134,24 @@ class RainWorldWorld(World):
     def create_items(self) -> None:
         added_items = 0
 
-        # if self.options.region_keys > 0:
-        #     item: RainWorldItemData
-        #     for item in random.sample([v for k, v in all_items.items() if k.startswith("Key to")],
-        #                               k=self.options.region_keys.value):
-        #         item.precollect += 1
+        #################################################################
+        # TESTING
+        # all_items["Karma"].count -= 1
+        # self.multiworld.get_location("Passage-DragonSlayer", self.player).place_locked_item(self.create_item("Karma"))
 
+        #################################################################
+        # STARTING ITEM SETTINGS
         all_items["Karma"].count += self.options.extra_karma_cap_increases
         # all_items["Karma cap increase"].precollect += self.options.starting_karma - 1
 
+        #################################################################
+        # FAUX ITEM SETTINGS
+        self.multiworld.push_precollected(self.create_item(f"Scug-{scug_names[self.options.which_gamestate.value]}"))
+        if self.options.which_gamestate.value > 9:
+            self.multiworld.push_precollected(self.create_item("MSC"))
+
+        #################################################################
+        # PREDETERMINED POPULATION
         for item_data in items.all_items.values():
             for i in range(item_data.count):
                 if i >= item_data.precollect:
@@ -128,6 +161,8 @@ class RainWorldWorld(World):
                     self.multiworld.push_precollected(item_data.generate_item(self.player))
                     item_data.precollect -= 1
 
+        #################################################################
+        # FILLER POPULATION
         remaining_slots = self.location_count - added_items
         trap_fraction = self.options.pct_traps / 100
 
@@ -181,6 +216,5 @@ class RainWorldWorld(World):
         visualize_regions(self.multiworld.get_region("Menu", self.player), "my_world.puml", show_locations=False)
 
     def fill_slot_data(self) -> Mapping[str, Any]:
-        d = self.options.as_dict("which_worldstate", "food_quest_mode")
-        d['STARTING_SHELTER'] = self.starting_region
+        d = self.options.as_dict("which_gamestate", "random_starting_region")
         return d

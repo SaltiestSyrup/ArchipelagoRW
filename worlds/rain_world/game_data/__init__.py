@@ -1,3 +1,10 @@
+"""
+Static data summarizing the contents of the game world, such as the locations of creature spawns.
+"""
+
+from . import creatures
+from . import general
+
 OBJECTS = {
     "SlimeMold": ["SH", "UW"],
     "DangleFruit": ["SL", "SB", "UW", "SU", "HI", "SH", "CC", "DS", "GW", "SI", "LF"],
@@ -45,30 +52,7 @@ lizzies = {
     'OE': [],
 }
 
-food_quest_items = [
-    "SlimeMold", "DangleFruit", "Fly", "Mushroom", "BlackLizard", "WaterNut",
-    "JellyFish", "JetFish", "GlowWeed", "Salamander", "Snail", "Hazer",
-    "EggBug", "LillyPuck", "YellowLizard", "TubeWorm", "SSOracleSwarmer", "Centiwing",
-    "DandelionPeach", "CyanLizard", "GooieDuck", "RedCentipede"
-]
 
-
-REGION_CODE_DICT = {
-    "SU": "Outskirts",
-    "HI": "Industrial Complex",
-    "DS": "Drainage System",
-    "GW": "Garbage Wastes",
-    "SL": "Shoreline",
-    "VS": "Pipeyard",
-    "SH": "Shaded Citadel",
-    "UW": "The Exterior",
-    "SS": "Five Pebbles",
-    "CC": "Chimney Canopy",
-    "SI": "Sky Islands",
-    "LF": "Farm Arrays",
-    "SB": "Subterranean",
-    "MS": "Submerged Superstructure",
-    # "OE": "Outer Expanse",
-    # "LC": "Metropolis",
-    # "DM": "Looks to the Moon",
-}
+dragonslayer_vanilla = ["GreenLizard", "PinkLizard", "BlueLizard", "WhiteLizard", "YellowLizard", "BlackLizard"]
+dragonslayer_msc = dragonslayer_vanilla + ["CyanLizard", "RedLizard", "SpitLizard", "ZoopLizard"]
+lizards_any = dragonslayer_msc + ["Salamander", "EelLizard", "TrainLizard"]
