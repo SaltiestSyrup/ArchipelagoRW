@@ -16,36 +16,20 @@ You can use the [game options page](/games/Risk%20of%20Rain%202/player-options) 
 website to generate a YAML using a graphical interface.
 You can also edit this file directly if you understand the format.
 
-## 2. Enable the Dev Console and Archipelago mods
+## 2. Enable the Randomizer mod
 
-### Option A: Install via Steam Workshop
-
-1. Subscribe to the Dev Console mod
-[on the Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=2920528044).
-2. Subscribe to the Archipelago mod on the Workshop (TODO).
-3. Enable both in the in-game Remix menu.
-4. Restart Rain World.
-
-### Option B: Install as local mods
-
-1. Download Dev Console [from GitHub](https://github.com/SlimeCubed/DevConsole).
-2. From that repository, copy the folder `Remix\slime-cubed.devconsole`
-to `Rain World\RainWorld_Data\StreamingAssets\mods\slime-cubed.devconsole`.
-3. Download the Archipelago mod [from GitHub](https://github.com/alphappy/ArchipelagoRWMod).
-4. From that repository, copy the folder `mod`
-to `Rain World\RainWorld_Data\StreamingAssets\mods\archipelago`.
-5. Enable both in the in-game Remix menu.
-6. Restart Rain World.
+TODO.  Right now, the randomizer may be built from the
+[`archipelago` branch of the Randomizer mod](https://github.com/SaltiestSyrup/RWRandomizer/tree/archipelago)
+or the
+[`archipelagoing` branch of this fork](https://github.com/alphappy/RWRandomizer/tree/archipelagoing).
+Once built, its assembly, along with `Archipelago.MultiClient.Net.dll` and `Newtonsoft.Json.dll`,
+should be present in a mod `plugins` folder.
 
 ## 3. Test that the mods are working
 
-There are three things that should always happen when the mod is working as intended:
-1. The Dev Console should open when its keybind is pressed.
-By default, it is <code>`</code> (backtick / backquote),
-but this can be changed in its Remix menu.
-2. (UNIMPLEMENTED) Clicking on Archipelago in the Remix menu should open its Remix interface
-(as opposed to warning that the mod does not define a Remix interface).
-3. Dev Console autocomplete should recommend the commands `apconnect` and `apdisconnect` as you type them.
+The Randomizer mod should have a Remix menu interface with an `Archipelago` tab
+from which a connection to an Archipelago room may be established.
+If this Remix menu interface appears, the mod is loaded correctly.
 
 ## 4. Set Remix settings
 
@@ -58,14 +42,9 @@ For all other Rain World Remix settings, the choice is yours.
 
 ## 5. Join an Archipelago room
 
-When the Archipelago room is open, open the Dev Console and connect by sending the command
-`apconnect <HOST> <NAME> <PASSWORD>`.
-- `<HOST>` should include the port number.
-- `<NAME>` must *exactly* match the name in your settings YAML.
-- `<PASSWORD>` must *exactly* match the room password, but can be omitted if no password was set.
-
-For instance, the command might look like `apconnect localhost:38281 hunter`
-or `apconnect archipelago.gg:22222 monk ErraticPulse5`.
+When the Archipelago room is open, the Randomizer mod Remix menu interface 
+may be used to connect to a room.
+The name entered here must exactly match the name specified in the YAML.
 
 A message should be returned indicating a successful connection.
 At that point, you can start a Story campaign to begin.
@@ -73,12 +52,6 @@ At that point, you can start a Story campaign to begin.
 The client will remain connected if you go back out to the main menu or any other menu.
 It may not remain connected if you close or hot-reload the game (e.g., via Rain Reloader),
 or if the host address or port number changes.
-To disconnect, run the command `apdisconnect`.
-
-You can use `apsay` to send a text message to the room.
-This works like the regular text client;
-for instance, you can `!hint` an item by sending, e.g.,
-`apsay !hint key to outskirts`.
 
 For details on everything that gets randomized,
 see the [game description page](en_Rain%20World.md).
