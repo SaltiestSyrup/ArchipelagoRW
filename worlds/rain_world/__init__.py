@@ -166,12 +166,7 @@ class RainWorldWorld(World):
         remaining_slots = self.location_count - added_items
         trap_fraction = self.options.pct_traps / 100
 
-        nontrap_weights = normalize({
-            "Rock": self.options.wt_rocks / 100,
-            "Spear": self.options.wt_spears / 100,
-            "Grenade": self.options.wt_grenades / 100,
-            "Fuit": self.options.wt_fruit / 100,
-        })
+        nontrap_weights = normalize(self.options.get_nontrap_weight_dict())
 
         trap_weights = normalize({
             "Stun Trap": self.options.wt_stuns / 100,

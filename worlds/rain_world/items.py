@@ -20,6 +20,12 @@ class RainWorldItemData:
         return RainWorldItem(self.name, self.item_type, self.code, player)
 
 
+class FillerItemData(RainWorldItemData):
+    def __init__(self, name: str, code: Optional[int], gamestate: Optional[list[str]] = None):
+        super().__init__(name, code, ItemClassification.filler, 0, 0)
+        self.gamestate = gamestate or []
+
+
 offset: int = constants.FIRST_ID
 
 all_items: Dict[str, RainWorldItemData] = {
@@ -42,14 +48,43 @@ all_items: Dict[str, RainWorldItemData] = {
     "Scug-Inv": RainWorldItemData("Scug-Inv", offset + 118, ItemClassification.progression, 0),
 
     #################################################################
-    # FILLER
-    "Rock": RainWorldItemData("Rock", 200 + offset, ItemClassification.filler, 0),
-    "Spear": RainWorldItemData("Spear", 201 + offset, ItemClassification.filler, 0),
-    "Grenade": RainWorldItemData("Grenade", 202 + offset, ItemClassification.filler, 0),
-    "Fuit": RainWorldItemData("Fuit", 203 + offset, ItemClassification.filler, 0),
+    # FILLER - WEAPONS
+    "Object-Rock": FillerItemData("Object-Rock", 200 + offset),
+    "Object-Spear": FillerItemData("Object-Spear", 201 + offset),
+    "Object-ExplosiveSpear": FillerItemData("Object-ExplosiveSpear", 202 + offset),
+    "Object-ElectricSpear": FillerItemData("Object-ExplosiveSpear", 203 + offset, ["MSC"]),
+    "Object-ScavengerBomb": FillerItemData("Object-ScavengerBomb", 204 + offset),
+    "Object-FlareBomb": FillerItemData("Object-FlareBomb", 205 + offset),
+    "Object-PuffBall": FillerItemData("Object-PuffBall", 206 + offset),
+    "Object-FirecrackerPlant": FillerItemData("Object-FirecrackerPlant", 207 + offset),
+    "Object-SingularityBomb": FillerItemData("Object-SingularityBomb", 208 + offset, ["MSC"]),
+    "Object-LillyPuck": FillerItemData("Object-LillyPuck", 209 + offset, ["MSC"]),
 
     #################################################################
-    # TRAPS
+    # FILLER - FOOD
+    "Object-DangleFruit": FillerItemData("Object-DangleFruit", 240 + offset),
+    "Object-WaterNut": FillerItemData("Object-WaterNut", 241 + offset),
+    "Object-EggBugEgg": FillerItemData("Object-EggBugEgg", 242 + offset),
+    "Object-JellyFish": FillerItemData("Object-JellyFish", 243 + offset),
+    "Object-Mushroom": FillerItemData("Object-Mushroom", 244 + offset),
+    "Object-SlimeMold": FillerItemData("Object-SlimeMold", 245 + offset),
+    "Object-FireEgg": FillerItemData("Object-FireEgg", 246 + offset, ["MSC"]),
+    "Object-GlowWeed": FillerItemData("Object-GlowWeed", 247 + offset, ["MSC"]),
+    "Object-Seed": FillerItemData("Object-Seed", 248 + offset, ["MSC"]),
+    "Object-GooieDuck": FillerItemData("Object-GooieDuck", 249 + offset, ["MSC"]),
+    "Object-DandelionPeach": FillerItemData("Object-DandelionPeach", 250 + offset, ["MSC"]),
+
+    #################################################################
+    # FILLER - OTHER
+    "Object-BubbleGrass": FillerItemData("Object-BubbleGrass", 270 + offset),
+    "Object-FlyLure": FillerItemData("Object-FlyLure", 271 + offset),
+    "Object-Lantern": FillerItemData("Object-Lantern", 272 + offset),
+    "Object-KarmaFlower": FillerItemData("Object-KarmaFlower", 273 + offset),
+    "Object-VultureMask": FillerItemData("Object-VultureMask", 274 + offset),
+    "Object-JokeRifle": FillerItemData("Object-JokeRifle", 275 + offset, ["MSC"]),
+
+    #################################################################
+    # FILLER - TRAPS
     "Stun Trap": RainWorldItemData("Stun Trap", 300 + offset, ItemClassification.trap, 0),
     "Zoomies Trap": RainWorldItemData("Zoomies Trap", 301 + offset, ItemClassification.trap, 0),
     "Timer Trap": RainWorldItemData("Timer Trap", 302 + offset, ItemClassification.trap, 0),

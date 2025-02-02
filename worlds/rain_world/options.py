@@ -144,36 +144,121 @@ class PctTraps(Range):
     default = 30
 
 
-class WtRock(Range):
-    """The relative weight of rocks in the non-trap filler item pool."""
-    display_name = "Rock"
+class WtGeneric(Range):
     range_start = 0
     range_end = 100
+
+
+class WtRock(WtGeneric):
+    """The relative weight of rocks in the non-trap filler item pool."""
+    display_name = "Rock"
+    item_name = "Object-Rock"
     default = 100
 
 
-class WtSpear(Range):
+class WtSpear(WtGeneric):
     """The relative weight of spears in the non-trap filler item pool."""
     display_name = "Spear"
-    range_start = 0
-    range_end = 100
-    default = 50
+    item_name = "Object-Spear"
+    default = 40
 
 
-class WtGrenade(Range):
+class WtExplosiveSpear(WtGeneric):
+    """The relative weight of explosive spears in the non-trap filler item pool."""
+    display_name = "ExplosiveSpear"
+    item_name = "Object-ExplosiveSpear"
+    default = 10
+
+
+class WtGrenade(WtGeneric):
     """The relative weight of grenades in the non-trap filler item pool."""
     display_name = "Grenade"
-    range_start = 0
-    range_end = 100
+    item_name = "Object-ScavengerBomb"
+    default = 10
+
+
+class WtFlashbang(WtGeneric):
+    """The relative weight of flashbangs in the non-trap filler item pool."""
+    display_name = "Flashbang"
+    item_name = "Object-FlareBomb"
+    default = 20
+
+
+class WtSporePuff(WtGeneric):
+    """The relative weight of spore puffs in the non-trap filler item pool."""
+    display_name = "Spore puff"
+    item_name = "Object-PuffBall"
+    default = 20
+
+
+class WtCherrybomb(WtGeneric):
+    """The relative weight of cherrybombs in the non-trap filler item pool."""
+    display_name = "Cherrybomb"
+    item_name = "Object-FirecrackerPlant"
+    default = 30
+
+
+class WtLillyPuck(WtGeneric):
+    """The relative weight of lilypucks in the non-trap filler item pool."""
+    display_name = "Lilypuck (MSC)"
+    item_name = "Object-LillyPuck"
+    default = 20
+
+
+class WtFruit(WtGeneric):
+    """The relative weight of blue fruit in the non-trap filler item pool."""
+    display_name = "Blue fruit"
+    item_name = "Object-DangleFruit"
+    default = 60
+
+
+class WtBubbleFruit(WtGeneric):
+    """The relative weight of bubble fruit in the non-trap filler item pool."""
+    display_name = "Bubble fruit"
+    item_name = "Object-WaterNut"
+    default = 40
+
+
+class WtEggbugEgg(WtGeneric):
+    """The relative weight of eggbug eggs in the non-trap filler item pool."""
+    display_name = "Eggbug egg"
+    item_name = "Object-EggBugEgg"
+    default = 30
+
+
+class WtJellyfish(WtGeneric):
+    """The relative weight of jellyfish in the non-trap filler item pool."""
+    display_name = "Jellyfish"
+    item_name = "Object-JellyFish"
     default = 15
 
 
-class WtFruit(Range):
-    """The relative weight of blue fruits in the non-trap filler item pool."""
-    display_name = "Fruit"
-    range_start = 0
-    range_end = 100
-    default = 30
+class WtMushroom(WtGeneric):
+    """The relative weight of mushrooms in the non-trap filler item pool."""
+    display_name = "Mushroom"
+    item_name = "Object-Mushroom"
+    default = 15
+
+
+class WtSlimeMold(WtGeneric):
+    """The relative weight of slime mold in the non-trap filler item pool."""
+    display_name = "Slime mold"
+    item_name = "Object-SlimeMold"
+    default = 35
+
+
+class WtFireEgg(WtGeneric):
+    """The relative weight of firebug eggs in the non-trap filler item pool."""
+    display_name = "Firebug egg (MSC)"
+    item_name = "Object-FireEgg"
+    default = 5
+
+
+class WtGlowWeed(WtGeneric):
+    """The relative weight of glow weed in the non-trap filler item pool."""
+    display_name = "Glow weed (MSC)"
+    item_name = "Object-GlowWeed"
+    default = 15
 
 
 class WtTrapStun(Range):
@@ -252,8 +337,29 @@ class RainWorldOptions(PerGameCommonOptions):
 
     wt_rocks: WtRock
     wt_spears: WtSpear
+    wt_explosive_spears: WtExplosiveSpear
     wt_grenades: WtGrenade
+    wt_flashbangs: WtFlashbang
+    wt_sporepuffs: WtSporePuff
+    wt_cherrybombs: WtCherrybomb
+    wt_lilypucks: WtLillyPuck
+
     wt_fruit: WtFruit
+    wt_bubblefruit: WtBubbleFruit
+    wt_eggbugeggs: WtEggbugEgg
+    wt_jellyfish: WtJellyfish
+    wt_mushrooms: WtMushroom
+    wt_slimemold: WtSlimeMold
+    wt_fireeggs: WtFireEgg
+    wt_glowweed: WtGlowWeed
+
+    def get_nontrap_weight_dict(self) -> dict[str, float]:
+        return {a.item_name: a.value for a in [
+            self.wt_rocks, self.wt_spears, self.wt_explosive_spears, self.wt_grenades,
+            self.wt_flashbangs, self.wt_sporepuffs, self.wt_cherrybombs, self.wt_lilypucks,
+            self.wt_fruit, self.wt_bubblefruit, self.wt_eggbugeggs, self.wt_jellyfish,
+            self.wt_mushrooms, self.wt_slimemold, self.wt_fireeggs, self.wt_glowweed
+        ]}
 
     wt_stuns: WtTrapStun
     wt_zoomies: WtTrapZoomies
@@ -263,6 +369,12 @@ class RainWorldOptions(PerGameCommonOptions):
     wt_spitterspider: WtTrapSpitterSpider
 
 
+filler_weight_classes: list[type] = [
+    WtRock, WtSpear, WtExplosiveSpear, WtGrenade, WtFlashbang, WtSporePuff, WtCherrybomb,
+    WtLillyPuck, WtFruit, WtBubbleFruit, WtEggbugEgg, WtJellyfish, WtMushroom, WtSlimeMold,
+    WtFireEgg, WtGlowWeed
+]
+
 option_groups = [
     OptionGroup(
         "Important",
@@ -271,7 +383,10 @@ option_groups = [
     OptionGroup("Start settings", [RandomStartingRegion], True),
     OptionGroup("Progression item settings", [ExtraKarmaCapIncreases], True),
     OptionGroup("Location settings", [PassagePriority], True),
-    OptionGroup("Filler item relative weights", [PctTraps, WtRock, WtSpear, WtGrenade, WtFruit], True),
+    OptionGroup(
+        "Filler item relative weights",
+        [PctTraps] + filler_weight_classes,
+        True),
     OptionGroup(
         "Trap relative weights",
         [WtTrapStun, WtTrapZoomies, WtTrapTimer, WtTrapRedLizard, WtTrapRedCentipede, WtTrapSpitterSpider],
