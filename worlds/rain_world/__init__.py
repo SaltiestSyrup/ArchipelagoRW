@@ -211,5 +211,5 @@ class RainWorldWorld(World):
         visualize_regions(self.multiworld.get_region("Menu", self.player), "my_world.puml", show_locations=False)
 
     def fill_slot_data(self) -> Mapping[str, Any]:
-        d = self.options.as_dict("which_gamestate", "random_starting_region")
+        d = self.options.as_dict("which_gamestate", "random_starting_region", "passage_progress_without_survivor")
         return d
