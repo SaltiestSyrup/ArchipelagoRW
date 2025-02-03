@@ -111,3 +111,12 @@ def has_some(items: list[str], count: int) -> Callable[[int], Callable[[Collecti
     return inner
 
 
+def gate_factory(gate_name: str, karma: int, gamestate: list[str] = None) -> Callable[[int], Callable[[CollectionState], bool]]:
+    def inner(player: int) -> Callable[[CollectionState], bool]:
+        def inner_inner(state: CollectionState) -> bool:
+            return (state.has("Karma", player, karma - (1 if karma < 6 else 2))
+                    and state.has(f"GATE_{gate_name}", player)
+                    and state.has_all(gamestate or [], player))
+        return inner_inner
+    return inner
+

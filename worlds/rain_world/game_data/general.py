@@ -13,9 +13,9 @@ REGION_CODE_DICT = {
     "LF": "Farm Arrays",
     "SB": "Subterranean",
     "MS": "Submerged Superstructure",
-    # "OE": "Outer Expanse",
-    # "LC": "Metropolis",
-    # "DM": "Looks to the Moon",
+    "OE": "Outer Expanse",
+    "LC": "Metropolis",
+    "DM": "Looks to the Moon",
 }
 
 food_quest_items = [
@@ -82,3 +82,5 @@ regions = {
 
     20: "Pipeyard"
 }
+
+regions_vanilla = ["SU", "HI", "DS", "GW", "SL", "VS", "SH", "UW", "SS", "CC", "SI", "LF", "SB"]
