@@ -83,4 +83,4 @@ regions = {
     20: "Pipeyard"
 }
 
-regions_vanilla = ["SU", "HI", "DS", "GW", "SL", "VS", "SH", "UW", "SS", "CC", "SI", "LF", "SB"]
+regions_vanilla = ["SU", "HI", "DS", "GW", "SL", "SH", "UW", "SS", "CC", "SI", "LF", "SB"]
