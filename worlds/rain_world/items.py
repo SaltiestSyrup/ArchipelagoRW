@@ -86,23 +86,23 @@ all_items: Dict[str, RainWorldItemData] = {
 
     #################################################################
     # FILLER - NON-CREATURE TRAPS
-    "Trap-Stun": RainWorldItemData("Trap-Stun", 300 + offset, ItemClassification.trap, 0),
-    "Trap-Zoomies": RainWorldItemData("Trap-Zoomies", 301 + offset, ItemClassification.trap, 0),
-    "Trap-Timer": RainWorldItemData("Trap-Timer", 302 + offset, ItemClassification.trap, 0),
-    "Trap-Flood": RainWorldItemData("Trap-Flood", 303 + offset, ItemClassification.trap, 0),
-    "Trap-Rain": RainWorldItemData("Trap-Rain", 304 + offset, ItemClassification.trap, 0),
-    "Trap-Gravity": RainWorldItemData("Trap-Gravity", 305 + offset, ItemClassification.trap, 0),
-    "Trap-Fog": RainWorldItemData("Trap-Fog", 306 + offset, ItemClassification.trap, 0),
-    "Trap-KillSquad": RainWorldItemData("Trap-KillSquad", 307 + offset, ItemClassification.trap, 0),
-    "Trap-Alarm": RainWorldItemData("Trap-KillSquad", 308 + offset, ItemClassification.trap, 0),
+    "Trap-Stun": FillerItemData("Trap-Stun", 300 + offset),
+    "Trap-Zoomies": FillerItemData("Trap-Zoomies", 301 + offset),
+    "Trap-Timer": FillerItemData("Trap-Timer", 302 + offset),
+    "Trap-Flood": FillerItemData("Trap-Flood", 303 + offset),
+    "Trap-Rain": FillerItemData("Trap-Rain", 304 + offset),
+    "Trap-Gravity": FillerItemData("Trap-Gravity", 305 + offset),
+    "Trap-Fog": FillerItemData("Trap-Fog", 306 + offset),
+    "Trap-KillSquad": FillerItemData("Trap-KillSquad", 307 + offset),
+    "Trap-Alarm": FillerItemData("Trap-KillSquad", 308 + offset),
 
     #################################################################
     # FILLER - CREATURE TRAPS
-    "Trap-RedLizard": RainWorldItemData("Trap-RedLizard", 330 + offset, ItemClassification.trap, 0),
-    "Trap-RedCentipede": RainWorldItemData("Trap-RedCentipede", 331 + offset, ItemClassification.trap, 0),
-    "Trap-SpitterSpider": RainWorldItemData("Trap-SpitterSpider", 332 + offset, ItemClassification.trap, 0),
-    "Trap-BrotherLongLegs": RainWorldItemData("Trap-BrotherLongLegs", 333 + offset, ItemClassification.trap, 0),
-    "Trap-DaddyLongLegs": RainWorldItemData("Trap-DaddyLongLegs", 334 + offset, ItemClassification.trap, 0),
+    "Trap-RedLizard": FillerItemData("Trap-RedLizard", 330 + offset),
+    "Trap-RedCentipede": FillerItemData("Trap-RedCentipede", 331 + offset),
+    "Trap-SpitterSpider": FillerItemData("Trap-SpitterSpider", 332 + offset),
+    "Trap-BrotherLongLegs": FillerItemData("Trap-BrotherLongLegs", 333 + offset),
+    "Trap-DaddyLongLegs": FillerItemData("Trap-DaddyLongLegs", 334 + offset),
 }
 
 #################################################################
