@@ -261,52 +261,102 @@ class WtGlowWeed(WtGeneric):
     default = 15
 
 
-class WtTrapStun(Range):
+class WtTrapStun(WtGeneric):
     """The relative weight of stun traps in the trap filler item pool."""
-    display_name = "Stun trap"
-    range_start = 0
-    range_end = 100
+    display_name = "Stun"
+    item_name = "Trap-Stun"
     default = 100
 
 
-class WtTrapZoomies(Range):
+class WtTrapZoomies(WtGeneric):
     """The relative weight of zoomies traps in the trap filler item pool."""
-    display_name = "Zoomies trap"
-    range_start = 0
-    range_end = 100
+    display_name = "Zoomies"
+    item_name = "Trap-Zoomies"
     default = 70
 
 
-class WtTrapTimer(Range):
+class WtTrapTimer(WtGeneric):
     """The relative weight of timer traps in the trap filler item pool."""
-    display_name = "Timer trap"
-    range_start = 0
-    range_end = 100
+    display_name = "Timer"
+    item_name = "Trap-Timer"
     default = 100
 
 
-class WtTrapRedLizard(Range):
+class WtTrapRedLizard(WtGeneric):
     """The relative weight of red lizard traps in the trap filler item pool."""
-    display_name = "Red lizard trap"
-    range_start = 0
-    range_end = 100
+    display_name = "RedLizard"
+    item_name = "Trap-RedLizard"
     default = 40
 
 
-class WtTrapRedCentipede(Range):
+class WtTrapRedCentipede(WtGeneric):
     """The relative weight of red centipede traps in the trap filler item pool."""
-    display_name = "Red centipede trap"
-    range_start = 0
-    range_end = 100
+    display_name = "RedCentipede"
+    item_name = "Trap-RedCentipede"
     default = 25
 
 
-class WtTrapSpitterSpider(Range):
+class WtTrapSpitterSpider(WtGeneric):
     """The relative weight of spitter spider traps in the trap filler item pool."""
-    display_name = "Spitter spider trap"
-    range_start = 0
-    range_end = 100
+    display_name = "RedCentipede"
+    item_name = "Trap-RedCentipede"
     default = 30
+
+
+class WtTrapBrotherLongLegs(WtGeneric):
+    """The relative weight of brother long legs traps in the trap filler item pool."""
+    display_name = "BrotherLongLegs"
+    item_name = "Trap-BrotherLongLegs"
+    default = 15
+
+
+class WtTrapDaddyLongLegs(WtGeneric):
+    """The relative weight of daddy long legs traps in the trap filler item pool."""
+    display_name = "DaddyLongLegs"
+    item_name = "Trap-DaddyLongLegs"
+    default = 5
+
+
+class WtTrapFlood(WtGeneric):
+    """The relative weight of flood traps in the trap filler item pool."""
+    display_name = "Flood"
+    item_name = "Trap-Flood"
+    default = 15
+
+
+class WtTrapRain(WtGeneric):
+    """The relative weight of rain traps in the trap filler item pool."""
+    display_name = "Rain"
+    item_name = "Trap-Rain"
+    default = 15
+
+
+class WtTrapGravity(WtGeneric):
+    """The relative *weight* of gravity traps in the trap filler item pool."""
+    display_name = "Gravity"
+    item_name = "Trap-Gravity"
+    default = 15
+
+
+class WtTrapFog(WtGeneric):
+    """The relative weight of fog traps in the trap filler item pool."""
+    display_name = "Fog"
+    item_name = "Trap-Fog"
+    default = 20
+
+
+class WtTrapKillSquad(WtGeneric):
+    """The relative weight of kill squad traps in the trap filler item pool."""
+    display_name = "KillSquad"
+    item_name = "Trap-KillSquad"
+    default = 10
+
+
+class WtTrapAlarm(WtGeneric):
+    """The relative weight of alarm traps in the trap filler item pool."""
+    display_name = "Alarm"
+    item_name = "Trap-Alarm"
+    default = 15
 
 
 class Accessibility(Choice):
@@ -364,15 +414,41 @@ class RainWorldOptions(PerGameCommonOptions):
     wt_stuns: WtTrapStun
     wt_zoomies: WtTrapZoomies
     wt_timers: WtTrapTimer
+    wt_killsquads: WtTrapKillSquad
+    wt_alarms: WtTrapAlarm
+    wt_fogs: WtTrapFog
+    wt_floods: WtTrapFlood
+    wt_rains: WtTrapRain
+    wt_gravity: WtTrapGravity
+
     wt_redlizard: WtTrapRedLizard
     wt_redcentipede: WtTrapRedCentipede
     wt_spitterspider: WtTrapSpitterSpider
+    wt_brotherlonglegs: WtTrapBrotherLongLegs
+    wt_daddylonglegs: WtTrapDaddyLongLegs
+
+    def get_trap_weight_dict(self) -> dict[str, float]:
+        return {a.item_name: a.value for a in [
+            self.wt_stuns, self.wt_zoomies, self.wt_timers, self.wt_alarms, self.wt_killsquads,
+            self.wt_gravity, self.wt_rains, self.wt_floods, self.wt_fogs,
+
+            self.wt_redcentipede, self.wt_redlizard, self.wt_spitterspider,
+            self.wt_brotherlonglegs, self.wt_daddylonglegs
+        ]}
 
 
 filler_weight_classes: list[type] = [
     WtRock, WtSpear, WtExplosiveSpear, WtGrenade, WtFlashbang, WtSporePuff, WtCherrybomb,
     WtLillyPuck, WtFruit, WtBubbleFruit, WtEggbugEgg, WtJellyfish, WtMushroom, WtSlimeMold,
     WtFireEgg, WtGlowWeed
+]
+
+trap_weight_classes: list[type] = [
+    WtTrapStun, WtTrapZoomies, WtTrapTimer, WtTrapAlarm, WtTrapKillSquad,
+    WtTrapGravity, WtTrapRain, WtTrapFlood, WtTrapFog,
+
+    WtTrapRedLizard, WtTrapRedCentipede, WtTrapSpitterSpider,
+    WtTrapBrotherLongLegs, WtTrapDaddyLongLegs
 ]
 
 option_groups = [
@@ -383,13 +459,6 @@ option_groups = [
     OptionGroup("Start settings", [RandomStartingRegion], True),
     OptionGroup("Progression item settings", [ExtraKarmaCapIncreases], True),
     OptionGroup("Location settings", [PassagePriority], True),
-    OptionGroup(
-        "Filler item relative weights",
-        [PctTraps] + filler_weight_classes,
-        True),
-    OptionGroup(
-        "Trap relative weights",
-        [WtTrapStun, WtTrapZoomies, WtTrapTimer, WtTrapRedLizard, WtTrapRedCentipede, WtTrapSpitterSpider],
-        True
-    ),
+    OptionGroup("Filler item relative weights", [PctTraps] + filler_weight_classes, True),
+    OptionGroup("Trap relative weights", trap_weight_classes, True),
 ]

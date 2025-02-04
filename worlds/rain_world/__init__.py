@@ -130,15 +130,7 @@ class RainWorldWorld(World):
         trap_fraction = self.options.pct_traps / 100
 
         nontrap_weights = normalize(self.options.get_nontrap_weight_dict())
-
-        trap_weights = normalize({
-            "Stun Trap": self.options.wt_stuns / 100,
-            "Zoomies Trap": self.options.wt_zoomies / 100,
-            "Timer Trap": self.options.wt_timers / 100,
-            "Red Lizard Trap": self.options.wt_redlizard / 100,
-            "Red Centipede Trap": self.options.wt_redcentipede / 100,
-            "Spitter Spider Trap": self.options.wt_spitterspider / 100
-        })
+        trap_weights = normalize(self.options.get_trap_weight_dict())
 
         d: dict[str, float] = {}
         d.update({k: v * (1 - trap_fraction) for k, v in nontrap_weights.items()})
