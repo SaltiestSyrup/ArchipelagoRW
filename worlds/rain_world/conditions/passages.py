@@ -35,7 +35,7 @@ cond_chieftain = AllOf(
 #################################################################
 # HUNTER
 cond_hunter = AnyOf(
-    Simple(["Scug-Hunter", "Scug-Artificer", "Scug-Spearmaster", "Scug-Gourmand", "Scug-Inv"], 1),
+    Simple(["Scug-Hunter", "Scug-Artificer", "Scug-Spear", "Scug-Gourmand", "Scug-Inv"], 1),
     AllOf(
         Simple(["Scug-Monk", "Scug-Survivor", "Scug-Rivulet"], 1),
         Simple(["Fly", "SmallNeedleWorm", "SmallCentipede", "Centipede", "EggBug", "JellyFish", "Hazer", "VultureGrub"],
@@ -92,7 +92,7 @@ cond_scholar = AnyOf(
     ),
     Simple(["Scug-Red", "Scug-Rivulet"], 1),
     AllOf(
-        Simple(["Scug-Artificer", "Scug-Spearmaster"], 1),
+        Simple(["Scug-Artificer", "Scug-Spear"], 1),
         Simple("Mark")
     ),
 )
