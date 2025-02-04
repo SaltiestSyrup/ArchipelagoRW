@@ -132,3 +132,13 @@ class Compound(Condition):
             else:
                 return sum(c.check(player)(state) for c in self.conditions) >= self.count
         return inner
+
+
+class AnyOf(Compound):
+    def __init__(self, *conditions: Condition):
+        super().__init__(1, *conditions)
+
+
+class AllOf(Compound):
+    def __init__(self, *conditions: Condition):
+        super().__init__(len(conditions), *conditions)

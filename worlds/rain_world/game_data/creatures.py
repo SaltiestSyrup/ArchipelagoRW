@@ -1,6 +1,4 @@
-__all__ = ["can_access_creature_factory_factory", "can_access_multiple_creatures_factory_factory",
-           "can_access_dragonslayer_factory",
-           "dragonslayer_vanilla", "dragonslayer_msc", "lizards_any", "data"]
+__all__ = ["dragonslayer_vanilla", "dragonslayer_msc", "lizards_any", "data"]
 
 import json
 import os.path
@@ -33,54 +31,5 @@ def generate_events(constructor: Callable):
     return ret
 
 
-def can_access_creature_factory_factory(name: str) -> Callable[[int], Callable[[CollectionState], bool]]:
-    def can_access_creature_factory(player: int) -> Callable[[CollectionState], bool]:
-        def can_access_creature(state: CollectionState) -> bool:
-            return state.has(name, player)
-            # try:
-            #     regions = data["MSC" if state.has("MSC", player) else "Vanilla"]["Red"][name]["normal"]
-            #     return state.has_any((f"Access-{region}" for region in regions), player)
-            # except KeyError:
-            #     return False
-        return can_access_creature
-    return can_access_creature_factory
 
-
-def can_access_multiple_creatures_factory_factory(names: list[str], count: int) -> Callable[[int], Callable[[CollectionState], bool]]:
-    def can_access_multiple_creatures_factory(player: int) -> Callable[[CollectionState], bool]:
-        def can_access_multiple_creatures(state: CollectionState) -> bool:
-            return state.has_from_list_unique(names, player, count)
-            # hits = 0
-            # for name in names:
-            #     try:
-            #         regions = data["MSC" if state.has("MSC", player) else "Vanilla"]["Red"][name]["normal"]
-            #         if state.has_any((f"Access-{region}" for region in regions), player):
-            #             hits += 1
-            #             if hits >= count:
-            #                 return True
-            #     except KeyError:
-            #         continue
-            # return False
-        return can_access_multiple_creatures
-    return can_access_multiple_creatures_factory
-
-
-def can_access_dragonslayer_factory(player: int) -> Callable[[CollectionState], bool]:
-    def can_access_multiple_creatures(state: CollectionState) -> bool:
-        return state.has_from_list_unique(
-            dragonslayer_msc if state.has("MSC", player) else dragonslayer_vanilla,
-            player, 6
-        )
-
-        # hits = 0
-        # msc = state.has("MSC", player)
-        # for name in dragonslayer_msc if msc else dragonslayer_vanilla:
-        #     regions = data["MSC" if msc else "Vanilla"]["Red"][name]["normal"]
-        #     if state.has_any((f"Access-{region}" for region in regions), player):
-        #         hits += 1
-        #         if hits >= 6:
-        #             return True
-        # return False
-
-    return can_access_multiple_creatures
 

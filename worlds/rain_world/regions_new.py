@@ -67,6 +67,7 @@ all_regions = [
     RegionData("Late Passages", "(P3)"),
     RegionData("Food Quest", "(FQ)"),
     RegionData("Starting region", "START"),
+    RegionData("Events", "(EV)"),
 
     RegionData("Outskirts", "SU"),
     RegionData("Outskirts filtration", "SU^"),
@@ -95,6 +96,7 @@ all_regions = [
     RegionData("Undergrowth", "UG"),
     RegionData("Silent Construct", "CL"),
     RegionData("Waterfront Facility", "LM"),
+    RegionData("Rubicon", "HR"),
     RegionData("Void Sea", "(Vo)")
 ]
 
@@ -105,6 +107,7 @@ all_connections = [
     ConnectionData("Menu", "Food Quest", Simple("MSC")),
     ConnectionData("Early Passages", "Late Passages", Simple("Passage-Survivor")),
     ConnectionData("Menu", "Starting region"),
+    ConnectionData("Menu", "Events"),
 
     ConnectionData("Outskirts filtration", "Outskirts"),
     Gate("Outskirts", "Industrial Complex", 3, "SU_HI"),

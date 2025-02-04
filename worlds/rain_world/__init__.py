@@ -2,7 +2,8 @@ import random
 from typing import Mapping, Any
 
 from .constants import REGION_CODE_DICT
-from .events import all_events, object_events
+from .events import all_events
+# from .events_old import all_events, object_events
 from .utils import normalize, flounder2
 from .items import RainWorldItem, all_items, RainWorldItemData
 from worlds.AutoWorld import World, WebWorld
@@ -64,8 +65,8 @@ class RainWorldWorld(World):
         for data in all_events:
             data.make(self.player, self.multiworld)
 
-        for data in object_events:
-            data.make(self.player, self.multiworld)
+        # for data in object_events:
+        #     data.make(self.player, self.multiworld)
 
         self.location_count = len(all_locations)
 

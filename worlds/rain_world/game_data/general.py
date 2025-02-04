@@ -16,6 +16,11 @@ REGION_CODE_DICT = {
     "OE": "Outer Expanse",
     "LC": "Metropolis",
     "DM": "Looks to the Moon",
+    "CL": "Silent Construct",
+    "RM": "The Rot",
+    "UG": "Undergrowth",
+    "LM": "Waterfront Facility",
+    "HR": "Rubicon",
 }
 
 food_quest_items = [
@@ -84,3 +89,6 @@ regions = {
 }
 
 regions_vanilla = ["SU", "HI", "DS", "GW", "SL", "SH", "UW", "SS", "CC", "SI", "LF", "SB"]
+
+scugs_msc = ['Yellow', 'White', 'Red', 'Gourmand', 'Artificer', 'Rivulet', 'Spear', 'Saint', 'Inv']
+scugs_vanilla = ['Yellow', 'White', 'Red']

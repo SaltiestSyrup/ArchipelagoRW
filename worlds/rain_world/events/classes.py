@@ -1,10 +1,6 @@
-from typing import NamedTuple
-
-from BaseClasses import MultiWorld, Item, ItemClassification, Location, CollectionState
-from worlds.rain_world.constants import REGION_CODE_DICT
-from worlds.rain_world.utils import flatten
-from . import game_data
-from ..generic.Rules import add_rule
+from BaseClasses import ItemClassification, MultiWorld, Item, Location, CollectionState
+from worlds.generic.Rules import add_rule
+from worlds.rain_world.classes import Condition
 
 
 class EventData:
@@ -55,9 +51,18 @@ class ObjectEventData:
         add_rule(location, self.access_rule()(player))
 
 
-all_events: list[EventData] = [
-    EventData(f"Access-{short}", f"Access-{short}", full)
-    for short, full in game_data.general.REGION_CODE_DICT.items()
-]
+class ObjectEventData2:
+    def __init__(self, item_name: str, location_name: str, region: str, condition: Condition):
+        self.item_name = item_name
+        self.location_item = location_name
+        self.region = region
+        self.classification = ItemClassification.progression
+        self.condition = condition
 
-object_events = game_data.creatures.generate_events(ObjectEventData)
+    def make(self, player: int, multiworld: MultiWorld):
+        item = Item(self.item_name, self.classification, None, player)
+        region = multiworld.get_region(self.region, player)
+        location = Location(player, self.location_item, None, region)
+        region.locations.append(location)
+        location.place_locked_item(item)
+        add_rule(location, self.condition.check(player))
