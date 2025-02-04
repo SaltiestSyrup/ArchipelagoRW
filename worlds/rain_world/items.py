@@ -1,7 +1,7 @@
 from BaseClasses import Item, ItemClassification
 from typing import Optional, Dict
 from . import constants
-from .regions_new import all_gate_short_names
+from .regions import all_gate_short_names
 
 
 class RainWorldItem(Item):

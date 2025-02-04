@@ -2,7 +2,7 @@
 Static data summarizing the contents of the game world, such as the locations of creature spawns.
 """
 
-from . import creatures, general, placed_objects, files
+from . import general, files
 
 OBJECTS = {
     "SlimeMold": ["SH", "UW"],

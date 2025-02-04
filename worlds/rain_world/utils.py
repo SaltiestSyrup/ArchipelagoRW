@@ -1,12 +1,11 @@
 from typing import TypeVar
 
+T = TypeVar("T")
 
-def flatten(lol):
+
+def flatten(lol: list[list[T]]) -> list[T]:
     """Flattens a list of lists."""
     return [item for sublist in lol for item in sublist]
-
-
-T = TypeVar("T")
 
 
 def normalize(d: dict[T, float]) -> dict[T, float]:

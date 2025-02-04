@@ -21,10 +21,10 @@ class LocationAccessRule(NamedTuple):
 
 #################################################################
 # LIZARDS
-cond_dragonslayer_vanilla = Simple(game_data.creatures.dragonslayer_vanilla)
-cond_dragonslayer_msc = Compound(2, Simple(game_data.creatures.dragonslayer_msc, 6), Simple("MSC"))
+cond_dragonslayer_vanilla = Simple(game_data.general.dragonslayer_vanilla)
+cond_dragonslayer_msc = Compound(2, Simple(game_data.general.dragonslayer_msc, 6), Simple("MSC"))
 cond_dragonslayer = Compound(1, cond_dragonslayer_vanilla, cond_dragonslayer_msc)
-cond_friend = Simple(game_data.creatures.lizards_any, 1)
+cond_friend = Simple(game_data.general.lizards_any, 1)
 
 #################################################################
 # WANDERER

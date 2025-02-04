@@ -1,7 +1,7 @@
 import random
 from typing import Mapping, Any
 
-from .constants import REGION_CODE_DICT
+from .game_data.general import REGION_CODE_DICT
 from .events import all_events
 # from .events_old import all_events, object_events
 from .utils import normalize, flounder2
@@ -11,8 +11,8 @@ from BaseClasses import Item, ItemClassification, Tutorial, LocationProgressType
 from . import constants, state_helpers
 from .options import RainWorldOptions
 from .classes import location_name_to_id, RainWorldRegion, RegionData
-from .regions_new import all_regions, all_connections
-from .locations_new import all_locations, location_map
+from .regions import all_regions, all_connections
+from .locations import all_locations, location_map
 from .rules import all_rules
 from Utils import visualize_regions
 from .game_data.general import scug_names, default_starting_regions, prioritizable_passages, regions

@@ -1,7 +1,7 @@
 from typing import Dict, List, NamedTuple, Optional, TYPE_CHECKING, Any, Callable
 
 from BaseClasses import CollectionState, Location, Region, MultiWorld
-from worlds.rain_world.constants import FIRST_ID, REGION_CODE_DICT
+from .constants import FIRST_ID
 from .game_data.general import food_quest_items
 
 location_map: dict[str, int] = {}
