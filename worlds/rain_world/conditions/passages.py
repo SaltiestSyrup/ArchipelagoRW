@@ -34,7 +34,7 @@ cond_hunter = AnyOf(
 # MONK
 cond_monk = AnyOf(
     Simple(game_data.general.monk_foods_vanilla, 1),
-    AllOf(Simple('MSC'), Simple(game_data.general.monk_foods_msc))
+    AllOf(Simple('MSC'), Simple(game_data.general.monk_foods_msc, 1))
 )
 
 #################################################################
@@ -42,7 +42,7 @@ cond_monk = AnyOf(
 cond_mother = AllOf(
     Simple("MSC"),
     Simple([f"Scug-{scug}" for scug in ("White", "Red", "Gourmand")], 1),
-    Simple(game_data.general.slugpup_normal_regions, 1)
+    Simple([f"Access-{region}" for region in game_data.general.slugpup_normal_regions], 1)
 )
 
 #################################################################
@@ -59,7 +59,7 @@ cond_pilgrim = AllOf(
     Simple([f"Echo-{e}" for e in ('CC', 'SI', 'LF', 'SB')], locations=True),
     AnyOf(Simple(["Echo-SH", "Echo-UW"], locations=True), Simple("Scug-Saint")),
     AnyOf(
-        Simple([f"Scug-{scug}" for scug in set(game_data.general.scugs_msc) - {"Artificer", "Saint"}]),
+        Simple([f"Scug-{scug}" for scug in set(game_data.general.scugs_msc) - {"Artificer", "Saint"}], 1),
         AllOf(Simple("Scug-Artificer"), Simple("Echo-LC", locations=True)),
         AllOf(Simple("Scug-Saint"), Simple(["Echo-UG", "Echo-SL", "Echo-CL"], locations=True)),
     )
@@ -68,10 +68,7 @@ cond_pilgrim = AllOf(
 #################################################################
 # SCHOLAR
 cond_scholar = AnyOf(
-    AllOf(
-        Simple("MSC", negative=True),
-        Simple(["Scug-Monk", "Access-SL", "Mark"])
-    ),
+    Simple(["MSC", "Scug-Monk", "Access-SL", "Mark"]),  # Monk requires MSC to see colored pearls
     AllOf(
         Simple(["Scug-White", "Scug-Gourmand"], 1),
         Simple(["Access-SL", "Mark"])
@@ -114,7 +111,7 @@ def wanderer_pip_factory(count: int) -> Condition:
         AllOf(Simple("MSC", negative=True), Simple([f"Access-{r}" for r in regions], count)),
         AllOf(
             Simple("MSC"),
-            Simple(["Scug-Yellow", "Scug-White", "Scug-Red"]),
+            Simple(["Scug-Yellow", "Scug-White", "Scug-Red"], 1),
             Simple([f"Access-{r}" for r in regions_msc], count)
         ),
         AllOf(Simple("Scug-Gourmand"), Simple([f"Access-{r}" for r in regions_gourmand], count)),
@@ -139,7 +136,7 @@ all_rules: list[LocationAccessRule] = [
     LocationAccessRule("Passage-Nomad", cond_nomad),
     LocationAccessRule("Passage-Pilgrim", cond_pilgrim),
     LocationAccessRule("Passage-Scholar", cond_scholar),
-    LocationAccessRule("Passage-Survivor", Simple("Karma", 5)),
+    LocationAccessRule("Passage-Survivor", Simple("Karma", 4)),
     LocationAccessRule("Passage-Wanderer", cond_wanderer),
 ]
 
