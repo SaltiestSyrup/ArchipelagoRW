@@ -15,7 +15,6 @@ cond_friend = Simple(game_data.general.lizards_any, 1)
 #################################################################
 # CHIEFTAIN
 cond_chieftain = AllOf(
-    Simple("MSC"),
     Simple(["Scavenger", "EliteScavenger"], 1),
     Simple([f"Scug-{s}" for s in set(game_data.general.scug_names.values()) - {"Artificer"}], 1)
 )
@@ -58,8 +57,7 @@ cond_nomad = AllOf(
 cond_pilgrim = AllOf(
     Simple("MSC"),
     Simple([f"Echo-{e}" for e in ('CC', 'SI', 'LF', 'SB')], locations=True),
-    Simple(["Echo-SH", "Scug-Saint"], 1),
-    Simple(["Echo-UW", "Scug-Saint"], 1),
+    AnyOf(Simple(["Echo-SH", "Echo-UW"], locations=True), Simple("Scug-Saint")),
     AnyOf(
         Simple([f"Scug-{scug}" for scug in set(game_data.general.scugs_msc) - {"Artificer", "Saint"}]),
         AllOf(Simple("Scug-Artificer"), Simple("Echo-LC", locations=True)),
@@ -129,12 +127,13 @@ def wanderer_pip_factory(count: int) -> Condition:
 
 #################################################################
 # LISTING
-# Passages without any implemented rules yet: Saint, Outlaw, Martyr
+# Passages without any implemented rules yet: Saint, Outlaw
 all_rules: list[LocationAccessRule] = [
     LocationAccessRule("Passage-DragonSlayer", cond_dragonslayer),
     LocationAccessRule("Passage-Chieftain", cond_chieftain),
     LocationAccessRule("Passage-Friend", cond_friend),
     LocationAccessRule("Passage-Hunter", cond_hunter),
+    LocationAccessRule("Passage-Martyr", Simple("MSC")),
     LocationAccessRule("Passage-Monk", cond_monk),
     LocationAccessRule("Passage-Mother", cond_mother),
     LocationAccessRule("Passage-Nomad", cond_nomad),
