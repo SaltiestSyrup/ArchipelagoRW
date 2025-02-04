@@ -1,7 +1,7 @@
 from .classes import ObjectEventData2
 
 from ..game_data.general import scugs_msc, scugs_vanilla
-from ..classes import Simple, AnyOf, AllOf
+from ..conditions.classes import Simple, AnyOf, AllOf
 from ..game_data.files import placed_objects, creatures
 
 

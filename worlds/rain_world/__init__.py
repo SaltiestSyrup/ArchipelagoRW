@@ -13,7 +13,7 @@ from .options import RainWorldOptions
 from .classes import location_name_to_id, RainWorldRegion, RegionData
 from .regions import all_regions, all_connections
 from .locations import all_locations, location_map
-from .rules import all_rules
+from .conditions import all_rules
 from Utils import visualize_regions
 from .game_data.general import scug_names, default_starting_regions, prioritizable_passages, regions
 

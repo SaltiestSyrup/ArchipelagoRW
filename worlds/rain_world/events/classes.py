@@ -1,6 +1,6 @@
 from BaseClasses import ItemClassification, MultiWorld, Item, Location, CollectionState
 from worlds.generic.Rules import add_rule
-from worlds.rain_world.classes import Condition
+from ..conditions.classes import Condition
 
 
 class EventData:

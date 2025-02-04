@@ -55,6 +55,7 @@ regions = {
 }
 
 regions_vanilla = ["SU", "HI", "DS", "GW", "SL", "SH", "UW", "SS", "CC", "SI", "LF", "SB"]
+regions_all = list(REGION_CODE_DICT.keys())
 
 #################################################################
 # SCUG DATA
@@ -102,3 +103,10 @@ food_quest_items = [
 dragonslayer_vanilla = ["GreenLizard", "PinkLizard", "BlueLizard", "WhiteLizard", "YellowLizard", "BlackLizard"]
 dragonslayer_msc = dragonslayer_vanilla + ["CyanLizard", "RedLizard", "SpitLizard", "ZoopLizard"]
 lizards_any = dragonslayer_msc + ["Salamander", "EelLizard", "TrainLizard"]
+
+echoes_vanilla = ['CC', 'SI', 'LF', 'SB', 'SH', 'UW']
+
+monk_foods_vanilla = ['DangleFruit', 'BubbleFruit', 'SeedCob', 'SlimeMold']
+monk_foods_msc = ['LillyPuck', 'GlowWeed', 'DandelionPeach', 'GooieDuck', 'Seed', 'FireEgg']
+
+slugpup_normal_regions = ['SU', 'HI', 'DS', 'SL', 'GW', 'SH', 'UW', 'CC', 'SI', 'LF', 'SB', 'VS', 'OE']
