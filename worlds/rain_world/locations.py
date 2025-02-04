@@ -209,6 +209,10 @@ all_locations: list[LocationData] = [
     Echo("UW", "The Exterior", 5073, ""),
     Echo("SI", "Sky Islands", 5074, ""),
     Echo("SB", "Subterranean ravine", 5075, ""),
+    Echo("LC", "Metropolis", 5076, ""),
+    Echo("UG", "Undergrowth", 5077, ""),
+    Echo("CL", "Silent Construct", 5078, ""),
+    Echo("SL", "Shoreline", 5079, ""),
 
     LocationData("Ascension", "Ascension", "Void Sea", None),
 ]

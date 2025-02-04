@@ -2,20 +2,8 @@
 Conditions for passage locations.
 """
 
-from BaseClasses import MultiWorld
 from .. import game_data
-from worlds.generic.Rules import add_rule
-from .classes import Condition, Simple, AnyOf, AllOf
-
-
-class LocationAccessRule:
-    def __init__(self, name: str, condition: Condition):
-        self.name: str = name
-        self.condition: Condition = condition
-
-    def make(self, player: int, multiworld: MultiWorld):
-        add_rule(multiworld.get_location(self.name, player), self.condition.check(player))
-
+from .classes import Condition, Simple, AnyOf, AllOf, LocationAccessRule
 
 #################################################################
 # LIZARDS

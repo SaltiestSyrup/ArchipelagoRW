@@ -1,6 +1,7 @@
 from typing import Callable, Optional
 
-from BaseClasses import CollectionState
+from BaseClasses import CollectionState, MultiWorld
+from worlds.generic.Rules import add_rule
 
 
 class Condition:
@@ -75,3 +76,12 @@ class AllOf(Compound):
 
 
 ConditionBlank = Condition()
+
+
+class LocationAccessRule:
+    def __init__(self, name: str, condition: Condition):
+        self.name: str = name
+        self.condition: Condition = condition
+
+    def make(self, player: int, multiworld: MultiWorld):
+        add_rule(multiworld.get_location(self.name, player), self.condition.check(player))
