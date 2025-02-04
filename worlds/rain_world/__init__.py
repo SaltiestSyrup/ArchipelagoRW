@@ -1,14 +1,14 @@
 import random
 from typing import Mapping, Any
 
+from .conditions.classes import Simple
 from .game_data.general import REGION_CODE_DICT
 from .events import all_events
-# from .events_old import all_events, object_events
 from .utils import normalize, flounder2
 from .items import RainWorldItem, all_items, RainWorldItemData
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Item, ItemClassification, Tutorial, LocationProgressType
-from . import constants, state_helpers
+from . import constants
 from .options import RainWorldOptions
 from .classes import location_name_to_id, RainWorldRegion, RegionData
 from .regions import all_regions, all_connections
@@ -43,12 +43,6 @@ class RainWorldWorld(World):
     item_name_to_id = items.item_name_to_id
     location_name_to_id = location_map
 
-    # Items can be grouped using their names to allow easy checking if any item
-    # from that group has been collected. Group names can also be used for !hint
-    # item_name_groups = {
-    #     "lizard_kills": {"sword", "lance"},
-    # }
-
     location_count = 0
     starting_region = 'SU'
 
@@ -64,9 +58,6 @@ class RainWorldWorld(World):
 
         for data in all_events:
             data.make(self.player, self.multiworld)
-
-        # for data in object_events:
-        #     data.make(self.player, self.multiworld)
 
         self.location_count = len(all_locations)
 
@@ -84,11 +75,6 @@ class RainWorldWorld(World):
             passage.progress_type = LocationProgressType.PRIORITY
 
         #################################################################
-        # for n in range(self.options.maximum_required_food_quest_pips + 1, 23):
-        #     self.multiworld.get_location(f'FQ|{n}', self.player).progress_type = (
-        #         LocationProgressType.EXCLUDED)
-
-        #################################################################
         # PPWS: add a new free connection if PPWS is enabled.
         if self.options.passage_progress_without_survivor:
             self.multiworld.get_region('Menu', self.player).connect(
@@ -104,30 +90,6 @@ class RainWorldWorld(World):
 
         start = self.multiworld.get_region(self.starting_region, self.player)
         self.multiworld.get_region('Starting region', self.player).connect(start)
-
-        # menu_region = Region("Menu", self.player, self.multiworld)
-        #
-        # true_regions: list[RainWorldRegion] = [
-        #     data.generate_region(self.player, self.multiworld) for data in actual_regions.values()
-        # ]
-        #
-        # voidsea_region = Region("Void Sea", self.player, self.multiworld)
-        # voidsea_region.locations.append(Location(self.player, "Ascension", None, voidsea_region))
-        #
-        # self.multiworld.regions += [menu_region] + true_regions
-        #
-        # self.multiworld.get_region('SB', self.player).connect(voidsea_region, rule=state_helpers.max_karma_at_least(10, self.player))
-        #
-        # for connection in vanilla_connections:
-        #     left = self.multiworld.get_region(connection.left_region, self.player)
-        #     right = self.multiworld.get_region(connection.right_region, self.player)
-        #     left.connect(right, rule=state_helpers.karma_and_key(self.player, connection.left_cost, right.name))
-        #     right.connect(left, rule=state_helpers.karma_and_key(self.player, connection.right_cost, left.name))
-        #     # left.connect(right, rule=state_helpers.max_karma_at_least(connection.left_cost, self.player))
-        #     # right.connect(left, rule=state_helpers.max_karma_at_least(connection.right_cost, self.player))
-        #
-        # menu_region.add_exits(['SU'])
-        # self.location_count = sum(len(r.locations) for r in true_regions)
 
     def create_item(self, name: str) -> RainWorldItem:
         return items.all_items[name].generate_item(self.player)
@@ -183,28 +145,11 @@ class RainWorldWorld(World):
         d.update({k: v * trap_fraction for k, v in trap_weights.items()})
 
         self.multiworld.itempool += [self.create_item(e) for e in flounder2(d, remaining_slots)]
-        #
-        # filler_weight_total = sum(items.filler_weights.values())
-        # for item_name, weight in items.filler_weights.items():
-        #     amt = int(fillers_to_add * weight / filler_weight_total)
-        #     for _ in range(amt):
-        #         self.multiworld.itempool.append(self.create_item(item_name))
-        #     added_items += amt
-        #
-        # trap_weight_total = sum(items.trap_weights.values())
-        # for item_name, weight in items.trap_weights.items():
-        #     amt = int(traps_to_add * weight / trap_weight_total)
-        #     for _ in range(amt):
-        #         self.multiworld.itempool.append(self.create_item(item_name))
-        #     added_items += amt
-
-        # for _ in range(self.location_count - added_items):
-        #     self.multiworld.itempool.append(self.create_item("Rock"))
 
     def set_rules(self) -> None:
         ascension_item = Item("Ascension", ItemClassification.progression, None, self.player)
         self.multiworld.get_location("Ascension", self.player).place_locked_item(ascension_item)
-        self.multiworld.completion_condition[self.player] = state_helpers.ascension(self.player)
+        self.multiworld.completion_condition[self.player] = Simple("Ascension").check(self.player)
 
         for data in all_rules:
             data.make(self.player, self.multiworld)

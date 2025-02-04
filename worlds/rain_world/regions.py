@@ -1,6 +1,6 @@
 from typing import NamedTuple
 
-from BaseClasses import Region, CollectionState, MultiWorld
+from BaseClasses import Region, MultiWorld
 from .conditions.classes import Condition, Simple, Compound, ConditionBlank
 from .game_data.general import scug_names
 

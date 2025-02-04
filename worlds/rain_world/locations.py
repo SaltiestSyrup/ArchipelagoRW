@@ -1,6 +1,6 @@
-from typing import Dict, List, NamedTuple, Optional, TYPE_CHECKING, Any, Callable
+from typing import Optional, Callable
 
-from BaseClasses import CollectionState, Location, Region, MultiWorld
+from BaseClasses import CollectionState, Location, MultiWorld
 from .constants import FIRST_ID
 from .game_data.general import food_quest_items
 
