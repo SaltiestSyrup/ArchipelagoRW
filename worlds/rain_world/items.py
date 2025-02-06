@@ -53,7 +53,7 @@ all_items: Dict[str, RainWorldItemData] = {
     "Object-Rock": FillerItemData("Object-Rock", 200 + offset),
     "Object-Spear": FillerItemData("Object-Spear", 201 + offset),
     "Object-ExplosiveSpear": FillerItemData("Object-ExplosiveSpear", 202 + offset),
-    "Object-ElectricSpear": FillerItemData("Object-ExplosiveSpear", 203 + offset, ["MSC"]),
+    "Object-ElectricSpear": FillerItemData("Object-ElectricSpear", 203 + offset, ["MSC"]),
     "Object-ScavengerBomb": FillerItemData("Object-ScavengerBomb", 204 + offset),
     "Object-FlareBomb": FillerItemData("Object-FlareBomb", 205 + offset),
     "Object-PuffBall": FillerItemData("Object-PuffBall", 206 + offset),
@@ -94,7 +94,7 @@ all_items: Dict[str, RainWorldItemData] = {
     "Trap-Gravity": FillerItemData("Trap-Gravity", 305 + offset),
     "Trap-Fog": FillerItemData("Trap-Fog", 306 + offset),
     "Trap-KillSquad": FillerItemData("Trap-KillSquad", 307 + offset),
-    "Trap-Alarm": FillerItemData("Trap-KillSquad", 308 + offset),
+    "Trap-Alarm": FillerItemData("Trap-Alarm", 308 + offset),
 
     #################################################################
     # FILLER - CREATURE TRAPS
