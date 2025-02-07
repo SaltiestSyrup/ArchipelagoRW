@@ -11,28 +11,6 @@ class PassageProgressWithoutSurvivor(Toggle):
     default = True
 
 
-class MoreSlugcatsExpansionEnabled(Toggle):
-    """Whether the More Slugcats Expansion is enabled.
-    This MUST match the setting you use in-game."""
-    display_name = "(UNIMPLEMENTED) More Slugcats"
-    default = True
-
-
-class WhichWorldstate(Choice):
-    """Which campaign / worldstate you will start in.  Downpour must be enabled to pick a Downpour slugcat."""
-    display_name = "Starting scug"
-    option_monk = 0
-    option_survivor = 1
-    option_hunter = 2
-    option_gourmand = 3
-    option_artificer = 4
-    option_rivulet = 5
-    option_spearmaster = 6
-    option_saint = 7
-    option_sofanthiel = 8
-    default = 1
-
-
 class WhichGamestate(Choice):
     """Which campaign / worldstate you will start in."""
     display_name = "Game state"
@@ -57,34 +35,6 @@ class WhichGamestate(Choice):
         if value < 19:
             return f"{scug_names[value]}{' (Vanilla)' if value < 10 else (' (MSC)' if value < 13 else '')}"
         return f"{value}"
-
-
-class FoodQuestMode(Choice):
-    """How food quest checks are awarded.
-
-    In **per-count** mode, checks are associated with total numbers of food quest items
-    (e.g. `FQ|02` is always the second food quest check, regardless of which foods are consumed).
-
-    In **per-food** mode, each food has its own check (e.g., blue fruit is always `FQ|02`)."""
-    rich_text_doc = True
-    display_name = "(UNIMPLEMENTED) Food quest mode"
-    option_per_count = 0
-    option_per_food = 1
-
-
-class RegionKeys(Range):
-    """Number of random region keys to start with."""
-    display_name = "Starting region keys"
-    range_start = 0
-    range_end = 14
-    default = 5
-
-
-class RandomStartingShelter(Toggle):
-    """Whether to start in a random shelter anywhere in the world.
-    If `False`, you will start at the default starting point for the selected starting scug."""
-    display_name = "(UNIMPLEMENTED) Random starting shelter"
-    default = True
 
 
 class RandomStartingRegion(Choice):
@@ -117,15 +67,6 @@ class PassagePriority(Range):
     range_start = 0
     range_end = 14
     default = 5
-
-
-class MaximumRequiredFoodQuestPips(Range):
-    """Maximum number of food quest items that could be required.
-    All pips beyond this number will never have progression items."""
-    display_name = "Maximum required food quest pips"
-    range_start = 0
-    range_end = 22
-    default = 15
 
 
 class ExtraKarmaCapIncreases(Range):
@@ -359,22 +300,8 @@ class WtTrapAlarm(WtGeneric):
     default = 15
 
 
-class Accessibility(Choice):
-    """
-    Unused
-    """
-    display_name = "Accessibility"
-    rich_text_doc = True
-    visibility = Visibility.none
-    option_minimal = 2
-    alias_none = 2
-    default = 2
-
-
 @dataclass
 class RainWorldOptions(PerGameCommonOptions):
-    accessibility: Accessibility
-
     passage_progress_without_survivor: PassageProgressWithoutSurvivor
     which_gamestate: WhichGamestate
 

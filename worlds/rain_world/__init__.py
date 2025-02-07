@@ -1,6 +1,5 @@
 __all__ = ["RainWorldWorld", "RainWorldWebWorld"]
 
-import random
 from typing import Mapping, Any
 
 from .options import RainWorldOptions
@@ -10,13 +9,11 @@ from .events import get_events
 from .utils import normalize, flounder2
 from .items import RainWorldItem, all_items, RainWorldItemData
 from worlds.AutoWorld import World, WebWorld
-from BaseClasses import Item, ItemClassification, Tutorial, LocationProgressType
-from . import constants, locations_new
-from .classes import location_name_to_id, RainWorldRegion, RegionData
+from BaseClasses import Item, ItemClassification, Tutorial
+from . import constants, locations
 from .regions import all_regions, all_connections
-from .locations_new import all_locations
-from .locations_new.classes import location_map
-from .conditions import all_rules
+from .locations import all_locations
+from .locations.classes import location_map
 from Utils import visualize_regions
 from .game_data.general import scug_names, default_starting_regions, prioritizable_passages, regions
 
