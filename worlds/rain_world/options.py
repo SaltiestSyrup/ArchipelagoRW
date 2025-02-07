@@ -1,18 +1,20 @@
 from dataclasses import dataclass
 
-from Options import PerGameCommonOptions, Toggle, Range, OptionGroup, Choice, Visibility, ProgressionBalancing
-from .game_data.general import scug_names
+from Options import PerGameCommonOptions, Toggle, Range, OptionGroup, Choice, ProgressionBalancing, Accessibility
+from .game_data.general import scug_names, scug_display_names
 
 
 class PassageProgressWithoutSurvivor(Toggle):
     """Whether the Remix setting `Passage progress without Survivor` is enabled.
-    This MUST match the setting you use in-game."""
+    This affects logic for The Dragon Slayer, The Friend, The Nomad, and The Wanderer.
+    This **must** match the setting you use in-game."""
     display_name = "Passage progress without Survivor"
     default = True
 
 
 class WhichGamestate(Choice):
-    """Which campaign / worldstate you will start in."""
+    """Which campaign and worldstate you will start in.
+    If an MSC state is selected, MSC **must** be enabled in-game."""
     display_name = "Game state"
     option_monk_vanilla = 0
     option_survivor_vanilla = 1
@@ -33,7 +35,7 @@ class WhichGamestate(Choice):
     @classmethod
     def get_option_name(cls, value: int) -> str:
         if value < 19:
-            return f"{scug_names[value]}{' (Vanilla)' if value < 10 else (' (MSC)' if value < 13 else '')}"
+            return f"{scug_display_names[value]}{' (Vanilla)' if value < 10 else (' (MSC)' if value < 13 else '')}"
         return f"{value}"
 
 
@@ -62,7 +64,8 @@ class RandomStartingRegion(Choice):
 
 class PassagePriority(Range):
     """Number of Passage completion checks that are marked as priority checks,
-    increasing the chance that they will contain progression items."""
+    increasing the chance that they will contain progression items.
+    These are in addition to any manually-set priorities."""
     display_name = "Priority Passages"
     range_start = 0
     range_end = 14
@@ -70,7 +73,7 @@ class PassagePriority(Range):
 
 
 class ExtraKarmaCapIncreases(Range):
-    """Number of extra karma cap increases in the pool beyond the minimum for ascension."""
+    """Number of extra karma cap increases in the pool beyond the minimum required for ascension."""
     display_name = "Extra karma cap increases"
     range_start = 0
     range_end = 30
@@ -369,6 +372,10 @@ class RainWorldOptions(PerGameCommonOptions):
         ]}
 
 
+important: list[type] = [
+    ProgressionBalancing, Accessibility, PassageProgressWithoutSurvivor, WhichGamestate
+]
+
 filler_weight_classes: list[type] = [
     WtRock, WtSpear, WtExplosiveSpear, WtGrenade, WtFlashbang, WtSporePuff, WtCherrybomb,
     WtLillyPuck, WtFruit, WtBubbleFruit, WtEggbugEgg, WtJellyfish, WtMushroom, WtSlimeMold,
@@ -384,10 +391,7 @@ trap_weight_classes: list[type] = [
 ]
 
 option_groups = [
-    OptionGroup(
-        "Important",
-        [ProgressionBalancing, PassageProgressWithoutSurvivor, WhichGamestate]
-    ),
+    OptionGroup("Important", important),
     OptionGroup("Start settings", [RandomStartingRegion], True),
     OptionGroup("Progression item settings", [ExtraKarmaCapIncreases], True),
     OptionGroup("Location settings", [PassagePriority], True),

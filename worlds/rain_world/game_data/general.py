@@ -68,7 +68,8 @@ scug_names = {
     "rivulet": "Rivulet",
     "spearmaster": "Spear",
     "saint": "Saint",
-    "sofanthiel": "Sofanthiel",
+    "sofanthiel": "Inv",
+    "inv": "Inv",
     0: "Yellow",
     1: "White",
     2: "Red",
@@ -79,6 +80,29 @@ scug_names = {
     14: "Artificer",
     15: "Rivulet",
     16: "Spear",
+    17: "Saint",
+    18: "Inv"
+}
+
+scug_display_names = {
+    "Yellow": "Monk",
+    "White": "Survivor",
+    "Red": "Hunter",
+    "Gourmand": "Gourmand",
+    "Artificer": "Artificer",
+    "Rivulet": "Rivulet",
+    "Spear": "Spearmaster",
+    "Inv": "Sofanthiel",
+    0: "Monk",
+    1: "Survivor",
+    2: "Hunter",
+    10: "Monk",
+    11: "Survivor",
+    12: "Hunter",
+    13: "Gourmand",
+    14: "Artificer",
+    15: "Rivulet",
+    16: "Spearmaster",
     17: "Saint",
     18: "Sofanthiel"
 }
