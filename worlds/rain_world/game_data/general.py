@@ -119,14 +119,6 @@ passages = ["Chieftain", "DragonSlayer", "Friend", "Hunter", "Martyr", "Monk", "
 # Passages that can't be automatically set as priority until early logic detection improves.
 prioritizable_passages = set(passages) - {"Chieftain", "Traveller", "Mother"}
 
-food_quest_items = [
-    "SlimeMold", "DangleFruit", "Fly", "Mushroom", "BlackLizard", "WaterNut",
-    "JellyFish", "JetFish", "GlowWeed", "Salamander", "Snail", "Hazer",
-    "EggBug", "LillyPuck", "YellowLizard", "TubeWorm", "SSOracleSwarmer", "Centiwing",
-    "DandelionPeach", "CyanLizard", "GooieDuck", "RedCentipede"
-]
-alt_food_quest_items = {"Salamander": ["Salamander", "EelLizard"], "RedCentipede": ["RedCentipede", "Aquapede"]}
-
 dragonslayer_vanilla = ["GreenLizard", "PinkLizard", "BlueLizard", "WhiteLizard", "YellowLizard", "BlackLizard"]
 dragonslayer_msc = dragonslayer_vanilla + ["CyanLizard", "RedLizard", "SpitLizard", "ZoopLizard"]
 lizards_any = dragonslayer_msc + ["Salamander", "EelLizard", "TrainLizard"]
@@ -137,3 +129,25 @@ monk_foods_vanilla = ['DangleFruit', 'BubbleFruit', 'SeedCob', 'SlimeMold']
 monk_foods_msc = ['LillyPuck', 'GlowWeed', 'DandelionPeach', 'GooieDuck', 'Seed', 'FireEgg']
 
 slugpup_normal_regions = ['SU', 'HI', 'DS', 'SL', 'GW', 'SH', 'UW', 'CC', 'SI', 'LF', 'SB', 'VS', 'OE']
+
+#################################################################
+# FOOD QUEST DATA
+
+food_quest_items = [
+    "SlimeMold", "DangleFruit", "Fly", "Mushroom", "BlackLizard", "WaterNut",
+    "JellyFish", "JetFish", "GlowWeed", "Salamander", "Snail", "Hazer",
+    "EggBug", "LillyPuck", "YellowLizard", "TubeWorm", "SSOracleSwarmer", "Centiwing",
+    "DandelionPeach", "CyanLizard", "GooieDuck", "RedCentipede"
+]
+alt_food_quest_items = {"Salamander": ["Salamander", "EelLizard"], "RedCentipede": ["RedCentipede", "Aquapede"]}
+
+food_quest_survivor_inedible = {
+    "BlackLizard", "JetFish", "Salamander", "Snail", "EggBug", "YellowLizard", "TubeWorm", "CyanLizard"
+}
+food_quest_spearmaster_inedible = {
+    "SlimeMold", "DangleFruit", "WaterNut", "JellyFish", "GlowWeed", "LillyPuck", "DandelionPeach", "GooieDuck"
+}
+food_quest_saint_inedible = {
+    "Fly", "BlackLizard", "JellyFish", "JetFish", "Salamander", "Snail", "Hazer", "EggBug", "YellowLizard", "TubeWorm",
+    "Centiwing", "CyanLizard", "RedCentipede"
+}
