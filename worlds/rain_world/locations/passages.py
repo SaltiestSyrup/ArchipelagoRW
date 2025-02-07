@@ -24,15 +24,15 @@ cond_hunter = AnyOf(
     AllOf(
         Simple(["Scug-Yellow", "Scug-White", "Scug-Rivulet"], 1),
         Simple(["Fly", "SmallNeedleWorm", "SmallCentipede", "Centipede", "EggBug", "JellyFish", "Hazer", "VultureGrub"],
-               1)
+               5)
     )
 )
 
 #################################################################
 # MONK
 cond_monk = AnyOf(
-    Simple(game_data.general.monk_foods_vanilla, 1),
-    AllOf(Simple('MSC'), Simple(game_data.general.monk_foods_msc, 1))
+    Simple(game_data.general.monk_foods_vanilla, 3),
+    AllOf(Simple('MSC'), Simple(game_data.general.monk_foods_msc, 3))
 )
 
 #################################################################
