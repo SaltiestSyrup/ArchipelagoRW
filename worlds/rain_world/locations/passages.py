@@ -136,12 +136,12 @@ locations = [
     Passage("Traveller", "PPwS Passages", 5022, cond_wanderer),
 
     # Passages which always require Survivor.
-    Passage("Chieftain", "Late Passages", 5040, cond_chieftain),
+    Passage("Chieftain", "Late Passages", 5040, cond_chieftain, generate.blacklist_scugs(["Artificer"])),
     Passage("Hunter", "Late Passages", 5041, cond_hunter),
     Passage("Monk", "Late Passages", 5042, cond_monk),
     Passage("Outlaw", "Late Passages", 5043),
     Passage("Saint", "Late Passages", 5044),
-    Passage("Scholar", "Late Passages", 5045, cond_scholar),
+    Passage("Scholar", "Late Passages", 5045, cond_scholar, generate.no_monk_vanilla()),
 
     # Passages where the dependence on Survivor is royally screwed up.
     Passage("Nomad", "Late Passages", 5046, cond_nomad, generate.msc(True)),

@@ -14,7 +14,7 @@ class TestHunterVanilla(RainWorldTestBase):
 
 
 class TestMonkMSC(RainWorldTestBase):
-    options = {"which_gamestate": "monk_msd"}
+    options = {"which_gamestate": "monk_msc"}
 
 
 class TestSurvivorMSC(RainWorldTestBase):
