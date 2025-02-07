@@ -67,6 +67,5 @@ class Echo(PhysicalLocation):
 
 class Passage(LocationData):
     def __init__(self, name: str, region: str, offset: int,
-                 access_condition: Condition = ConditionBlank,
-                 generation_condition: Callable[[RainWorldOptions], bool] = lambda _: True):
-        super().__init__(f"Passage-{name}", f"Passage-{name}", region, offset, access_condition, generation_condition)
+                 access_condition: Condition = ConditionBlank):
+        super().__init__(f"Passage-{name}", f"Passage-{name}", region, offset, access_condition)

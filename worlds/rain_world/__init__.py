@@ -12,7 +12,6 @@ from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Item, ItemClassification, Tutorial
 from . import constants, locations
 from .regions import all_regions, all_connections
-from .locations import all_locations
 from .locations.classes import location_map
 from Utils import visualize_regions
 from .game_data.general import (scug_names, default_starting_regions, prioritizable_passages, regions, passages,
@@ -56,8 +55,8 @@ class RainWorldWorld(World):
             data.make(self.player, self.multiworld)
 
         # return is a bool for whether generation actually happened and the location is not an event
-        locations = [data.make(self.player, self.multiworld, self.options) for data in all_locations]
-        self.location_count = sum(locations)
+        locs = [data.make(self.player, self.multiworld, self.options) for data in locations.generate(self.options)]
+        self.location_count = sum(locs)
 
         for data in get_events(self.options):
             data.make(self.player, self.multiworld)

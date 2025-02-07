@@ -1,7 +1,7 @@
-from .classes import Passage
+from .classes import Passage, LocationData
 from .. import game_data
+from ..options import RainWorldOptions
 from ..conditions.classes import Condition, Simple, AnyOf, AllOf
-from ..conditions import generate
 
 #################################################################
 # LIZARDS
@@ -128,27 +128,41 @@ def wanderer_pip_factory(count: int) -> Condition:
 
 #################################################################
 # LOCATIONS
-# Passages without any implemented rules yet: Saint, Outlaw
-locations = [
-    Passage("Martyr", "Early Passages", 5000, Simple("MSC"), generate.msc(True)),
-    Passage("Mother", "Early Passages", 5001, cond_mother,
-            generate.whitelist_scugs(["White", "Red", "Gourmand"], True)),
-    Passage("Pilgrim", "Early Passages", 5002, cond_pilgrim, generate.msc(True)),
-    Passage("Survivor", "Early Passages", 5003, Simple("Karma", 4)),
+locations: dict[str, LocationData] = {
+    "Martyr": Passage("Martyr", "Early Passages", 5000),
+    "Mother": Passage("Mother", "Early Passages", 5001, cond_mother),
+    "Pilgrim": Passage("Pilgrim", "Early Passages", 5002, cond_pilgrim),
+    "Survivor": Passage("Survivor", "Early Passages", 5003, Simple("Karma", 4)),
 
-    # Passages which require Survivor only if PPwS is disabled.
-    Passage("DragonSlayer", "PPwS Passages", 5020, cond_dragonslayer),
-    Passage("Friend", "PPwS Passages", 5021, cond_friend),
-    Passage("Traveller", "PPwS Passages", 5022, cond_wanderer),
+    "DragonSlayer": Passage("DragonSlayer", "PPwS Passages", 5020, cond_dragonslayer),
+    "Friend": Passage("Friend", "PPwS Passages", 5021, cond_friend),
+    "Traveller": Passage("Traveller", "PPwS Passages", 5022, cond_wanderer),
 
-    # Passages which always require Survivor.
-    Passage("Chieftain", "Late Passages", 5040, cond_chieftain, generate.blacklist_scugs(["Artificer"])),
-    Passage("Hunter", "Late Passages", 5041, cond_hunter, generate.blacklist_scugs(["Saint"])),
-    Passage("Monk", "Late Passages", 5042, cond_monk),
-    Passage("Outlaw", "Late Passages", 5043, cond_outlaw),
-    Passage("Saint", "Late Passages", 5044),
-    Passage("Scholar", "Late Passages", 5045, cond_scholar, generate.scholar()),
+    "Chieftain": Passage("Chieftain", "Late Passages", 5040, cond_chieftain),
+    "Hunter": Passage("Hunter", "Late Passages", 5041, cond_hunter),
+    "Monk": Passage("Monk", "Late Passages", 5042, cond_monk),
+    "Outlaw": Passage("Outlaw", "Late Passages", 5043, cond_outlaw),
+    "Saint": Passage("Saint", "Late Passages", 5044),
+    "Scholar": Passage("Scholar", "Late Passages", 5045, cond_scholar),
+    "Nomad": Passage("Nomad", "Late Passages", 5046, cond_nomad),
+}
 
-    # Passages where the dependence on Survivor is royally screwed up.
-    Passage("Nomad", "Late Passages", 5046, cond_nomad, generate.msc(True)),
-]
+
+def generate(options: RainWorldOptions) -> list[LocationData]:
+    keys = ["Survivor", "DragonSlayer", "Friend", "Traveller", "Monk", "Outlaw", "Saint"]
+
+    if options.starting_scug != "Artificer":
+        keys.append("Chieftain")
+
+    if options.starting_scug != "Saint":
+        keys.append("Hunter")
+        if options.starting_scug != "Yellow" or options.msc_enabled:
+            keys.append("Scholar")
+
+    if options.msc_enabled:
+        keys += ["Martyr", "Pilgrim", "Nomad"]
+
+        if options.starting_scug in ["White", "Red", "Gourmand"]:
+            keys.append("Mother")
+
+    return [locations[key] for key in keys]
