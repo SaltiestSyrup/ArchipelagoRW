@@ -29,7 +29,7 @@ def whitelist_scugs(scugs: list[str], msc_enabled: bool = None) -> Callable[[Rai
     return inner
 
 
-def no_monk_vanilla() -> Callable[[RainWorldOptions], bool]:
+def scholar() -> Callable[[RainWorldOptions], bool]:
     def inner(options: RainWorldOptions) -> bool:
-        return options.starting_scug != "Yellow" or options.msc_enabled
+        return options.starting_scug != "Saint" and (options.starting_scug != "Yellow" or options.msc_enabled)
     return inner

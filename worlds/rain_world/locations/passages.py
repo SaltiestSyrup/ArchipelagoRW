@@ -55,7 +55,7 @@ cond_nomad = AllOf(
 cond_pilgrim = AllOf(
     Simple("MSC"),
     Simple([f"Echo-{e}" for e in ('CC', 'SI', 'LF', 'SB')], locations=True),
-    AnyOf(Simple(["Echo-SH", "Echo-UW"], locations=True), Simple("Scug-Saint")),
+    AnyOf(Simple("Scug-Saint"), Simple(["Echo-SH", "Echo-UW"], locations=True)),
     AnyOf(
         Simple([f"Scug-{scug}" for scug in set(game_data.general.scugs_msc) - {"Artificer", "Saint"}], 1),
         AllOf(Simple("Scug-Artificer"), Simple("Echo-LC", locations=True)),
@@ -137,11 +137,11 @@ locations = [
 
     # Passages which always require Survivor.
     Passage("Chieftain", "Late Passages", 5040, cond_chieftain, generate.blacklist_scugs(["Artificer"])),
-    Passage("Hunter", "Late Passages", 5041, cond_hunter),
+    Passage("Hunter", "Late Passages", 5041, cond_hunter, generate.blacklist_scugs(["Saint"])),
     Passage("Monk", "Late Passages", 5042, cond_monk),
     Passage("Outlaw", "Late Passages", 5043),
     Passage("Saint", "Late Passages", 5044),
-    Passage("Scholar", "Late Passages", 5045, cond_scholar, generate.no_monk_vanilla()),
+    Passage("Scholar", "Late Passages", 5045, cond_scholar, generate.scholar()),
 
     # Passages where the dependence on Survivor is royally screwed up.
     Passage("Nomad", "Late Passages", 5046, cond_nomad, generate.msc(True)),
