@@ -378,6 +378,11 @@ class RainWorldOptions(PerGameCommonOptions):
     passage_progress_without_survivor: PassageProgressWithoutSurvivor
     which_gamestate: WhichGamestate
 
+    @property
+    def msc_enabled(self) -> bool: return self.which_gamestate.value > 9
+    @property
+    def starting_scug(self) -> str: return scug_names[self.which_gamestate.value]
+
     random_starting_region: RandomStartingRegion
 
     passage_priority: PassagePriority

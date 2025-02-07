@@ -16,11 +16,12 @@ class EventData:
         self.classification = classification
 
     def make(self, player: int, multiworld: MultiWorld):
-        item = Item(self.item_name, self.classification, None, player)
         region = multiworld.get_region(self.region, player)
-        location = Location(player, self.location_item, None, region)
-        region.locations.append(location)
-        location.place_locked_item(item)
+        if region.populate:
+            item = Item(self.item_name, self.classification, None, player)
+            location = Location(player, self.location_item, None, region)
+            region.locations.append(location)
+            location.place_locked_item(item)
 
 
 def generate_events():

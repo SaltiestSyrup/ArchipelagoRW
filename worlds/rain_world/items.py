@@ -34,6 +34,7 @@ all_items: Dict[str, RainWorldItemData] = {
     # PROGRESSION
     "Ascension": RainWorldItemData("Ascension", None, ItemClassification.progression_skip_balancing, 0),
     "Karma": RainWorldItemData("Karma", offset, ItemClassification.progression, 8),
+    "Mark": RainWorldItemData("Mark", offset + 1, ItemClassification.progression, 1),
 
     #################################################################
     # GAMESTATE

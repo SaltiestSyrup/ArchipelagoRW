@@ -1,7 +1,6 @@
-from .game_data.general import food_quest_items
-from .locations_new.classes import LocationData, Token, Pearl, Echo, Passage
+from .classes import LocationData, Token, Pearl
 
-all_locations: list[LocationData] = [
+locations: list[LocationData] = [
     Token("SU", "gold", "Outskirts", 0, ""),
     Token("SU", "red", "Outskirts", 1, ""),
     Token("PoleMimic", "blue", "Outskirts", 2, ""),
@@ -129,46 +128,4 @@ all_locations: list[LocationData] = [
     Token("GooieDuck", "blue", "Outer Expanse", 1405, "JUNGLE04"),
     Token("JungleLeech", "blue", "Outer Expanse", 1406, "RUIN06"),
     Pearl("OE", "", "Outer Expanse", 1420, "SPIRE"),
-
-    # Passages which never require Survivor to earn.
-    Passage("Martyr", "Early Passages", 5000),
-    Passage("Mother", "Early Passages", 5001),
-    Passage("Pilgrim", "Early Passages", 5002),
-    Passage("Survivor", "Early Passages", 5003),
-
-    # Passages which require Survivor only if PPwS is disabled.
-    Passage("DragonSlayer", "PPwS Passages", 5020),
-    Passage("Friend", "PPwS Passages", 5021),
-    Passage("Wanderer", "PPwS Passages", 5022),
-
-    # Passages which always require Survivor.
-    Passage("Chieftain", "Late Passages", 5040),
-    Passage("Hunter", "Late Passages", 5041),
-    Passage("Monk", "Late Passages", 5042),
-    Passage("Outlaw", "Late Passages", 5043),
-    Passage("Saint", "Late Passages", 5044),
-    Passage("Scholar", "Late Passages", 5045),  # TODO
-
-    # Passages where the dependence on Survivor is royally screwed up.
-    Passage("Nomad", "Late Passages", 5046),  # TODO who was responsible for making this one honestly
-
-    Echo("CC", "Chimney Canopy", 5070, ""),
-    Echo("SH", "Shaded Citadel", 5071, ""),
-    Echo("LF", "Farm Arrays", 5072, ""),
-    Echo("UW", "The Exterior", 5073, ""),
-    Echo("SI", "Sky Islands", 5074, ""),
-    Echo("SB", "Subterranean ravine", 5075, ""),
-    Echo("LC", "Metropolis", 5076, ""),
-    Echo("UG", "Undergrowth", 5077, ""),
-    Echo("CL", "Silent Construct", 5078, ""),
-    Echo("SL", "Shoreline", 5079, ""),
-
-    LocationData("Ascension", "Ascension", "Void Sea", None),
 ]
-
-# food quest, 5101 - 5123
-all_locations += [LocationData(f"FoodQuest-{s}", f"FoodQuest-{s}", "Food Quest", 5100 + n)
-                  for n, s in enumerate(food_quest_items)]
-
-# wanderer pips, 5151 - 5164
-all_locations += [LocationData(f"Wanderer-{n}", f"Wanderer-{n}", "PPwS Passages", 5150 + n) for n in range(1, 14)]

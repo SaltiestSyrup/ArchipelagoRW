@@ -1,7 +1,10 @@
 from . import world, misc
+from .. import RainWorldOptions
 
-all_events = [
-    *world.generate_events("placed_objects"),
-    *world.generate_events("creatures"),
-    *misc.generate_events(),
-]
+
+def get_events(options: RainWorldOptions):
+    return [
+        *world.generate_events_for_one_gamestate("placed_objects", options),
+        *world.generate_events_for_one_gamestate("creatures", options),
+        *misc.generate_events(),
+    ]

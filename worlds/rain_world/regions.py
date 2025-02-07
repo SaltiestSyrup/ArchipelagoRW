@@ -1,7 +1,9 @@
-from typing import NamedTuple
+from typing import NamedTuple, Callable, Optional
 
 from BaseClasses import Region, MultiWorld
+from . import RainWorldOptions
 from .conditions.classes import Condition, Simple, Compound, ConditionBlank
+from .conditions import generate
 from .game_data.general import scug_names
 
 
@@ -42,12 +44,25 @@ class Gate(ConnectionData):
         source.connect(dest, name=f'GATE_{self.gate_name} (to {dest.name})', rule=rule.check(player))
 
 
-class RegionData(NamedTuple):
-    full_name: str
-    short_name: str
+class RainWorldRegion(Region):
+    game = "Rain World"
 
-    def make(self, player: int, multiworld: MultiWorld):
-        multiworld.regions.append(Region(self.full_name, player, multiworld))
+    def __init__(self, name: str, player: int, multiworld: MultiWorld, populate: bool):
+        super().__init__(name, player, multiworld)
+        self.populate = populate
+
+
+class RegionData:
+    def __init__(self, full_name: str, short_name: str,
+                 generation_condition: Callable[[RainWorldOptions], bool] = lambda _: True):
+        self.full_name = full_name
+        self.short_name = short_name
+        self.generation_condition = generation_condition
+
+    def make(self, player: int, multiworld: MultiWorld, options: RainWorldOptions):
+        multiworld.regions.append(RainWorldRegion(
+            self.full_name, player, multiworld, self.generation_condition(options))
+        )
 
 
 def any_scug_except(scugs: list[str]) -> Simple:
@@ -63,47 +78,48 @@ all_regions = [
     RegionData("Early Passages", "(P1)"),
     RegionData("PPwS Passages", "(P2)"),
     RegionData("Late Passages", "(P3)"),
-    RegionData("Food Quest", "(FQ)"),
+    RegionData("Food Quest", "(FQ)", generate.msc(True)),
     RegionData("Starting region", "START"),
     RegionData("Events", "(EV)"),
 
     RegionData("Outskirts", "SU"),
-    RegionData("Outskirts filtration", "SU^"),
     RegionData("Industrial Complex", "HI"),
-    RegionData("Drainage System", "DS"),
+    RegionData("Drainage System", "DS", generate.blacklist_scugs(["Saint"])),
     RegionData("Garbage Wastes", "GW"),
-    RegionData("Shoreline", "SL"),
-    RegionData("Shoreline above Moon", "SL^"),
-    RegionData("Pipeyard", "VS"),
-    RegionData("Shaded Citadel", "SH"),
-    RegionData("The Exterior", "UW"),
-    RegionData("Five Pebbles", "SS"),
-    RegionData("Five Pebbles above puppet", "SS^"),
+    RegionData("Shoreline", "SL", generate.blacklist_scugs(["Artificer", "Spear"])),
+    RegionData("Shoreline above Moon", "SL^", generate.blacklist_scugs(["Artificer", "Spear"])),
+    RegionData("Shaded Citadel", "SH", generate.blacklist_scugs(["Saint"])),
+    RegionData("The Exterior", "UW", generate.blacklist_scugs(["Saint"])),
+    RegionData("Five Pebbles", "SS", generate.blacklist_scugs(["Rivulet", "Saint"])),
+    RegionData("Five Pebbles above puppet", "SS^", generate.blacklist_scugs(["Rivulet", "Saint"])),
     RegionData("Chimney Canopy", "CC"),
     RegionData("Sky Islands", "SI"),
     RegionData("Farm Arrays", "LF"),
     RegionData("Subterranean", "SB"),
     RegionData("Subterranean ravine", "SB^"),
-    RegionData("Submerged Superstructure", "MS"),
-    RegionData("Bitter Aerie", "MS^"),
-    RegionData("Outer Expanse", "OE"),
-    RegionData("Outer Expanse filtration", "OE^"),
-    RegionData("Metropolis", "LC"),
-    RegionData("Looks to the Moon", "DM"),
-    RegionData("The Rot", "RM"),
-    RegionData("Undergrowth", "UG"),
-    RegionData("Silent Construct", "CL"),
-    RegionData("Waterfront Facility", "LM"),
-    RegionData("Rubicon", "HR"),
-    RegionData("Void Sea", "(Vo)")
+    RegionData("Void Sea", "(Vo)"),
+
+    RegionData("Outskirts filtration", "SU^", generate.whitelist_scugs(["Yellow", "White", "Gourmand"], True)),
+    RegionData("Pipeyard", "VS", generate.msc(True)),
+    RegionData("Submerged Superstructure", "MS", generate.msc(True)),
+    RegionData("Bitter Aerie", "MS^", generate.whitelist_scugs(["Rivlet"], True)),
+    RegionData("Outer Expanse", "OE", generate.whitelist_scugs(["Yellow", "White", "Gourmand"], True)),
+    RegionData("Outer Expanse filtration", "OE^", generate.whitelist_scugs(["Yellow", "White", "Gourmand"], True)),
+    RegionData("Metropolis", "LC", generate.whitelist_scugs(["Artificer"], True)),
+    RegionData("Looks to the Moon", "DM", generate.whitelist_scugs(["Spear"], True)),
+    RegionData("The Rot", "RM", generate.whitelist_scugs(["Rivulet"], True)),
+    RegionData("Undergrowth", "UG", generate.whitelist_scugs(["Saint"], True)),
+    RegionData("Silent Construct", "CL", generate.whitelist_scugs(["Saint"], True)),
+    RegionData("Waterfront Facility", "LM", generate.whitelist_scugs(["Artificer", "Spear"], True)),
+    RegionData("Rubicon", "HR", generate.whitelist_scugs(["Saint"], True)),
 ]
 
 
 all_connections = [
     ConnectionData("Menu", "Early Passages"),
+    ConnectionData("Early Passages", "Late Passages", Simple("Passage-Survivor", locations=True)),
     ConnectionData("Late Passages", "PPwS Passages"),  # default connect PPwS to late to require survivor
     ConnectionData("Menu", "Food Quest", Simple("MSC")),
-    ConnectionData("Early Passages", "Late Passages", Simple("Passage-Survivor")),
     ConnectionData("Menu", "Starting region"),
     ConnectionData("Menu", "Events"),
 
@@ -182,7 +198,7 @@ all_connections = [
     # Gate("Subterranean", "Rubicon", 10, "DS_SB", one_of_these_scugs(["Saint"])),
 
     ################################################################
-    # DOWNPOUR
+    # DOWNPOUR - GENERAL
 
     Gate("Pipeyard", "Industrial Complex", 2, "HI_VS", Simple("MSC")),
     Gate("Pipeyard", "Shoreline", 3, "SL_VS", Simple("MSC")),
@@ -194,13 +210,21 @@ all_connections = [
     Gate("Five Pebbles above puppet", "The Exterior", 1, "SS_UW"),
     ConnectionData("Five Pebbles", "Five Pebbles above puppet"),
 
+    ################################################################
+    # DOWNPOUR - GOURMAND
     Gate("Outer Expanse", "Subterranean", 5, "SB_OE",  Simple("MSC")),
     ConnectionData("Outer Expanse", "Outer Expanse filtration"),
     Gate("Outer Expanse filtration", "Outskirts filtration", 1, "OE_SU",  Simple("MSC")),
 
-    Gate("Bitter Aerie", "Shoreline above Moon", 5, "SL_MS",  Simple("MSC")),
-    Gate("Shoreline above Moon", "Bitter Aerie", 6, "SL_MS",  Simple("MSC")),
-    Gate("Submerged Superstructure", "Shoreline", 1, "MS_SL",  Simple("MSC")),
+    ################################################################
+    # DOWNPOUR - RIVULET
+    Gate("Bitter Aerie", "Shoreline above Moon", 5, "SL_MS", Simple("MSC")),
+    Gate("Shoreline above Moon", "Bitter Aerie", 6, "SL_MS", Simple("MSC")),
+    Gate("Submerged Superstructure", "Shoreline", 1, "MS_SL", Simple("MSC")),
+
+    ################################################################
+    # DOWNPOUR - SPEARMASTER
+    Gate("Waterfront Facility", "Looks to the Moon", 5, "SL_DM", Simple("MSC")),
 
     ConnectionData("Subterranean", "Void Sea", Simple("Karma", 8))
 ]

@@ -1,18 +1,21 @@
+__all__ = ["RainWorldWorld", "RainWorldWebWorld"]
+
 import random
 from typing import Mapping, Any
 
+from .options import RainWorldOptions
 from .conditions.classes import Simple
 from .game_data.general import REGION_CODE_DICT
-from .events import all_events
+from .events import get_events
 from .utils import normalize, flounder2
 from .items import RainWorldItem, all_items, RainWorldItemData
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Item, ItemClassification, Tutorial, LocationProgressType
-from . import constants
-from .options import RainWorldOptions
+from . import constants, locations_new
 from .classes import location_name_to_id, RainWorldRegion, RegionData
 from .regions import all_regions, all_connections
-from .locations import all_locations, location_map
+from .locations_new import all_locations
+from .locations_new.classes import location_map
 from .conditions import all_rules
 from Utils import visualize_regions
 from .game_data.general import scug_names, default_starting_regions, prioritizable_passages, regions
@@ -48,31 +51,31 @@ class RainWorldWorld(World):
 
     def create_regions(self):
         for data in all_regions:
-            data.make(self.player, self.multiworld)
+            data.make(self.player, self.multiworld, self.options)
 
         for data in all_connections:
             data.make(self.player, self.multiworld)
 
-        for data in all_locations:
-            data.make(self.player, self.multiworld)
+        # return is a bool for whether generation actually happened and the location is not an event
+        locations = [data.make(self.player, self.multiworld, self.options) for data in all_locations]
+        self.location_count = sum(locations)
 
-        for data in all_events:
+        for data in get_events(self.options):
             data.make(self.player, self.multiworld)
-
-        self.location_count = len(all_locations)
 
         #################################################################
-        # PRIORITY PASSAGES
-        passage_locations = [
-            loc for loc in
-            [self.multiworld.get_location(f'Passage-{passage}', self.player) for passage in prioritizable_passages]
-            if loc.progress_type == LocationProgressType.DEFAULT
-        ]
-
-        num = max(0, min(self.options.passage_priority.value, len(passage_locations)))
-
-        for passage in random.sample(passage_locations, num):
-            passage.progress_type = LocationProgressType.PRIORITY
+        # PRIORITY PASSAGES: pick a number of passages matching the relevant option
+        # that are not already prioritized and are prioritizable
+        # passage_locations = [
+        #     loc for loc in
+        #     [self.multiworld.get_location(f'Passage-{passage}', self.player) for passage in prioritizable_passages]
+        #     if loc.progress_type == LocationProgressType.DEFAULT
+        # ]
+        #
+        # num = max(0, min(self.options.passage_priority.value, len(passage_locations)))
+        #
+        # for passage in random.sample(passage_locations, num):
+        #     passage.progress_type = LocationProgressType.PRIORITY
 
         #################################################################
         # PPWS: add a new free connection if PPWS is enabled.
@@ -98,14 +101,8 @@ class RainWorldWorld(World):
         added_items = 0
 
         #################################################################
-        # TESTING
-        # all_items["Karma"].count -= 1
-        # self.multiworld.get_location("Passage-DragonSlayer", self.player).place_locked_item(self.create_item("Karma"))
-
-        #################################################################
         # STARTING ITEM SETTINGS
         all_items["Karma"].count += self.options.extra_karma_cap_increases
-        # all_items["Karma cap increase"].precollect += self.options.starting_karma - 1
 
         #################################################################
         # FAUX ITEM SETTINGS
@@ -142,9 +139,6 @@ class RainWorldWorld(World):
         ascension_item = Item("Ascension", ItemClassification.progression, None, self.player)
         self.multiworld.get_location("Ascension", self.player).place_locked_item(ascension_item)
         self.multiworld.completion_condition[self.player] = Simple("Ascension").check(self.player)
-
-        for data in all_rules:
-            data.make(self.player, self.multiworld)
 
         visualize_regions(self.multiworld.get_region("Menu", self.player), "my_world.puml", show_locations=False)
 
