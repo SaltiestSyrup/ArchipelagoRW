@@ -133,7 +133,7 @@ locations = [
     # Passages which require Survivor only if PPwS is disabled.
     Passage("DragonSlayer", "PPwS Passages", 5020, cond_dragonslayer),
     Passage("Friend", "PPwS Passages", 5021, cond_friend),
-    Passage("Wanderer", "PPwS Passages", 5022, cond_wanderer),
+    Passage("Traveller", "PPwS Passages", 5022, cond_wanderer),
 
     # Passages which always require Survivor.
     Passage("Chieftain", "Late Passages", 5040, cond_chieftain),

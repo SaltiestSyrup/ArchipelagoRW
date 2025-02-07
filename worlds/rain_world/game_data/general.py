@@ -113,11 +113,11 @@ scugs_vanilla = ['Yellow', 'White', 'Red']
 #################################################################
 # PASSAGE DATA
 passages_vanilla = ["Chieftain", "DragonSlayer", "Friend", "Hunter", "Monk",
-                    "Outlaw", "Saint", "Scholar", "Survivor", "Wanderer"]
+                    "Outlaw", "Saint", "Scholar", "Survivor", "Traveller"]
 passages = ["Chieftain", "DragonSlayer", "Friend", "Hunter", "Martyr", "Monk", "Mother",
-            "Nomad", "Outlaw", "Pilgrim", "Saint", "Scholar", "Survivor", "Wanderer"]
+            "Nomad", "Outlaw", "Pilgrim", "Saint", "Scholar", "Survivor", "Traveller"]
 # Passages that can't be automatically set as priority until early logic detection improves.
-prioritizable_passages = set(passages) - {"Chieftain", "Wanderer", "Mother"}
+prioritizable_passages = set(passages) - {"Chieftain", "Traveller", "Mother"}
 
 food_quest_items = [
     "SlimeMold", "DangleFruit", "Fly", "Mushroom", "BlackLizard", "WaterNut",
