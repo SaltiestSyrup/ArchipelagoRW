@@ -1,18 +1,16 @@
-__all__ = ['placed_objects', 'creatures']
+__all__ = ['placed_objects', 'creatures', 'white_tokens']
 
 import json
-import os
+from os.path import dirname, realpath, join
 from ..general import regions_vanilla
 
+realpath = dirname(realpath(__file__))
+
 # Dictionary of PlacedObjects.  data[objtype][dlcstate][scug] -> list of rooms.
-placed_objects: dict[str, dict[str, [dict[str, list[str]]]]] = json.load(
-    open(os.path.join(os.path.dirname(os.path.realpath(__file__)), "placed_objects.json"))
-)
+placed_objects: dict[str, dict[str, [dict[str, list[str]]]]] = json.load(open(join(realpath, "placed_objects.json")))
 
 # Dictionary of creature spawners.  data[dentype][crittype][dlcstate][scug] -> list of rooms.
-creatures: dict[str, dict[str, dict[str, [dict[str, list[str]]]]]] = json.load(
-    open(os.path.join(os.path.dirname(os.path.realpath(__file__)), "creatures.json"))
-)
+creatures: dict[str, dict[str, dict[str, [dict[str, list[str]]]]]] = json.load(open(join(realpath, "creatures.json")))
 
 creatures["normal"]["Fly"] = {
     "Vanilla": {"Yellow": [], "White": [], "Red": [],
@@ -42,3 +40,6 @@ creatures["normal"]["SSOracleSwarmer"] = {
         "*ALL": []
     }
 }
+
+# Dictionary of white (broadcast) tokens.  data[id] -> {"room": room, "blacklist": list of scugs}.
+white_tokens: dict[str, dict[str, str | list[str]]] = json.load(open(join(realpath, "white_tokens.json")))
