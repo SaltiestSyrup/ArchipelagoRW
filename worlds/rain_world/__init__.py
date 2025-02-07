@@ -15,7 +15,8 @@ from .regions import all_regions, all_connections
 from .locations import all_locations
 from .locations.classes import location_map
 from Utils import visualize_regions
-from .game_data.general import scug_names, default_starting_regions, prioritizable_passages, regions
+from .game_data.general import (scug_names, default_starting_regions, prioritizable_passages, regions, passages,
+                                passages_vanilla)
 
 
 class RainWorldWebWorld(WebWorld):
@@ -28,6 +29,7 @@ class RainWorldWebWorld(WebWorld):
         ["alphappy"]
     )]
     option_groups = options.option_groups
+    rich_text_options_doc = True
 
 
 class RainWorldWorld(World):
@@ -97,26 +99,29 @@ class RainWorldWorld(World):
     def create_items(self) -> None:
         added_items = 0
 
-        #################################################################
-        # STARTING ITEM SETTINGS
-        all_items["Karma"].count += self.options.extra_karma_cap_increases
+        pool = {
+            "Karma": 8 + self.options.extra_karma_cap_increases.value,
+            **{k: 1 for k in items.all_items.keys() if k.startswith("GATE")},
+            **{f"Passage-{p}": 1 for p in (passages if self.options.msc_enabled else passages_vanilla)},
+            "The Mark": 1,
+            "The Glow": 1,
+            "IdDrone": 1 if self.options.starting_scug == "Artificer" else 0,
+            "Disconnect_FP": 1 if self.options.starting_scug == "Rivulet" else 0,
+            "Rewrite_Spear_Pearl": 1 if self.options.starting_scug == "Spear" else 0,
+        }
+        precollect = {
+            "MSC": 1 if self.options.msc_enabled else 0,
+            f"Scug-{scug_names[self.options.which_gamestate.value]}": 1,
+        }
 
-        #################################################################
-        # FAUX ITEM SETTINGS
-        self.multiworld.push_precollected(self.create_item(f"Scug-{scug_names[self.options.which_gamestate.value]}"))
-        if self.options.which_gamestate.value > 9:
-            self.multiworld.push_precollected(self.create_item("MSC"))
+        for name, count in pool.items():
+            for i in range(count):
+                self.multiworld.itempool.append(self.create_item(name))
+            added_items += count
 
-        #################################################################
-        # PREDETERMINED POPULATION
-        for item_data in items.all_items.values():
-            for i in range(item_data.count):
-                if i >= item_data.precollect:
-                    self.multiworld.itempool.append(item_data.generate_item(self.player))
-                    added_items += 1
-                else:
-                    self.multiworld.push_precollected(item_data.generate_item(self.player))
-                    item_data.precollect -= 1
+        for name, count in precollect.items():
+            for i in range(count):
+                self.multiworld.push_precollected(self.create_item(name))
 
         #################################################################
         # FILLER POPULATION

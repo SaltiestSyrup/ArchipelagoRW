@@ -1,6 +1,6 @@
 from BaseClasses import Item, ItemClassification
 from typing import Optional, Dict
-from . import constants
+from . import constants, RainWorldOptions, game_data
 from .regions import all_gate_short_names
 
 
@@ -9,13 +9,10 @@ class RainWorldItem(Item):
 
 
 class RainWorldItemData:
-    def __init__(self, name: str, code: Optional[int], item_type: ItemClassification = ItemClassification.filler,
-                 count: int = 1, precollect: int = 0):
+    def __init__(self, name: str, code: Optional[int], item_type: ItemClassification = ItemClassification.filler):
         self.name = name
         self.code = code
         self.item_type = item_type
-        self.count = count
-        self.precollect = precollect
 
     def generate_item(self, player: int) -> RainWorldItem:
         return RainWorldItem(self.name, self.item_type, self.code, player)
@@ -23,7 +20,7 @@ class RainWorldItemData:
 
 class FillerItemData(RainWorldItemData):
     def __init__(self, name: str, code: Optional[int], gamestate: Optional[list[str]] = None):
-        super().__init__(name, code, ItemClassification.filler, 0, 0)
+        super().__init__(name, code, ItemClassification.filler)
         self.gamestate = gamestate or []
 
 
@@ -32,22 +29,36 @@ offset: int = constants.FIRST_ID
 all_items: Dict[str, RainWorldItemData] = {
     #################################################################
     # PROGRESSION
-    "Ascension": RainWorldItemData("Ascension", None, ItemClassification.progression_skip_balancing, 0),
-    "Karma": RainWorldItemData("Karma", offset, ItemClassification.progression, 8),
-    "Mark": RainWorldItemData("Mark", offset + 1, ItemClassification.progression, 1),
+    "Ascension": RainWorldItemData("Ascension", None, ItemClassification.progression_skip_balancing),
+    "Karma": RainWorldItemData("Karma", offset, ItemClassification.progression),
+    "The Mark": RainWorldItemData("The Mark", offset + 1, ItemClassification.progression),
+    "IdDrone": RainWorldItemData("IdDrone", offset + 2, ItemClassification.progression),
+
+    #################################################################
+    # PASSAGE TOKENS
+    **{
+        f"Passage-{p}": RainWorldItemData(f"Passage-{p}", offset + 20 + i, ItemClassification.useful)
+        for i, p in enumerate(game_data.general.passages)
+    },
+
+    #################################################################
+    # UNIQUE
+    "The Glow": RainWorldItemData("The Glow", offset + 50, ItemClassification.useful),
+    "Disconnect_FP": RainWorldItemData("Disconnect_FP", offset + 51, ItemClassification.useful),
+    "Rewrite_Spear_Pearl": RainWorldItemData("Rewrite_Spear_Pearl", offset + 52, ItemClassification.useful),
 
     #################################################################
     # GAMESTATE
-    "MSC": RainWorldItemData("MSC", offset + 100, ItemClassification.progression, 0),
-    "Scug-Yellow": RainWorldItemData("Scug-Yellow", offset + 110, ItemClassification.progression, 0),
-    "Scug-White": RainWorldItemData("Scug-White", offset + 111, ItemClassification.progression, 0),
-    "Scug-Red": RainWorldItemData("Scug-Red", offset + 112, ItemClassification.progression, 0),
-    "Scug-Gourmand": RainWorldItemData("Scug-Gourmand", offset + 113, ItemClassification.progression, 0),
-    "Scug-Artificer": RainWorldItemData("Scug-Artificer", offset + 114, ItemClassification.progression, 0),
-    "Scug-Rivulet": RainWorldItemData("Scug-Rivulet", offset + 115, ItemClassification.progression, 0),
-    "Scug-Spear": RainWorldItemData("Scug-Spear", offset + 116, ItemClassification.progression, 0),
-    "Scug-Saint": RainWorldItemData("Scug-Saint", offset + 117, ItemClassification.progression, 0),
-    "Scug-Inv": RainWorldItemData("Scug-Inv", offset + 118, ItemClassification.progression, 0),
+    "MSC": RainWorldItemData("MSC", offset + 100, ItemClassification.progression),
+    "Scug-Yellow": RainWorldItemData("Scug-Yellow", offset + 110, ItemClassification.progression),
+    "Scug-White": RainWorldItemData("Scug-White", offset + 111, ItemClassification.progression),
+    "Scug-Red": RainWorldItemData("Scug-Red", offset + 112, ItemClassification.progression),
+    "Scug-Gourmand": RainWorldItemData("Scug-Gourmand", offset + 113, ItemClassification.progression),
+    "Scug-Artificer": RainWorldItemData("Scug-Artificer", offset + 114, ItemClassification.progression),
+    "Scug-Rivulet": RainWorldItemData("Scug-Rivulet", offset + 115, ItemClassification.progression),
+    "Scug-Spear": RainWorldItemData("Scug-Spear", offset + 116, ItemClassification.progression),
+    "Scug-Saint": RainWorldItemData("Scug-Saint", offset + 117, ItemClassification.progression),
+    "Scug-Inv": RainWorldItemData("Scug-Inv", offset + 118, ItemClassification.progression),
 
     #################################################################
     # FILLER - WEAPONS

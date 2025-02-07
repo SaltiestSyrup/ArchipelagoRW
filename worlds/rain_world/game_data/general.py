@@ -112,6 +112,8 @@ scugs_vanilla = ['Yellow', 'White', 'Red']
 
 #################################################################
 # PASSAGE DATA
+passages_vanilla = ["Chieftain", "DragonSlayer", "Friend", "Hunter", "Monk",
+                    "Outlaw", "Saint", "Scholar", "Survivor", "Wanderer"]
 passages = ["Chieftain", "DragonSlayer", "Friend", "Hunter", "Martyr", "Monk", "Mother",
             "Nomad", "Outlaw", "Pilgrim", "Saint", "Scholar", "Survivor", "Wanderer"]
 # Passages that can't be automatically set as priority until early logic detection improves.

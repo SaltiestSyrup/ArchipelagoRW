@@ -13,7 +13,7 @@ cond_friend = Simple(game_data.general.lizards_any, 1)
 #################################################################
 # CHIEFTAIN
 cond_chieftain = AllOf(
-    Simple(["Scavenger", "EliteScavenger"], 1),
+    Simple(["Scavenger", "ScavengerElite"], 1),
     Simple([f"Scug-{s}" for s in set(game_data.general.scug_names.values()) - {"Artificer"}], 1)
 )
 
@@ -66,15 +66,15 @@ cond_pilgrim = AllOf(
 #################################################################
 # SCHOLAR
 cond_scholar = AnyOf(
-    Simple(["MSC", "Scug-Monk", "Access-SL", "Mark"]),  # Monk requires MSC to see colored pearls
+    Simple(["MSC", "Scug-Yellow", "Access-SL", "The Mark"]),  # Monk requires MSC to see colored pearls
     AllOf(
         Simple(["Scug-White", "Scug-Gourmand"], 1),
-        Simple(["Access-SL", "Mark"])
+        Simple(["Access-SL", "The Mark"])
     ),
     Simple(["Scug-Red", "Scug-Rivulet"], 1),
     AllOf(
         Simple(["Scug-Artificer", "Scug-Spear"], 1),
-        Simple("Mark")
+        Simple("The Mark")
     ),
 )
 
