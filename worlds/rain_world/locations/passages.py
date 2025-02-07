@@ -51,6 +51,12 @@ cond_nomad = AllOf(
 )
 
 #################################################################
+# OUTLAW
+cond_outlaw = Simple(
+    list(set(game_data.files.creatures["normal"].keys()).difference(set(game_data.general.outlaw_insignificant))), 3
+)
+
+#################################################################
 # PILGRIM
 cond_pilgrim = AllOf(
     Simple("MSC"),
@@ -139,7 +145,7 @@ locations = [
     Passage("Chieftain", "Late Passages", 5040, cond_chieftain, generate.blacklist_scugs(["Artificer"])),
     Passage("Hunter", "Late Passages", 5041, cond_hunter, generate.blacklist_scugs(["Saint"])),
     Passage("Monk", "Late Passages", 5042, cond_monk),
-    Passage("Outlaw", "Late Passages", 5043),
+    Passage("Outlaw", "Late Passages", 5043, cond_outlaw),
     Passage("Saint", "Late Passages", 5044),
     Passage("Scholar", "Late Passages", 5045, cond_scholar, generate.scholar()),
 
