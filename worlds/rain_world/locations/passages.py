@@ -110,6 +110,18 @@ cond_wanderer = AnyOf(cond_wanderer_vanilla, cond_wanderer_msc_base, cond_wander
                       cond_wanderer_artificer, cond_wanderer_rivulet, cond_wanderer_spearmaster, cond_wanderer_saint)
 
 
+def wanderer_regions(scug: str, msc: bool) -> set[str]:
+    if not msc:
+        return regions
+    elif scug in ["Yellow", "White", "Red"]:
+        return regions_msc
+    else:
+        return {
+            "Gourmand": regions_gourmand, "Artificer": regions_artificer, "Rivulet": regions_rivulet,
+            "Spear": regions_spearmaster, "Saint": regions_saint
+        }[scug]
+
+
 def wanderer_pip_factory(count: int) -> Condition:
     return AnyOf(
         AllOf(Simple("MSC", negative=True), Simple([f"Access-{r}" for r in regions], count)),
@@ -145,11 +157,18 @@ locations: dict[str, LocationData] = {
     "Saint": Passage("Saint", "Late Passages", 5044),
     "Scholar": Passage("Scholar", "Late Passages", 5045, cond_scholar),
     "Nomad": Passage("Nomad", "Late Passages", 5046, cond_nomad),
+    **{
+        f"Wanderer-{i}": LocationData(
+            f"Wanderer-{i}", f"Wanderer-{i}", "PPwS Passages", 5050 + i, wanderer_pip_factory(i)
+        ) for i in range(14)
+    }
 }
 
 
 def generate(options: RainWorldOptions) -> list[LocationData]:
     keys = ["Survivor", "DragonSlayer", "Friend", "Traveller", "Monk", "Outlaw", "Saint"]
+
+    keys += [f"Wanderer-{i}" for i in range(len(wanderer_regions(options.starting_scug, options.msc_enabled)))]
 
     if options.starting_scug != "Artificer":
         keys.append("Chieftain")
