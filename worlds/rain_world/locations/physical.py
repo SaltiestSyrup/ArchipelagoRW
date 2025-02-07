@@ -1,4 +1,5 @@
 from .classes import LocationData, Token, Pearl
+from ..conditions import generate
 
 locations: list[LocationData] = [
     Token("SU", "gold", "Outskirts", 0, ""),
@@ -30,7 +31,8 @@ locations: list[LocationData] = [
     Token("GW", "red", "Garbage Wastes", 301, "A25"),
     Token("WaterNut", "blue", "Garbage Wastes", 302, "D02"),
     Token("RedLizard", "blue", "Garbage Wastes", 303, "A14"),
-    Token("BrotherLongLegs", "blue", "Garbage Wastes", 304, "C09"),
+    Token("BrotherLongLegs", "blue", "Garbage Wastes", 304, "C09",
+          generation_condition=generate.blacklist_scugs(["Saint"])),
     Token("ScavengerBomb", "blue", "Garbage Wastes", 305, "A21"),
     Token("FireSpear", "blue", "Garbage Wastes", 306, "A24"),
     Pearl("GW", "", "Garbage Wastes", 320, ""),
@@ -119,6 +121,8 @@ locations: list[LocationData] = [
     Token("BigJelly", "blue", "Submerged Superstructure", 1302, "MEMOUTSIDE"),
     Token("GlowWeed", "blue", "Submerged Superstructure", 1303, "VENT15"),
     Token("AquaCenti", "blue", "Submerged Superstructure", 1304, "VENT10"),
+    Token("Rivulet", "green", "Submerged Superstructure", 1305, "VISTA",
+          generation_condition=generate.whitelist_scugs(["Rivulet"])),
 
     Token("OE", "gold", "Outer Expanse", 1400, "WORMPIT"),
     Token("OE", "red", "Outer Expanse", 1401, "TREETOP"),
@@ -127,5 +131,54 @@ locations: list[LocationData] = [
     Token("Yeek", "blue", "Outer Expanse", 1404, "RUIN21"),
     Token("GooieDuck", "blue", "Outer Expanse", 1405, "JUNGLE04"),
     Token("JungleLeech", "blue", "Outer Expanse", 1406, "RUIN06"),
+    Token("Gourmand", "green", "Outer Expanse", 1407, "CAVE13",
+          generation_condition=generate.whitelist_scugs(["Gourmand"])),
     Pearl("OE", "", "Outer Expanse", 1420, "SPIRE"),
+
+    Token("LM", "gold", "Waterfront Facility", 1500, "D04"),
+    Token("LM", "red", "Waterfront Facility", 1501, "LEGENTRANCEARTY"),
+    Token("SeaLeech", "blue", "Waterfront Facility", 1502, "A06"),
+    Token("BigEel", "blue", "Waterfront Facility", 1503, "E01"),
+    Token("JellyFish", "blue", "Waterfront Facility", 1504, "C01"),
+    Pearl("SL_bridge", "", "Waterfront Facility", 1520, "B01"),
+    Pearl("SL_shimney", "", "Waterfront Facility", 1521, "B04"),
+
+    Token("LC", "gold", "Metropolis", 1600, "streets"),
+    Token("LC", "red", "Metropolis", 1601, "02A"),
+    Token("Artificer", "green", "Metropolis", 1602, "SUBWAY04"),
+    Token("ElectricSpear", "blue", "Metropolis", 1603, "scavtreasury"),
+    Token("ScavengerElite", "blue", "Metropolis", 1604, "topdoor"),
+    Token("SingularityBomb", "blue", "Metropolis", 1605, "LAC01"),
+    Pearl("LC", "", "Metropolis", 1620, "ruin01"),
+    Pearl("LC second", "", "Metropolis", 1621, "floorpipes"),
+
+    Token("RM", "gold", "The Rot", 1700, "A04"),
+    Token("RM", "red", "The Rot", 1701, "LCUPSIDE"),
+    Token("TerrorLongLegs", "blue", "The Rot", 1702, "DEAD01"),
+    Token("DaddyLongLegs", "blue", "The Rot", 1703, "H01"),
+    Pearl("RM", "blue", "The Rot", 1720, "AI"),
+
+    Token("DM", "gold", "Looks to the Moon", 1800, "I08"),
+    Token("DM", "red", "Looks to the Moon", 1801, "M02"),
+    Token("Spear", "green", "Looks to the Moon", 1802, "VISTA"),
+    Token("MotherSpider", "blue", "Looks to the Moon", 1803, "U09"),
+    Pearl("DM", "", "Looks to the Moon", 1820, "LAB3"),
+
+    Token("UG", "gold", "Undergrowth", 1900, "DARK01"),
+    Token("UG", "red", "Undergrowth", 1901, "C02"),
+    Token("Snail", "blue", "Undergrowth", 1902, "B06"),
+    Token("JungleLeech", "blue", "Undergrowth", 1903, "A16"),
+    Token("Salamander", "blue", "Undergrowth", 1904, "B05"),
+    Token("Hazer", "blue", "Undergrowth", 1905, "A21"),
+    Token("BubbleGrass", "blue", "Undergrowth", 1905, "A25"),
+    Pearl("DS", "blue", "Undergrowth", 1920, "D01"),
+
+    Token("CL", "gold", "Silent Construct", 2000, "B21"),
+    Token("CL", "red", "Silent Construct", 2001, "A36"),
+    Token("Saint", "green", "Silent Construct", 2002, "LSSECRET"),
+    Token("BigSpider", "blue", "Silent Construct", 2003, "A13"),
+    Token("YellowLizard", "blue", "Silent Construct", 2004, "C21"),
+    Token("BrotherLongLegs", "blue", "Silent Construct", 2005, "C14"),
+    Token("SlimeMold", "blue", "Silent Construct", 2006, "B03"),
+    Pearl("RM", "", "Silent Construct", 2020, "AI"),
 ]

@@ -2,7 +2,7 @@ from typing import NamedTuple, Callable, Optional
 
 from BaseClasses import Region, MultiWorld
 from . import RainWorldOptions
-from .conditions.classes import Condition, Simple, Compound, ConditionBlank
+from .conditions.classes import Condition, Simple, Compound, ConditionBlank, AllOf
 from .conditions import generate
 from .game_data.general import scug_names
 
@@ -41,7 +41,7 @@ class Gate(ConnectionData):
             self.condition
         ]
         rule = Compound(len(conditions), *conditions)
-        source.connect(dest, name=f'GATE_{self.gate_name} (to {dest.name})', rule=rule.check(player))
+        source.connect(dest, name=f'GATE_{self.gate_name} ({self.source} to {dest.name})', rule=rule.check(player))
 
 
 class RainWorldRegion(Region):
@@ -111,6 +111,7 @@ all_regions = [
     RegionData("Undergrowth", "UG", generate.whitelist_scugs(["Saint"], True)),
     RegionData("Silent Construct", "CL", generate.whitelist_scugs(["Saint"], True)),
     RegionData("Waterfront Facility", "LM", generate.whitelist_scugs(["Artificer", "Spear"], True)),
+    RegionData("Eastern Precipice", "LM^", generate.whitelist_scugs(["Spear"], True)),
     RegionData("Rubicon", "HR", generate.whitelist_scugs(["Saint"], True)),
 ]
 
@@ -197,6 +198,8 @@ all_connections = [
     Gate("Subterranean", "Undergrowth", 1, "DS_SB", one_of_these_scugs(["Saint"])),
     # Gate("Subterranean", "Rubicon", 10, "DS_SB", one_of_these_scugs(["Saint"])),
 
+    ConnectionData("Subterranean", "Void Sea", AllOf(Simple("Karma", 8), any_scug_except(["Saint"]))),
+
     ################################################################
     # DOWNPOUR - GENERAL
 
@@ -217,16 +220,46 @@ all_connections = [
     Gate("Outer Expanse filtration", "Outskirts filtration", 1, "OE_SU",  Simple("MSC")),
 
     ################################################################
+    # DOWNPOUR - ARTIFICER
+    Gate("Waterfront Facility", "Garbage Wastes", 2, "GW_SL", Simple("MSC")),
+    Gate("Waterfront Facility", "Pipeyard", 3, "GW_SL", Simple("MSC")),
+    Gate("Waterfront Facility", "Subterranean", 5, "SB_SL", Simple("MSC")),
+    Gate("Waterfront Facility", "The Exterior", 5, "UW_SL", Simple("MSC")),
+    Gate("Waterfront Facility", "Shaded Citadel", 2, "SH_SL", Simple("MSC")),
+
+    Gate("Metropolis", "The Exterior", 5, "UW_LC", Simple("MSC")),
+
+    ################################################################
     # DOWNPOUR - RIVULET
     Gate("Bitter Aerie", "Shoreline above Moon", 5, "SL_MS", Simple("MSC")),
     Gate("Shoreline above Moon", "Bitter Aerie", 6, "SL_MS", Simple("MSC")),
     Gate("Submerged Superstructure", "Shoreline", 1, "MS_SL", Simple("MSC")),
 
+    Gate("The Rot", "The Exterior", 1, "UW_SS", Simple("MSC")),
+    Gate("The Rot", "The Exterior", 1, "SS_UW", Simple("MSC")),
+
     ################################################################
     # DOWNPOUR - SPEARMASTER
-    Gate("Waterfront Facility", "Looks to the Moon", 5, "SL_DM", Simple("MSC")),
+    Gate("Waterfront Facility", "Looks to the Moon", 5, "SL_DM", Simple(["MSC", "Scug-Spear"])),
 
-    ConnectionData("Subterranean", "Void Sea", Simple("Karma", 8))
+    Gate("Looks to the Moon", "Eastern Precipice", 1, "SL_DM", Simple("MSC")),
+    Gate("Looks to the Moon", "Waterfront Facility", 1, "DM_SL", Simple("MSC")),
+    ConnectionData("Waterfront Facility", "Eastern Precipice", Simple(["MSC", "Scug-Spear"])),
+    ConnectionData("Eastern Precipice", "Waterfront Facility", Simple(["MSC", "Scug-Spear"])),
+
+    ################################################################
+    # DOWNPOUR - SAINT
+    Gate("Undergrowth", "Outskirts", 2, "SU_DS", Simple("MSC")),
+    Gate("Undergrowth", "Chimney Canopy", 5, "DS_CC", Simple("MSC")),
+    Gate("Undergrowth", "Garbage Wastes", 1, "DS_GW", Simple("MSC")),
+    Gate("Undergrowth", "Subterranean", 4, "DS_SB", Simple("MSC")),
+
+    Gate("Silent Construct", "Industrial Complex", 1, "HI_SH", Simple("MSC")),
+    Gate("Silent Construct", "Garbage Wastes", 2, "GW_SH", Simple("MSC")),
+    Gate("Silent Construct", "Shoreline", 1, "SL_CL", Simple("MSC")),
+
+    ConnectionData("Subterranean", "Rubicon", AllOf(Simple(["MSC", "Scug-Saint"]), Simple("Karma", 8))),
+    ConnectionData("Rubicon", "Void Sea", AllOf(Simple("Karma", 8), one_of_these_scugs(["Saint"]))),
 ]
 
 all_gate_short_names = set(item.gate_name for item in all_connections if type(item) == Gate)
