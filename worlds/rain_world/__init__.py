@@ -19,7 +19,7 @@ from .game_data.general import (
 class RainWorldWebWorld(WebWorld):
     tutorials = [Tutorial(
         "Multiworld Setup Guide",
-        "A guide to setting up the Rain World for Archipelago.",
+        "A guide to setting up Rain World for Archipelago.",
         "English",
         "setup_en.md",
         "setup/en",
@@ -27,6 +27,8 @@ class RainWorldWebWorld(WebWorld):
     )]
     option_groups = options.option_groups
     rich_text_options_doc = True
+    theme = "ocean"
+    bug_report_page = "https://github.com/alphappy/ArchipelagoRW/issues"
 
 
 class RainWorldWorld(World):

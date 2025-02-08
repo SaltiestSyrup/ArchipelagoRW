@@ -7,15 +7,55 @@ config file.
 
 ## What is the win condition?
 
-Currently, the goal is ascension.
-Logically, this requires that you raise max karma to 10 and gain access to Subterranean.
-The win condition is met once you enter the Void Sea itself.
+The default goal is ascension.
+Logically, this requires raising max karma to 10 and gain access to Subterranean.
+The win condition is met upon entering the Void Sea itself.
+If More Slugcats Expansion is enabled,
+the option for alternate victory conditions is available for most Slugcats.
 
 ## What does randomization do to Rain World?
 
-A few things change when randomized:
-- Initial max karma is 1, regardless of Slugcat.
-- Keys are required to use gates.
+A few categories of changes happen when randomized.
+
+### Karma
+Initial max karma is 1 by default, regardless of Slugcat.
+Raising max karma requires finding karma cap increases in the item pool,
+which may or may not be found at echoes.
+Meeting echoes still requires a certain karma level depending on current max
+and is not possible with less than 5 karma -
+except for Artificer and Saint, who can see echoes by being at max karma with karma reinforcement.
+There are at least 8 karma cap increases
+(one increase is worth 2 as max karma jumps from 5 to 7),
+though more may be added through the settings.
+
+### Gates
+Karma gates, in addition to requiring karma, require a key unique to each gate.
+Each gate has a key added to the item pool.
+Currently collected keys are displayed on the pause screen in-game.
+
+### Passages
+Passage tokens are added to the item pool.
+Completing a passage may or may not award a passage token.
+
+### The Mark of Communication
+The Mark of Communication is added to the item pool.
+Meeting Five Pebbles as Monk, Survivor, Gourmand, or Artificer
+and meeting Looks to the Moon as Spearmaster may or may not award the Mark.
+Hunter and Rivulet do not start with the Mark.
+The Mark is still required to make progress on The Scholar,
+and certain alternate victory conditions require the Mark.
+
+### Neuron Glow
+Neuron glow is added to the item pool.
+Eating a neuron fly may or may not grant the glow.
+
+### Story flags
+Story flags are added to the item pool.
+Hunter does not start with the green neuron
+and Artificer does not start with the citizen ID drone.
+The heart of The Rot may or may not contain the rarefaction cell for Rivulet.
+As Spearmaster, meeting Five Pebbles may or may not give their unique pearl,
+and meeting Looks to the Moon with the pearl in hand may or may not get it rewritten.
 
 ## Is the Archipelago mod compatible with other mods or DLC?
 
