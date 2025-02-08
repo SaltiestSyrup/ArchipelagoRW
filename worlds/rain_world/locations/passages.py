@@ -177,8 +177,8 @@ locations: dict[str, LocationData] = {
     "Nomad": Passage("Nomad", "Late Passages", 5046, cond_nomad),
     **{
         f"Wanderer-{i}": LocationData(
-            f"Wanderer-{i}", f"Wanderer-{i}", "PPwS Passages", 5050 + i, wanderer_pip_factory(i)
-        ) for i in range(14)
+            f"Wanderer-{i}", f"Wanderer-{i}", "PPwS Passages", 5049 + i, wanderer_pip_factory(i)
+        ) for i in range(1, 15)
     }
 }
 
@@ -200,6 +200,6 @@ def generate(options: RainWorldOptions) -> list[LocationData]:
         if options.starting_scug in ["White", "Red", "Gourmand"]:
             keys.append("Mother")
 
-    keys += [f"Wanderer-{i}" for i in range(len(wanderer_regions(options.starting_scug, options.msc_enabled)))]
+    keys += [f"Wanderer-{i+1}" for i in range(len(wanderer_regions(options.starting_scug, options.msc_enabled)))]
 
     return [locations[key] for key in keys]
