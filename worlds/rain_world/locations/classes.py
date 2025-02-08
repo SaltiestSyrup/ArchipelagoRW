@@ -1,6 +1,6 @@
 from typing import Optional, Callable
 
-from BaseClasses import CollectionState, MultiWorld, Location
+from BaseClasses import MultiWorld, Location
 from .. import RainWorldOptions
 from ..conditions.classes import ConditionBlank, Condition
 from ..constants import FIRST_ID

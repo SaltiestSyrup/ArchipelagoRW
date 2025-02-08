@@ -2,20 +2,18 @@ __all__ = ["RainWorldWorld", "RainWorldWebWorld"]
 
 from typing import Mapping, Any
 
+from worlds.AutoWorld import World, WebWorld
+from BaseClasses import Item, ItemClassification, Tutorial
 from .options import RainWorldOptions
 from .conditions.classes import Simple
-from .game_data.general import REGION_CODE_DICT
+from .game_data.general import region_code_to_name
 from .events import get_events
 from .utils import normalize, flounder2
 from .items import RainWorldItem, all_items, RainWorldItemData
-from worlds.AutoWorld import World, WebWorld
-from BaseClasses import Item, ItemClassification, Tutorial
-from . import constants, locations
+from . import locations
 from .regions import all_regions, all_connections
-from .locations.classes import location_map
-from Utils import visualize_regions
-from .game_data.general import (scug_names, default_starting_regions, prioritizable_passages, regions, passages,
-                                passages_vanilla)
+from .game_data.general import (
+    setting_to_scug_id, scug_id_to_starting_region, prioritizable_passages, regions, passages_all, passages_vanilla)
 
 
 class RainWorldWebWorld(WebWorld):
@@ -42,7 +40,7 @@ class RainWorldWorld(World):
     web = RainWorldWebWorld()
 
     item_name_to_id = items.item_name_to_id
-    location_name_to_id = location_map
+    location_name_to_id = locations.classes.location_map
 
     location_count = 0
     starting_region = 'SU'
@@ -85,7 +83,7 @@ class RainWorldWorld(World):
         #################################################################
         # STARTING REGION
         if self.options.random_starting_region.value == 0:
-            self.starting_region = default_starting_regions[scug_names[self.options.which_gamestate.value]]
+            self.starting_region = scug_id_to_starting_region[setting_to_scug_id[self.options.which_gamestate.value]]
         else:
             self.starting_region = regions[self.options.random_starting_region.value]
 
@@ -101,7 +99,7 @@ class RainWorldWorld(World):
         pool = {
             "Karma": 8 + self.options.extra_karma_cap_increases.value,
             **{k: 1 for k in items.all_items.keys() if k.startswith("GATE")},
-            **{f"Passage-{p}": 1 for p in (passages if self.options.msc_enabled else passages_vanilla)},
+            **{f"Passage-{p}": 1 for p in (passages_all if self.options.msc_enabled else passages_vanilla)},
             "The Mark": 1,
             "The Glow": 1,
             "IdDrone": 1 if self.options.starting_scug == "Artificer" else 0,
@@ -110,7 +108,7 @@ class RainWorldWorld(World):
         }
         precollect = {
             "MSC": 1 if self.options.msc_enabled else 0,
-            f"Scug-{scug_names[self.options.which_gamestate.value]}": 1,
+            f"Scug-{setting_to_scug_id[self.options.which_gamestate.value]}": 1,
         }
 
         for name, count in pool.items():
@@ -140,8 +138,6 @@ class RainWorldWorld(World):
         ascension_item = Item("Ascension", ItemClassification.progression, None, self.player)
         self.multiworld.get_location("Ascension", self.player).place_locked_item(ascension_item)
         self.multiworld.completion_condition[self.player] = Simple("Ascension").check(self.player)
-
-        visualize_regions(self.multiworld.get_region("Menu", self.player), "my_world.puml", show_locations=False)
 
     def fill_slot_data(self) -> Mapping[str, Any]:
         d = self.options.as_dict("which_gamestate", "random_starting_region", "passage_progress_without_survivor")

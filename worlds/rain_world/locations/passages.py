@@ -14,7 +14,7 @@ cond_friend = Simple(game_data.general.lizards_any, 1)
 # CHIEFTAIN
 cond_chieftain = AllOf(
     Simple(["Scavenger", "ScavengerElite"], 1),
-    Simple([f"Scug-{s}" for s in set(game_data.general.scug_names.values()) - {"Artificer"}], 1)
+    Simple([f"Scug-{s}" for s in set(game_data.general.setting_to_scug_id.values()) - {"Artificer"}], 1)
 )
 
 #################################################################
@@ -63,7 +63,7 @@ cond_pilgrim = AllOf(
     Simple([f"Echo-{e}" for e in ('CC', 'SI', 'LF', 'SB')], locations=True),
     AnyOf(Simple("Scug-Saint"), Simple(["Echo-SH", "Echo-UW"], locations=True)),
     AnyOf(
-        Simple([f"Scug-{scug}" for scug in set(game_data.general.scugs_msc) - {"Artificer", "Saint"}], 1),
+        Simple([f"Scug-{scug}" for scug in set(game_data.general.scugs_all) - {"Artificer", "Saint"}], 1),
         AllOf(Simple("Scug-Artificer"), Simple("Echo-LC", locations=True)),
         AllOf(Simple("Scug-Saint"), Simple(["Echo-UG", "Echo-SL", "Echo-CL"], locations=True)),
     )
@@ -168,8 +168,6 @@ locations: dict[str, LocationData] = {
 def generate(options: RainWorldOptions) -> list[LocationData]:
     keys = ["Survivor", "DragonSlayer", "Friend", "Traveller", "Monk", "Outlaw", "Saint"]
 
-    keys += [f"Wanderer-{i}" for i in range(len(wanderer_regions(options.starting_scug, options.msc_enabled)))]
-
     if options.starting_scug != "Artificer":
         keys.append("Chieftain")
 
@@ -183,5 +181,7 @@ def generate(options: RainWorldOptions) -> list[LocationData]:
 
         if options.starting_scug in ["White", "Red", "Gourmand"]:
             keys.append("Mother")
+
+    keys += [f"Wanderer-{i}" for i in range(len(wanderer_regions(options.starting_scug, options.msc_enabled)))]
 
     return [locations[key] for key in keys]

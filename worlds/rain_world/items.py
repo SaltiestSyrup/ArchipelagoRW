@@ -38,7 +38,7 @@ all_items: Dict[str, RainWorldItemData] = {
     # PASSAGE TOKENS
     **{
         f"Passage-{p}": RainWorldItemData(f"Passage-{p}", offset + 20 + i, ItemClassification.useful)
-        for i, p in enumerate(game_data.general.passages)
+        for i, p in enumerate(game_data.general.passages_all)
     },
 
     #################################################################

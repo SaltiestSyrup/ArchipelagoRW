@@ -1,15 +1,16 @@
+from typing import Iterable
+
 from BaseClasses import ItemClassification, MultiWorld, Item, Location
-from .. import RainWorldOptions
 from ..options import RainWorldOptions
 
-from ..game_data.general import scugs_msc, scugs_vanilla, REGION_CODE_DICT
+from ..game_data.general import scugs_all, scugs_vanilla, region_code_to_name
 from ..conditions.classes import Simple, AnyOf, AllOf, Condition
 from ..game_data.files import placed_objects, creatures
 from ...generic.Rules import add_rule
 
 
 class ObjectEventData2:
-    def __init__(self, item_name: str, location_name: str, region: str, condition: Condition, regions: list[str]):
+    def __init__(self, item_name: str, location_name: str, region: str, condition: Condition, regions: Iterable[str]):
         self.item_name = item_name
         self.location_item = location_name
         self.region = region
@@ -18,7 +19,7 @@ class ObjectEventData2:
         self.regions = regions
 
     def make(self, player: int, multiworld: MultiWorld):
-        regions = {r for r in self.regions if multiworld.get_region(REGION_CODE_DICT[r], player).populate}
+        regions = {r for r in self.regions if multiworld.get_region(region_code_to_name[r], player).populate}
 
         if len(regions) > 0:
             item = Item(self.item_name, self.classification, None, player)
@@ -51,7 +52,7 @@ def generate_events(which: str) -> list[ObjectEventData2]:
                             )
                         ) for scug in scugs]
                     )
-                ) for neg, dlcstate, scugs in zip((True, False), ("Vanilla", "MSC"), (scugs_vanilla, scugs_msc))]
+                ) for neg, dlcstate, scugs in zip((True, False), ("Vanilla", "MSC"), (scugs_vanilla, scugs_all))]
             )
 
         ret.append(ObjectEventData2(otype, otype, "Events", condition))

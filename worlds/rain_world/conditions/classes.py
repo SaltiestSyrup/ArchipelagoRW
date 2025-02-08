@@ -5,9 +5,6 @@ from worlds.generic.Rules import add_rule
 
 
 class Condition:
-    def __call__(self):
-        return self.check
-
     def check(self, player: int) -> Callable[[CollectionState], bool]:
         return lambda state: True
 

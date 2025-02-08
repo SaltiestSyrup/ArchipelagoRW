@@ -1,9 +1,11 @@
 from dataclasses import dataclass
 
 from Options import PerGameCommonOptions, Toggle, Range, OptionGroup, Choice, ProgressionBalancing, Accessibility
-from .game_data.general import scug_names, scug_display_names
+from .game_data.general import setting_to_scug_id, scug_id_to_name
 
 
+#################################################################
+# IMPORTANT SETTINGS
 class PassageProgressWithoutSurvivor(Toggle):
     """Whether the Remix setting `Passage progress without Survivor` is enabled.
     This affects logic for The Dragon Slayer, The Friend, The Nomad, and The Wanderer.
@@ -35,10 +37,12 @@ class WhichGamestate(Choice):
     @classmethod
     def get_option_name(cls, value: int) -> str:
         if value < 19:
-            return f"{scug_display_names[value]}{' (Vanilla)' if value < 10 else (' (MSC)' if value < 13 else '')}"
+            return f"{scug_id_to_name[value]}{' (Vanilla)' if value < 10 else (' (MSC)' if value < 13 else '')}"
         return f"{value}"
 
 
+#################################################################
+# GENERAL SETTINGS
 class RandomStartingRegion(Choice):
     """Where Slugcat will initially spawn."""
     display_name = "Random starting shelter"
@@ -80,6 +84,8 @@ class ExtraKarmaCapIncreases(Range):
     default = 1
 
 
+#################################################################
+# FILLER SETTINGS
 class PctTraps(Range):
     """The percentage of filler items that will be traps.  Set to 0 to remove traps entirely."""
     display_name = "Trap percentage"
@@ -205,6 +211,8 @@ class WtGlowWeed(WtGeneric):
     default = 15
 
 
+#################################################################
+# TRAP SETTINGS
 class WtTrapStun(WtGeneric):
     """The relative weight of stun traps in the trap filler item pool."""
     display_name = "Stun"
@@ -305,19 +313,23 @@ class WtTrapAlarm(WtGeneric):
 
 @dataclass
 class RainWorldOptions(PerGameCommonOptions):
+    #################################################################
+    # IMPORTANT SETTINGS
     passage_progress_without_survivor: PassageProgressWithoutSurvivor
     which_gamestate: WhichGamestate
 
-    @property
-    def msc_enabled(self) -> bool: return self.which_gamestate.value > 9
-    @property
-    def starting_scug(self) -> str: return scug_names[self.which_gamestate.value]
+    group_important = [ProgressionBalancing, Accessibility, PassageProgressWithoutSurvivor, WhichGamestate]
 
+    #################################################################
+    # GENERAL SETTINGS
     random_starting_region: RandomStartingRegion
-
     passage_priority: PassagePriority
     extra_karma_cap_increases: ExtraKarmaCapIncreases
 
+    group_general = [RandomStartingRegion, PassagePriority, ExtraKarmaCapIncreases]
+
+    #################################################################
+    # FILLER SETTINGS
     pct_traps: PctTraps
 
     wt_rocks: WtRock
@@ -338,14 +350,15 @@ class RainWorldOptions(PerGameCommonOptions):
     wt_fireeggs: WtFireEgg
     wt_glowweed: WtGlowWeed
 
-    def get_nontrap_weight_dict(self) -> dict[str, float]:
-        return {a.item_name: a.value for a in [
-            self.wt_rocks, self.wt_spears, self.wt_explosive_spears, self.wt_grenades,
-            self.wt_flashbangs, self.wt_sporepuffs, self.wt_cherrybombs, self.wt_lilypucks,
-            self.wt_fruit, self.wt_bubblefruit, self.wt_eggbugeggs, self.wt_jellyfish,
-            self.wt_mushrooms, self.wt_slimemold, self.wt_fireeggs, self.wt_glowweed
-        ]}
+    group_filler = [
+        PctTraps,
+        WtRock, WtSpear, WtExplosiveSpear, WtGrenade, WtFlashbang, WtSporePuff, WtCherrybomb,
+        WtLillyPuck, WtFruit, WtBubbleFruit, WtEggbugEgg, WtJellyfish, WtMushroom, WtSlimeMold,
+        WtFireEgg, WtGlowWeed
+    ]
 
+    #################################################################
+    # TRAP SETTINGS
     wt_stuns: WtTrapStun
     wt_zoomies: WtTrapZoomies
     wt_timers: WtTrapTimer
@@ -362,6 +375,28 @@ class RainWorldOptions(PerGameCommonOptions):
     wt_brotherlonglegs: WtTrapBrotherLongLegs
     wt_daddylonglegs: WtTrapDaddyLongLegs
 
+    group_traps = [
+        WtTrapStun, WtTrapZoomies, WtTrapTimer, WtTrapAlarm, WtTrapKillSquad,
+        WtTrapGravity, WtTrapRain, WtTrapFlood, WtTrapFog,
+
+        WtTrapRedLizard, WtTrapRedCentipede, WtTrapSpitterSpider,
+        WtTrapBrotherLongLegs, WtTrapDaddyLongLegs
+    ]
+
+    @property
+    def msc_enabled(self) -> bool: return self.which_gamestate.value > 9
+
+    @property
+    def starting_scug(self) -> str: return setting_to_scug_id[self.which_gamestate.value]
+
+    def get_nontrap_weight_dict(self) -> dict[str, float]:
+        return {a.item_name: a.value for a in [
+            self.wt_rocks, self.wt_spears, self.wt_explosive_spears, self.wt_grenades,
+            self.wt_flashbangs, self.wt_sporepuffs, self.wt_cherrybombs, self.wt_lilypucks,
+            self.wt_fruit, self.wt_bubblefruit, self.wt_eggbugeggs, self.wt_jellyfish,
+            self.wt_mushrooms, self.wt_slimemold, self.wt_fireeggs, self.wt_glowweed
+        ]}
+
     def get_trap_weight_dict(self) -> dict[str, float]:
         return {a.item_name: a.value for a in [
             self.wt_stuns, self.wt_zoomies, self.wt_timers, self.wt_alarms, self.wt_killsquads,
@@ -372,29 +407,9 @@ class RainWorldOptions(PerGameCommonOptions):
         ]}
 
 
-important: list[type] = [
-    ProgressionBalancing, Accessibility, PassageProgressWithoutSurvivor, WhichGamestate
-]
-
-filler_weight_classes: list[type] = [
-    WtRock, WtSpear, WtExplosiveSpear, WtGrenade, WtFlashbang, WtSporePuff, WtCherrybomb,
-    WtLillyPuck, WtFruit, WtBubbleFruit, WtEggbugEgg, WtJellyfish, WtMushroom, WtSlimeMold,
-    WtFireEgg, WtGlowWeed
-]
-
-trap_weight_classes: list[type] = [
-    WtTrapStun, WtTrapZoomies, WtTrapTimer, WtTrapAlarm, WtTrapKillSquad,
-    WtTrapGravity, WtTrapRain, WtTrapFlood, WtTrapFog,
-
-    WtTrapRedLizard, WtTrapRedCentipede, WtTrapSpitterSpider,
-    WtTrapBrotherLongLegs, WtTrapDaddyLongLegs
-]
-
 option_groups = [
-    OptionGroup("Important", important),
-    OptionGroup("Start settings", [RandomStartingRegion], True),
-    OptionGroup("Progression item settings", [ExtraKarmaCapIncreases], True),
-    OptionGroup("Location settings", [PassagePriority], True),
-    OptionGroup("Filler item relative weights", [PctTraps] + filler_weight_classes, True),
-    OptionGroup("Trap relative weights", trap_weight_classes, True),
+    OptionGroup("Important", RainWorldOptions.group_important),
+    OptionGroup("Start settings", RainWorldOptions.group_general, True),
+    OptionGroup("Filler item relative weights", RainWorldOptions.group_filler, True),
+    OptionGroup("Trap relative weights", RainWorldOptions.group_traps, True),
 ]

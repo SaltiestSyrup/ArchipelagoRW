@@ -1,6 +1,6 @@
 #################################################################
 # REGION DATA
-REGION_CODE_DICT = {
+region_code_to_name = {
     "SU": "Outskirts",
     "HI": "Industrial Complex",
     "DS": "Drainage System",
@@ -25,7 +25,7 @@ REGION_CODE_DICT = {
     "HR": "Rubicon",
 }
 
-default_starting_regions = {
+scug_id_to_starting_region = {
     "Yellow": "Outskirts",
     "White": "Outskirts",
     "Red": "Farm Arrays",
@@ -34,7 +34,7 @@ default_starting_regions = {
     "Rivulet": "Drainage System",
     "Spear": "Outskirts filtration",
     "Saint": "Sky Islands",
-    "Sofanthiel": "Shaded Citadel"
+    "Inv": "Shaded Citadel"
 }
 
 regions = {
@@ -55,11 +55,11 @@ regions = {
 }
 
 regions_vanilla = ["SU", "HI", "DS", "GW", "SL", "SH", "UW", "SS", "CC", "SI", "LF", "SB"]
-regions_all = list(REGION_CODE_DICT.keys())
+regions_all = list(region_code_to_name.keys())
 
 #################################################################
 # SCUG DATA
-scug_names = {
+setting_to_scug_id = {
     "monk": "Yellow",
     "survivor": "White",
     "hunter": "Red",
@@ -84,7 +84,7 @@ scug_names = {
     18: "Inv"
 }
 
-scug_display_names = {
+scug_id_to_name = {
     "Yellow": "Monk",
     "White": "Survivor",
     "Red": "Hunter",
@@ -107,17 +107,17 @@ scug_display_names = {
     18: "Sofanthiel"
 }
 
-scugs_msc = ['Yellow', 'White', 'Red', 'Gourmand', 'Artificer', 'Rivulet', 'Spear', 'Saint', 'Inv']
+scugs_all = ['Yellow', 'White', 'Red', 'Gourmand', 'Artificer', 'Rivulet', 'Spear', 'Saint', 'Inv']
 scugs_vanilla = ['Yellow', 'White', 'Red']
 
 #################################################################
 # PASSAGE DATA
 passages_vanilla = ["Chieftain", "DragonSlayer", "Friend", "Hunter", "Monk",
                     "Outlaw", "Saint", "Scholar", "Survivor", "Traveller"]
-passages = ["Chieftain", "DragonSlayer", "Friend", "Hunter", "Martyr", "Monk", "Mother",
-            "Nomad", "Outlaw", "Pilgrim", "Saint", "Scholar", "Survivor", "Traveller"]
+passages_all = ["Chieftain", "DragonSlayer", "Friend", "Hunter", "Martyr", "Monk", "Mother",
+                "Nomad", "Outlaw", "Pilgrim", "Saint", "Scholar", "Survivor", "Traveller"]
 # Passages that can't be automatically set as priority until early logic detection improves.
-prioritizable_passages = set(passages) - {"Chieftain", "Traveller", "Mother"}
+prioritizable_passages = set(passages_all) - {"Chieftain", "Traveller", "Mother"}
 
 dragonslayer_vanilla = ["GreenLizard", "PinkLizard", "BlueLizard", "WhiteLizard", "YellowLizard", "BlackLizard"]
 dragonslayer_msc = dragonslayer_vanilla + ["CyanLizard", "RedLizard", "SpitLizard", "ZoopLizard"]

@@ -27,5 +27,5 @@ class EventData:
 def generate_events():
     return [
         EventData(f"Access-{short}", f"Access-{short}", full)
-        for short, full in game_data.general.REGION_CODE_DICT.items()
+        for short, full in game_data.general.region_code_to_name.items()
     ]

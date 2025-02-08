@@ -4,7 +4,7 @@ from BaseClasses import Region, MultiWorld
 from . import RainWorldOptions
 from .conditions.classes import Condition, Simple, Compound, ConditionBlank, AllOf
 from .conditions import generate
-from .game_data.general import scug_names
+from .game_data.general import setting_to_scug_id
 
 
 class ConnectionData:
@@ -66,7 +66,7 @@ class RegionData:
 
 
 def any_scug_except(scugs: list[str]) -> Simple:
-    return Simple([f"Scug-{s}" for s in set(scug_names.values()).difference(set(scugs))], 1)
+    return Simple([f"Scug-{s}" for s in set(setting_to_scug_id.values()).difference(set(scugs))], 1)
 
 
 def one_of_these_scugs(scugs: list[str]) -> Simple:
