@@ -145,6 +145,12 @@ class DifficultyNomad(Range):
     default = 5
 
 
+class DifficultyChieftain(Toggle):
+    """Whether or not a scavenger toll must be accessible before The Chieftain can be logically required."""
+    display_name = "The Chieftain requires toll"
+    default = True
+
+
 #################################################################
 # FILLER SETTINGS
 class PctTraps(Range):
@@ -396,9 +402,11 @@ class RainWorldOptions(PerGameCommonOptions):
     difficulty_hunter: DifficultyHunter
     difficulty_outlaw: DifficultyOutlaw
     difficulty_nomad: DifficultyNomad
+    difficulty_chieftain: DifficultyChieftain
 
     group_difficulty = [
-        ProgressionBalancing, Accessibility, DifficultyMonk, DifficultyHunter, DifficultyOutlaw, DifficultyNomad
+        ProgressionBalancing, Accessibility, DifficultyMonk, DifficultyHunter, DifficultyOutlaw, DifficultyNomad,
+        DifficultyChieftain
     ]
 
     #################################################################

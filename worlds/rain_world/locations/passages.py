@@ -10,12 +10,18 @@ cond_dragonslayer_msc = AllOf(Simple(game_data.general.dragonslayer_msc, 6), Sim
 cond_dragonslayer = AnyOf(cond_dragonslayer_vanilla, cond_dragonslayer_msc)
 cond_friend = Simple(game_data.general.lizards_any, 1)
 
+
 #################################################################
 # CHIEFTAIN
-cond_chieftain = AllOf(
-    Simple(["Scavenger", "ScavengerElite"], 1),
-    Simple([f"Scug-{s}" for s in set(game_data.general.setting_to_scug_id.values()) - {"Artificer"}], 1)
-)
+def generate_cond_chieftain(options: RainWorldOptions) -> Condition:
+    return AllOf(
+        (
+            Simple([f"Access-{region}" for region in game_data.general.scavenger_tolls], 1)
+            if options.difficulty_chieftain else
+            Simple(["Scavenger", "ScavengerElite"], 1)
+        ),
+        Simple([f"Scug-{s}" for s in set(game_data.general.setting_to_scug_id.values()) - {"Artificer"}], 1)
+    )
 
 
 #################################################################
@@ -162,7 +168,7 @@ locations: dict[str, LocationData] = {
     "Friend": Passage("Friend", "PPwS Passages", 5021, cond_friend),
     "Traveller": Passage("Traveller", "PPwS Passages", 5022, cond_wanderer),
 
-    "Chieftain": Passage("Chieftain", "Late Passages", 5040, cond_chieftain),
+    "Chieftain": Passage("Chieftain", "Late Passages", 5040, access_condition_generator=generate_cond_chieftain),
     "Hunter": Passage("Hunter", "Late Passages", 5041, access_condition_generator=generate_cond_hunter),
     "Monk": Passage("Monk", "Late Passages", 5042, access_condition_generator=generate_cond_monk),
     "Outlaw": Passage("Outlaw", "Late Passages", 5043, access_condition_generator=generate_cond_outlaw),

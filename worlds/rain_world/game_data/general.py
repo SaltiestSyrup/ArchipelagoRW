@@ -132,6 +132,8 @@ slugpup_normal_regions = ['SU', 'HI', 'DS', 'SL', 'GW', 'SH', 'UW', 'CC', 'SI', 
 
 outlaw_insignificant = ["Fly", "SmallCentipede", "Snail", "PoleMimic", "TubeWorm", "Overseer"]
 
+scavenger_tolls = ["SU", "GW", "LF", "LC", "CL", "OE", "UG"]
+
 #################################################################
 # FOOD QUEST DATA
 
