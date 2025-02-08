@@ -52,7 +52,7 @@ class RainWorldWorld(World):
         for data in all_connections:
             data.make(self.player, self.multiworld)
 
-        # return is a bool for whether generation actually happened and the location is not an event
+        # return for each datum is a bool for whether that location was actually generated
         locs = [data.make(self.player, self.multiworld, self.options) for data in locations.generate(self.options)]
         self.location_count = sum(locs)
 
@@ -105,6 +105,8 @@ class RainWorldWorld(World):
             "IdDrone": 1 if self.options.starting_scug == "Artificer" else 0,
             "Disconnect_FP": 1 if self.options.starting_scug == "Rivulet" else 0,
             "Rewrite_Spear_Pearl": 1 if self.options.starting_scug == "Spear" else 0,
+            "Spear_Pearl": 1 if self.options.starting_scug == "Spear" else 0,
+            "Object-EnergyCell": 1 if self.options.starting_scug == "Rivulet" else 0,
         }
         precollect = {
             "MSC": 1 if self.options.msc_enabled else 0,
@@ -135,9 +137,9 @@ class RainWorldWorld(World):
         self.multiworld.itempool += [self.create_item(e) for e in flounder2(d, remaining_slots)]
 
     def set_rules(self) -> None:
-        ascension_item = Item("Ascension", ItemClassification.progression, None, self.player)
-        self.multiworld.get_location("Ascension", self.player).place_locked_item(ascension_item)
-        self.multiworld.completion_condition[self.player] = Simple("Ascension").check(self.player)
+        # ascension_item = Item("Ascension", ItemClassification.progression, None, self.player)
+        # self.multiworld.get_location("Ascension", self.player).place_locked_item(ascension_item)
+        self.multiworld.completion_condition[self.player] = Simple("Victory").check(self.player)
 
     def fill_slot_data(self) -> Mapping[str, Any]:
         d = self.options.as_dict("which_gamestate", "random_starting_region", "passage_progress_without_survivor")

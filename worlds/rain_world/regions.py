@@ -240,7 +240,8 @@ all_connections = [
 
     ################################################################
     # DOWNPOUR - SPEARMASTER
-    Gate("Waterfront Facility", "Looks to the Moon", 5, "SL_DM", Simple(["MSC", "Scug-Spear"])),
+    Gate("Eastern Precipice", "Looks to the Moon", 5, "SL_DM", Simple(["MSC", "Scug-Spear"])),
+    Gate("Waterfront Facility", "Looks to the Moon", 1, "DM_SL", Simple(["MSC", "Scug-Spear"])),
 
     Gate("Looks to the Moon", "Eastern Precipice", 1, "SL_DM", Simple("MSC")),
     Gate("Looks to the Moon", "Waterfront Facility", 1, "DM_SL", Simple("MSC")),

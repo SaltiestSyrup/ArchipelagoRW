@@ -41,6 +41,29 @@ class WhichGamestate(Choice):
         return f"{value}"
 
 
+class WhichVictoryCondition(Choice):
+    """Whether ascension in the Subterranean Void Sea or a gamestate-specific alternative is the victory condition.
+    The alternative victory condition depends on the selected gamestate:
+
+    **Vanilla**, **Hunter**, **Saint**, or **Sofanthiel**: No alternate.
+
+    **Monk** and **Survivor**: Reach Journey's End in Outer Expanse.
+
+    **Gourmand**: Receive the Mark, meet Five Pebbles, and reach Journey's End in Outer Expanse.
+
+    **Artificer**: Receive the Mark, meet Five Pebbles, and kill the Chieftain in Metropolis.
+
+    **Rivulet**: Receive the Mark, receive the Rarefaction Cell and deliver it to Submerged Superstructure,
+    then meet Looks to the Moon.
+
+    **Spearmaster**: Receive the Mark, receive the SM pearl and deliver it to Five Pebbles then to Looks to the Moon,
+    get the SM pearl signed, then deliver it to Communications Array in Sky Islands.
+    """
+    display_name = "Victory condition"
+    option_ascension = 0
+    option_alternate = 1
+
+
 #################################################################
 # GENERAL SETTINGS
 class RandomStartingRegion(Choice):
@@ -355,8 +378,9 @@ class RainWorldOptions(PerGameCommonOptions):
     # IMPORTANT SETTINGS
     passage_progress_without_survivor: PassageProgressWithoutSurvivor
     which_gamestate: WhichGamestate
+    which_victory_condition: WhichVictoryCondition
 
-    group_important = [PassageProgressWithoutSurvivor, WhichGamestate]
+    group_important = [PassageProgressWithoutSurvivor, WhichGamestate, WhichVictoryCondition]
 
     #################################################################
     # GENERAL SETTINGS

@@ -1,4 +1,4 @@
-from . import passages, misc, physical, echoes, foodquest, broadcasts
+from . import passages, physical, echoes, foodquest, broadcasts
 from .classes import LocationData
 from ..options import RainWorldOptions
 
@@ -17,5 +17,4 @@ def generate(options: RainWorldOptions) -> list[LocationData]:
         *echoes.locations,
         *foodquest.locations,
         *broadcasts.locations,
-        *misc.locations,
     ]
