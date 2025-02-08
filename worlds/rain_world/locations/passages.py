@@ -17,23 +17,31 @@ cond_chieftain = AllOf(
     Simple([f"Scug-{s}" for s in set(game_data.general.setting_to_scug_id.values()) - {"Artificer"}], 1)
 )
 
+
 #################################################################
 # HUNTER
-cond_hunter = AnyOf(
-    Simple(["Scug-Red", "Scug-Artificer", "Scug-Spear", "Scug-Gourmand", "Scug-Inv"], 1),
-    AllOf(
-        Simple(["Scug-Yellow", "Scug-White", "Scug-Rivulet"], 1),
-        Simple(["Fly", "SmallNeedleWorm", "SmallCentipede", "Centipede", "EggBug", "JellyFish", "Hazer", "VultureGrub"],
-               5)
+def generate_cond_hunter(options: RainWorldOptions) -> Condition:
+    return AnyOf(
+        Simple(["Scug-Red", "Scug-Artificer", "Scug-Spear", "Scug-Gourmand", "Scug-Inv"], 1),
+        AllOf(
+            Simple(["Scug-Yellow", "Scug-White", "Scug-Rivulet"], 1),
+            Simple(
+                ["Fly", "SmallNeedleWorm", "SmallCentipede", "Centipede",
+                 "EggBug", "JellyFish", "Hazer", "VultureGrub"],
+                options.difficulty_hunter.value
+            )
+        )
     )
-)
+
 
 #################################################################
 # MONK
-cond_monk = AnyOf(
-    Simple(game_data.general.monk_foods_vanilla, 3),
-    AllOf(Simple('MSC'), Simple(game_data.general.monk_foods_msc, 3))
-)
+def generate_cond_monk(options: RainWorldOptions) -> Condition:
+    return AnyOf(
+        Simple(game_data.general.monk_foods_vanilla, options.difficulty_monk.value),
+        AllOf(Simple('MSC'), Simple(game_data.general.monk_foods_msc, options.difficulty_monk.value))
+    )
+
 
 #################################################################
 # MOTHER
@@ -50,11 +58,15 @@ cond_nomad = AllOf(
     Simple([f"Access-{region}" for region in game_data.general.regions_all], 5)
 )
 
+
 #################################################################
 # OUTLAW
-cond_outlaw = Simple(
-    list(set(game_data.files.creatures["normal"].keys()).difference(set(game_data.general.outlaw_insignificant))), 3
-)
+def generate_cond_outlaw(options: RainWorldOptions) -> Condition:
+    return Simple(
+        list(set(game_data.files.creatures["normal"].keys()).difference(set(game_data.general.outlaw_insignificant))),
+        options.difficulty_outlaw.value
+    )
+
 
 #################################################################
 # PILGRIM
@@ -151,9 +163,9 @@ locations: dict[str, LocationData] = {
     "Traveller": Passage("Traveller", "PPwS Passages", 5022, cond_wanderer),
 
     "Chieftain": Passage("Chieftain", "Late Passages", 5040, cond_chieftain),
-    "Hunter": Passage("Hunter", "Late Passages", 5041, cond_hunter),
-    "Monk": Passage("Monk", "Late Passages", 5042, cond_monk),
-    "Outlaw": Passage("Outlaw", "Late Passages", 5043, cond_outlaw),
+    "Hunter": Passage("Hunter", "Late Passages", 5041, access_condition_generator=generate_cond_hunter),
+    "Monk": Passage("Monk", "Late Passages", 5042, access_condition_generator=generate_cond_monk),
+    "Outlaw": Passage("Outlaw", "Late Passages", 5043, access_condition_generator=generate_cond_outlaw),
     "Saint": Passage("Saint", "Late Passages", 5044),
     "Scholar": Passage("Scholar", "Late Passages", 5045, cond_scholar),
     "Nomad": Passage("Nomad", "Late Passages", 5046, cond_nomad),

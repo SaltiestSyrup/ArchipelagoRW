@@ -85,6 +85,44 @@ class ExtraKarmaCapIncreases(Range):
 
 
 #################################################################
+# DIFFICULTY SETTINGS
+class DifficultyHunter(Range):
+    """The number of different types of meats that must be available before The Hunter can be logically required.
+    Higher numbers are easier."""
+    display_name = "The Hunter difficulty"
+    range_start = 1
+    range_end = 4
+    default = 3
+
+
+class DifficultyMonk(Range):
+    """The number of different types of non-meats that must be available before The Monk can be logically required.
+    Higher numbers are easier."""
+    display_name = "The Monk difficulty"
+    range_start = 1
+    range_end = 4
+    default = 3
+
+
+class DifficultyOutlaw(Range):
+    """The number of different types of creatures that must be available before The Outlaw can be logically required.
+    Higher numbers are easier."""
+    display_name = "The Outlaw difficulty"
+    range_start = 1
+    range_end = 8
+    default = 5
+
+
+class DifficultyNomad(Range):
+    """The number of regions that must be accessible before The Nomad can be logically required.
+    Higher numbers are easier."""
+    display_name = "The Nomad difficulty"
+    range_start = 3
+    range_end = 8
+    default = 5
+
+
+#################################################################
 # FILLER SETTINGS
 class PctTraps(Range):
     """The percentage of filler items that will be traps.  Set to 0 to remove traps entirely."""
@@ -318,7 +356,7 @@ class RainWorldOptions(PerGameCommonOptions):
     passage_progress_without_survivor: PassageProgressWithoutSurvivor
     which_gamestate: WhichGamestate
 
-    group_important = [ProgressionBalancing, Accessibility, PassageProgressWithoutSurvivor, WhichGamestate]
+    group_important = [PassageProgressWithoutSurvivor, WhichGamestate]
 
     #################################################################
     # GENERAL SETTINGS
@@ -327,6 +365,17 @@ class RainWorldOptions(PerGameCommonOptions):
     extra_karma_cap_increases: ExtraKarmaCapIncreases
 
     group_general = [RandomStartingRegion, PassagePriority, ExtraKarmaCapIncreases]
+
+    #################################################################
+    # DIFFICULTY SETTINGS
+    difficulty_monk: DifficultyMonk
+    difficulty_hunter: DifficultyHunter
+    difficulty_outlaw: DifficultyOutlaw
+    difficulty_nomad: DifficultyNomad
+
+    group_difficulty = [
+        ProgressionBalancing, Accessibility, DifficultyMonk, DifficultyHunter, DifficultyOutlaw, DifficultyNomad
+    ]
 
     #################################################################
     # FILLER SETTINGS
@@ -410,6 +459,7 @@ class RainWorldOptions(PerGameCommonOptions):
 option_groups = [
     OptionGroup("Important", RainWorldOptions.group_important),
     OptionGroup("Start settings", RainWorldOptions.group_general, True),
+    OptionGroup("Difficulty settings", RainWorldOptions.group_difficulty, True),
     OptionGroup("Filler item relative weights", RainWorldOptions.group_filler, True),
     OptionGroup("Trap relative weights", RainWorldOptions.group_traps, True),
 ]
