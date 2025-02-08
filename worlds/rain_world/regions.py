@@ -170,7 +170,7 @@ all_connections = [
     Gate("The Exterior", "Five Pebbles above puppet", 1, "SS_UW"),
     Gate("The Exterior", "Five Pebbles", 5, "UW_SS"),
     Gate("The Exterior", "Waterfront Facility", 3, "UW_SL", one_of_these_scugs(["Artificer", "Spear"])),
-    Gate("The Exterior", "Metropolis", 5, "UW_LC", one_of_these_scugs(["Artificer"])),  # TODO
+    Gate("The Exterior", "Metropolis", 5, "UW_LC", Simple(["Scug-Artificer", "The Mark", "IdDrone"])),
     Gate("The Exterior", "The Rot", 1, "SS_UW", one_of_these_scugs(["Rivulet"])),
     Gate("The Exterior", "The Rot", 5, "UW_SS", one_of_these_scugs(["Rivulet"])),
 
