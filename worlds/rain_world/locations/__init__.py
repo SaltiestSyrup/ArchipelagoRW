@@ -1,9 +1,9 @@
-from . import passages, physical, echoes, foodquest, broadcasts, unique
+from . import passages, echoes, foodquest, broadcasts, unique, tokens_pearls
 from .classes import LocationData
 from ..options import RainWorldOptions
 
 # ID OFFSET BLOCKS:
-# Physical             0 - 2020
+# Tokens/Pearls        0 -  999
 # Unique            4900 - 4999
 # Passages          5000 - 5046
 # Echoes            5070 - 5079
@@ -13,7 +13,7 @@ from ..options import RainWorldOptions
 
 def generate(options: RainWorldOptions) -> list[LocationData]:
     return [
-        *physical.locations,
+        *tokens_pearls.generate(options),
         *unique.generate(options),
         *passages.generate(options),
         *echoes.locations,

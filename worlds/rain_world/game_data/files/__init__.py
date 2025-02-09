@@ -1,4 +1,4 @@
-__all__ = ['placed_objects', 'creatures', 'white_tokens']
+__all__ = ['placed_objects', 'creatures', 'white_tokens', 'tokens_pearls']
 
 import json
 from os.path import dirname, realpath, join
@@ -44,3 +44,6 @@ creatures["normal"]["SSOracleSwarmer"] = {
 
 # Dictionary of white (broadcast) tokens.  data[id] -> {"room": room, "blacklist": list of scugs}.
 white_tokens: dict[str, dict[str, str | list[str]]] = json.load(open(join(path, "white_tokens.json")))
+
+# Dictionary of tokens/pearls.  data[dlcstate] -> list of {"room": room, "blacklist": list of scugs, "type": type}.
+tokens_pearls: dict[str, list[dict[str, str | list[str]]]] = json.load(open(join(path, "tokens_pearls.json")))
