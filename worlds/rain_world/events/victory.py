@@ -35,8 +35,9 @@ def generate(options: RainWorldOptions) -> list[EventData]:
     if options.starting_scug == "Spear":
         ret += [
             EventData("MeetLttM", "MeetLttM", "Looks to the Moon"),
-            VictoryEvent("Messenger", "Sky Islands",
-                         Simple(["The Mark", "MeetFP", "MeetLttM", "Rewrite_Spear_Pearl", "Spear_Pearl"]))
+            VictoryEvent("Messenger", "Sky Islands", Simple(
+                ["The Mark", "MeetFP", "MeetLttM", "Rewrite_Spear_Pearl", "PearlObject-Spearmasterpearl"]
+            ))
         ]
 
     return ret

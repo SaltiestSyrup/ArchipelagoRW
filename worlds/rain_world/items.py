@@ -33,7 +33,8 @@ all_items: Dict[str, RainWorldItemData] = {
     "The Mark": RainWorldItemData("The Mark", offset + 1, ItemClassification.progression),
     "IdDrone": RainWorldItemData("IdDrone", offset + 2, ItemClassification.progression),
     "Object-EnergyCell": RainWorldItemData("Object-EnergyCell", offset + 3, ItemClassification.progression),
-    "Spear_Pearl": RainWorldItemData("Spear_Pearl", offset + 4, ItemClassification.progression),
+    "PearlObject-Spearmasterpearl": RainWorldItemData("PearlObject-Spearmasterpearl", offset + 4,
+                                                      ItemClassification.progression),
     "Rewrite_Spear_Pearl": RainWorldItemData("Rewrite_Spear_Pearl", offset + 5, ItemClassification.progression),
     "Object-NSHSwarmer": RainWorldItemData("Object-NSHSwarmer", offset + 6, ItemClassification.progression),
 

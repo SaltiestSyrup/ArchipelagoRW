@@ -132,7 +132,7 @@ class RainWorldWorld(World):
             "Disconnect_FP": 1 if self.options.starting_scug == "Rivulet" else 0,
             "Object-EnergyCell": 1 if self.options.starting_scug == "Rivulet" else 0,
             "Rewrite_Spear_Pearl": 1 if self.options.starting_scug == "Spear" else 0,
-            "Spear_Pearl": 1 if self.options.starting_scug == "Spear" else 0,
+            "PearlObject-Spearmasterpearl": 1 if self.options.starting_scug == "Spear" else 0,
         }
         precollect = {
             "MSC": 1 if self.options.msc_enabled else 0,
