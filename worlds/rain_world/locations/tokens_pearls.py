@@ -26,6 +26,8 @@ class TokenOrPearl(LocationData):
 
     def _gen(self) -> Callable[[RainWorldOptions], bool]:
         def inner(options: RainWorldOptions) -> bool:
+            if self.full_name.startswith("DevToken"):
+                return False
             if options.msc_enabled and options.starting_scug not in (self.msc_blacklist or []):
                 return True
             if not options.msc_enabled and options.starting_scug not in (self.vanilla_blacklist or []):
@@ -54,6 +56,8 @@ def token_name(obj: dict) -> str:
         return f'Token-L-{_region}'
     elif obj["type"] == "RedToken":  # safari level unlock
         return f'Token-S-{_region}'
+    elif obj["type"] == "DevToken":
+        return f'DevToken-{obj["name"]}-{_region}'
     elif "Token" in obj["type"]:
         return f'Token-{obj["name"]}-{_region}'
     else:
@@ -62,6 +66,8 @@ def token_name(obj: dict) -> str:
 
 for obj in tokens_pearls["MSC"]:
     if "Pearl" in obj["type"] and (obj["name"].startswith("Misc") or obj["name"].strip() == ''):
+        continue
+    if "WhiteToken" in obj["type"]:
         continue
 
     name = token_name(obj)
