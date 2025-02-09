@@ -122,7 +122,7 @@ all_items: Dict[str, RainWorldItemData] = {
 #################################################################
 # GATES
 for i, gate in enumerate(all_gate_short_names):
-    all_items[f"GATE_{gate}"] = RainWorldItemData(f"GATE_{gate}", 500 + i, ItemClassification.progression)
+    all_items[f"GATE_{gate}"] = RainWorldItemData(f"GATE_{gate}", offset + 500 + i, ItemClassification.progression)
 
 #################################################################
 item_name_to_id: Dict[str, int] = {
