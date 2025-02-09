@@ -23,7 +23,17 @@ region_code_to_name = {
     "UG": "Undergrowth",
     "LM": "Waterfront Facility",
     "HR": "Rubicon",
+
+    "SU^": "Outskirts filtration",
+    "SL^": "Shoreline above Moon",
+    "SS^": "Five Pebbles above puppet",
+    "SB^": "Subterranean ravine",
+    "MS^": "Bitter Aerie",
+    "OE^": "Outer Expanse filtration",
+    "LM^": "Eastern Precipice",
 }
+
+region_name_to_code = {v: k for k, v in region_code_to_name.items()}
 
 scug_id_to_starting_region = {
     "Yellow": "Outskirts",

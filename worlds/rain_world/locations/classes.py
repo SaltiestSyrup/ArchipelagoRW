@@ -1,7 +1,8 @@
 from typing import Optional, Callable
 
 from BaseClasses import MultiWorld, Location
-from .. import RainWorldOptions
+from ..options import RainWorldOptions
+from ..game_data.general import region_code_to_name
 from ..conditions.classes import ConditionBlank, Condition
 from ..constants import FIRST_ID
 from worlds.generic.Rules import add_rule
@@ -50,8 +51,9 @@ class Token(PhysicalLocation):
     def __init__(self, name: str, color: str, region: str, offset: int, room: str,
                  access_condition: Condition = ConditionBlank,
                  generation_condition: Callable[[RainWorldOptions], bool] = lambda _: True):
-        adjusted_name = f"{'S-' if color == 'red' else ('L-' if color == 'gold' else '')}{name}"
-        super().__init__(f"Token-{adjusted_name}", f"Token-{adjusted_name}", region, offset, room, access_condition,
+        adjusted_name = f"{'S-' if color == 'red' else ('L-' if color == 'gold' else '')}{name}-{region}"
+        super().__init__(f"Token-{adjusted_name}", f"Token-{adjusted_name}",
+                         region_code_to_name[region], offset, room, access_condition,
                          generation_condition)
 
 
@@ -59,7 +61,8 @@ class Pearl(PhysicalLocation):
     def __init__(self, name: str, color: str, region: str, offset: int, room: str,
                  access_condition: Condition = ConditionBlank,
                  generation_condition: Callable[[RainWorldOptions], bool] = lambda _: True):
-        super().__init__(f"Pearl-{name}", f"Pearl-{name}", region, offset, room, access_condition, generation_condition)
+        super().__init__(f"Pearl-{name}", f"Pearl-{name}", region_code_to_name[region],
+                         offset, room, access_condition, generation_condition)
 
 
 class Echo(PhysicalLocation):
