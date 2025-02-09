@@ -82,6 +82,20 @@ story_regions = {
     }
 }
 
+accessible_regions = {
+    "Vanilla": story_regions["Vanilla"],
+    "MSC": {
+        "Yellow": story_regions_vanilla.union({"VS", "MS", "OE", "OE^", "SU^"}),
+        "White": story_regions_vanilla.union({"VS", "MS", "OE", "OE^", "SU^"}),
+        "Red": story_regions_vanilla.union({"VS", "MS"}),
+        "Gourmand": story_regions_vanilla.union({"OE", "OE^", "SU^"}),
+        "Artificer": story_regions_vanilla.union({"LC", "LM"}).difference({"SL"}),
+        "Rivulet": story_regions_vanilla.union({"RM", "MS", "MS^"}).difference({"SS"}),
+        "Spear": story_regions_vanilla.union({"DM", "LM", "LM^", "SU^"}).difference({"SL"}),
+        "Saint": story_regions_vanilla.union({"UG", "CL", "HR"}).difference({"DS", "SH", "UW", "SS"}),
+    }
+}
+
 story_regions_msc = story_regions_vanilla.union({"VS"})
 story_regions_gourmand = story_regions_msc.union({"OE"})
 story_regions_artificer = story_regions_msc.union({"LC", "LM"}).difference({"SL"})

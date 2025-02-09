@@ -14,7 +14,7 @@ from .items import RainWorldItem, all_items, RainWorldItemData
 from . import locations
 from .regions import all_regions, all_connections
 from .game_data.general import (setting_to_scug_id, scug_id_to_starting_region, prioritizable_passages,
-                                setting_to_region_code, passages_all, passages_vanilla)
+                                setting_to_region_code, passages_all, passages_vanilla, accessible_regions)
 
 
 class RainWorldWebWorld(WebWorld):
@@ -59,7 +59,7 @@ class RainWorldWorld(World):
         #################################################################
         # STARTING REGION
         dlcstate = "MSC" if self.options.msc_enabled else "Vanilla"
-        valid_start_regions = story_regions[dlcstate][self.options.starting_scug]
+        valid_start_regions = accessible_regions[dlcstate][self.options.starting_scug]
 
         if self.options.random_starting_region.value == -1:
             start_region_code = choice(list(valid_start_regions))
