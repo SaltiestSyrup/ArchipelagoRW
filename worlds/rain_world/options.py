@@ -69,6 +69,7 @@ class WhichVictoryCondition(Choice):
 class RandomStartingRegion(Choice):
     """Where Slugcat will initially spawn."""
     display_name = "Random starting shelter"
+    option_random_valid = -1
     option_default_starting_point = 0
 
     option_outskirts = 1
@@ -85,6 +86,7 @@ class RandomStartingRegion(Choice):
     option_subterranean = 12
 
     option_pipeyard = 20
+    option_waterfront_facility = 21
 
     default = 0
 

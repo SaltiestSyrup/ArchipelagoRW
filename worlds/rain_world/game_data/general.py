@@ -34,38 +34,60 @@ region_code_to_name = {
 }
 
 region_name_to_code = {v: k for k, v in region_code_to_name.items()}
+regions_all = list(region_code_to_name.keys())
 
 scug_id_to_starting_region = {
-    "Yellow": "Outskirts",
-    "White": "Outskirts",
-    "Red": "Farm Arrays",
-    "Gourmand": "Shaded Citadel",
-    "Artificer": "Garbage Wastes",
-    "Rivulet": "Drainage System",
-    "Spear": "Outskirts filtration",
-    "Saint": "Sky Islands",
-    "Inv": "Shaded Citadel"
+    "Yellow": "SU",
+    "White": "SU",
+    "Red": "LF",
+    "Gourmand": "SH",
+    "Artificer": "GW",
+    "Rivulet": "DS",
+    "Spear": "SU^",
+    "Saint": "SI",
+    "Inv": "SH"
 }
 
-regions = {
-    1: "Outskirts",
-    2: "Industrial Complex",
-    3: "Drainage System",
-    4: "Garbage Wastes",
-    5: "Shoreline",
-    6: "Shaded Citadel",
-    7: "The Exterior",
-    8: "Five Pebbles",
-    9: "Chimney Canopy",
-    10: "Sky Islands",
-    11: "Farm Arrays",
-    12: "Subterranean",
+setting_to_region_code = {
+    1: "SU",
+    2: "HI",
+    3: "DS",
+    4: "GW",
+    5: "SL",
+    6: "SH",
+    7: "UW",
+    8: "SS",
+    9: "CC",
+    10: "SI",
+    11: "LF",
+    12: "SB",
 
-    20: "Pipeyard"
+    20: "VS",
+    21: "LM",
 }
 
-regions_vanilla = ["SU", "HI", "DS", "GW", "SL", "SH", "UW", "SS", "CC", "SI", "LF", "SB"]
-regions_all = list(region_code_to_name.keys())
+story_regions_vanilla = {"SU", "HI", "DS", "GW", "SL", "SH", "UW", "SS", "CC", "SI", "LF", "SB"}
+
+story_regions = {
+    "Vanilla": {scug: story_regions_vanilla for scug in ["Yellow", "White", "Red"]},
+    "MSC": {
+        "Yellow": story_regions_vanilla.union({"VS"}),
+        "White": story_regions_vanilla.union({"VS"}),
+        "Red": story_regions_vanilla.union({"VS"}),
+        "Gourmand": story_regions_vanilla.union({"OE"}),
+        "Artificer": story_regions_vanilla.union({"LC", "LM"}).difference({"SL"}),
+        "Rivulet": story_regions_vanilla.union({"RM", "MS"}).difference({"SS"}),
+        "Spear": story_regions_vanilla.union({"DM", "LM"}).difference({"SL"}),
+        "Saint": story_regions_vanilla.union({"UG", "CL", "HR"}).difference({"DS", "SH", "UW", "SS"}),
+    }
+}
+
+story_regions_msc = story_regions_vanilla.union({"VS"})
+story_regions_gourmand = story_regions_msc.union({"OE"})
+story_regions_artificer = story_regions_msc.union({"LC", "LM"}).difference({"SL"})
+story_regions_rivulet = story_regions_msc.union({"RM", "MS"}).difference({"SS"})
+story_regions_spearmaster = story_regions_msc.union({"DM", "LM"}).difference({"SL"})
+story_regions_saint = story_regions_msc.union({"UG", "CL", "HR"}).difference({"DS", "SH", "UW", "SS"})
 
 #################################################################
 # SCUG DATA

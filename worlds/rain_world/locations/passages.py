@@ -105,13 +105,13 @@ cond_scholar = AnyOf(
 #################################################################
 # WANDERER
 # These sets are *story regions*.
-regions = set(game_data.general.regions_vanilla)
-regions_msc = regions.union({"VS"})
-regions_gourmand = regions_msc.union({"OE"})
-regions_artificer = regions_msc.union({"LC", "LM"}).difference({"SL"})
-regions_rivulet = regions_msc.union({"RM", "MS"}).difference({"SS"})
-regions_spearmaster = regions_msc.union({"DM", "LM"}).difference({"SL"})
-regions_saint = regions_msc.union({"UG", "CL", "HR"}).difference({"DS", "SH", "UW", "SS"})
+regions = game_data.general.story_regions_vanilla
+regions_msc = game_data.general.story_regions_msc
+regions_gourmand = game_data.general.story_regions_gourmand
+regions_artificer = game_data.general.story_regions_artificer
+regions_rivulet = game_data.general.story_regions_rivulet
+regions_spearmaster = game_data.general.story_regions_spearmaster
+regions_saint = game_data.general.story_regions_saint
 
 cond_wanderer_vanilla = AllOf(Simple([f"Access-{r}" for r in regions]), Simple("MSC", negative=True))
 cond_wanderer_msc_base = AllOf(

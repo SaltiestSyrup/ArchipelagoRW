@@ -1,19 +1,20 @@
 __all__ = ["RainWorldWorld", "RainWorldWebWorld"]
 
+from random import choice
 from typing import Mapping, Any
 
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Item, ItemClassification, Tutorial
 from .options import RainWorldOptions
 from .conditions.classes import Simple
-from .game_data.general import region_code_to_name
+from .game_data.general import region_code_to_name, story_regions
 from .events import get_events
 from .utils import normalize, flounder2
 from .items import RainWorldItem, all_items, RainWorldItemData
 from . import locations
 from .regions import all_regions, all_connections
-from .game_data.general import (
-    setting_to_scug_id, scug_id_to_starting_region, prioritizable_passages, regions, passages_all, passages_vanilla)
+from .game_data.general import (setting_to_scug_id, scug_id_to_starting_region, prioritizable_passages,
+                                setting_to_region_code, passages_all, passages_vanilla)
 
 
 class RainWorldWebWorld(WebWorld):
@@ -46,6 +47,33 @@ class RainWorldWorld(World):
 
     location_count = 0
     starting_region = 'SU'
+
+    def generate_early(self) -> None:
+        # This is the earliest that the options are available.  Player YAML failures should be tripped here.
+
+        #################################################################
+        # SOFANTHIEL
+        if self.options.starting_scug == "Inv":
+            raise NotImplementedError("Invalid YAML: Starting slugcat Inv not implemented.")
+
+        #################################################################
+        # STARTING REGION
+        dlcstate = "MSC" if self.options.msc_enabled else "Vanilla"
+        valid_start_regions = story_regions[dlcstate][self.options.starting_scug]
+
+        if self.options.random_starting_region.value == -1:
+            start_region_code = choice(list(valid_start_regions))
+            print(f'Random starting region for player {self.player}: {start_region_code}')
+        elif self.options.random_starting_region.value == 0:
+            start_region_code = scug_id_to_starting_region[self.options.starting_scug]
+        else:
+            start_region_code = setting_to_region_code[self.options.random_starting_region.value]
+
+        if start_region_code not in valid_start_regions:
+            raise ValueError(f"Invalid YAML: {start_region_code} is not a valid starting region "
+                             f"for slugcat '{self.options.starting_scug}' and dlcstate '{dlcstate}'.")
+
+        self.starting_region = region_code_to_name[start_region_code]
 
     def create_regions(self):
         for data in all_regions:
@@ -84,11 +112,6 @@ class RainWorldWorld(World):
 
         #################################################################
         # STARTING REGION
-        if self.options.random_starting_region.value == 0:
-            self.starting_region = scug_id_to_starting_region[setting_to_scug_id[self.options.which_gamestate.value]]
-        else:
-            self.starting_region = regions[self.options.random_starting_region.value]
-
         start = self.multiworld.get_region(self.starting_region, self.player)
         self.multiworld.get_region('Starting region', self.player).connect(start)
 

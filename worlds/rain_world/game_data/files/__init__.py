@@ -2,7 +2,7 @@ __all__ = ['placed_objects', 'creatures', 'white_tokens']
 
 import json
 from os.path import dirname, realpath, join
-from ..general import regions_vanilla
+from ..general import story_regions_vanilla
 
 path = dirname(realpath(__file__))
 
@@ -15,7 +15,7 @@ creatures: dict[str, dict[str, dict[str, [dict[str, list[str]]]]]] = json.load(o
 # Batflies and neurons are not spawned by spawners.  Their locations are manually add to the dictionary here.
 creatures["normal"]["Fly"] = {
     "Vanilla": {"Yellow": [], "White": [], "Red": [],
-                "*ALL": [f"{r}_dummy" for r in set(regions_vanilla).difference({"SS"})]},
+                "*ALL": [f"{r}_dummy" for r in set(story_regions_vanilla).difference({"SS"})]},
     "MSC": {
         "Yellow": [f"{r}_dummy" for r in {"DS", "SL", "SH", "UW", "MS", "OE"}],
         "White": [f"{r}_dummy" for r in {"DS", "SL", "SH", "UW", "MS", "OE"}],
