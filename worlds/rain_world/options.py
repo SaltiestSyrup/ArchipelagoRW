@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
-from Options import PerGameCommonOptions, Toggle, Range, OptionGroup, Choice, ProgressionBalancing, Accessibility
+from Options import PerGameCommonOptions, Toggle, Range, OptionGroup, Choice, ProgressionBalancing, Accessibility, \
+    Visibility
 from .game_data.general import setting_to_scug_id, scug_id_to_name
 
 
@@ -107,6 +108,18 @@ class ExtraKarmaCapIncreases(Range):
     range_start = 0
     range_end = 30
     default = 1
+
+
+#################################################################
+# CHECK POOL SETTINGS
+class ChecksBroadcasts(Choice):
+    """Which slugcats broadcasts should be available to."""
+    display_name = "Broadcasts"
+    option_all_slugcats = 2
+    option_only_spearmaster = 1
+    option_off = 0
+    default = 1
+    visibility = Visibility.none
 
 
 #################################################################
@@ -410,6 +423,10 @@ class RainWorldOptions(PerGameCommonOptions):
         ProgressionBalancing, Accessibility, DifficultyMonk, DifficultyHunter, DifficultyOutlaw, DifficultyNomad,
         DifficultyChieftain
     ]
+
+    #################################################################
+    # CHECK POOL SETTINGS
+    checks_broadcasts: ChecksBroadcasts
 
     #################################################################
     # FILLER SETTINGS

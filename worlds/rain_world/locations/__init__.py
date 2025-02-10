@@ -18,5 +18,5 @@ def generate(options: RainWorldOptions) -> list[LocationData]:
         *passages.generate(options),
         *echoes.locations,
         *foodquest.locations,
-        *broadcasts.locations,
+        *broadcasts.generate(options),
     ]
