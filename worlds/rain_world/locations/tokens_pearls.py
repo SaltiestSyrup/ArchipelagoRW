@@ -20,6 +20,8 @@ class TokenOrPearl(LocationData):
         self.vanilla_blacklist = vanilla_blacklist
 
     def make(self, player: int, multiworld: MultiWorld, options: RainWorldOptions) -> bool:
+        if self.full_name == "Pearl-MS-GW":
+            self.msc_blacklist = set(scugs_all).difference({"Artificer", "Spear"})
         self.generation_condition = self._gen()
         # self.access_condition = self._acc()
         return super().make(player, multiworld, options)
