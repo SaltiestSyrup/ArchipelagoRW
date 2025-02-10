@@ -1,10 +1,10 @@
 __all__ = ["RainWorldWorld", "RainWorldWebWorld"]
 
-from random import choice
+from random import choice, sample
 from typing import Mapping, Any
 
 from worlds.AutoWorld import World, WebWorld
-from BaseClasses import Item, ItemClassification, Tutorial
+from BaseClasses import Tutorial, LocationProgressType
 from .options import RainWorldOptions
 from .conditions.classes import Simple
 from .game_data.general import region_code_to_name, story_regions
@@ -90,18 +90,14 @@ class RainWorldWorld(World):
             data.make(self.player, self.multiworld)
 
         #################################################################
-        # PRIORITY PASSAGES: pick a number of passages matching the relevant option
-        # that are not already prioritized and are prioritizable
-        # passage_locations = [
-        #     loc for loc in
-        #     [self.multiworld.get_location(f'Passage-{passage}', self.player) for passage in prioritizable_passages]
-        #     if loc.progress_type == LocationProgressType.DEFAULT
-        # ]
-        #
-        # num = max(0, min(self.options.passage_priority.value, len(passage_locations)))
-        #
-        # for passage in random.sample(passage_locations, num):
-        #     passage.progress_type = LocationProgressType.PRIORITY
+        # PRIORITY PASSAGES
+        if num := self.options.passage_priority.value > 0:
+            unprioritized_passage_locations = [
+                l for l in self.get_locations()
+                if l.name.startswith("Passage-") and l.progress_type == LocationProgressType.DEFAULT
+            ]
+            for loc in sample(unprioritized_passage_locations, min([num, len(unprioritized_passage_locations)])):
+                loc.progress_type = LocationProgressType.PRIORITY
 
         #################################################################
         # PPWS: add a new free connection if PPWS is enabled.
