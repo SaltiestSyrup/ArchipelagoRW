@@ -14,7 +14,8 @@ from .items import RainWorldItem, all_items, RainWorldItemData
 from . import locations
 from .regions import all_regions, all_connections
 from .game_data.general import (setting_to_scug_id, scug_id_to_starting_region, prioritizable_passages,
-                                setting_to_region_code, passages_all, passages_vanilla, accessible_regions)
+                                setting_to_region_code, passages_all, passages_vanilla, accessible_regions,
+                                accessible_gates)
 
 
 class RainWorldWebWorld(WebWorld):
@@ -116,10 +117,11 @@ class RainWorldWorld(World):
 
     def create_items(self) -> None:
         added_items = 0
+        dlcstate = "MSC" if self.options.msc_enabled else "Vanilla"
 
         pool = {
             "Karma": 8 + self.options.extra_karma_cap_increases.value,
-            **{k: 1 for k in items.all_items.keys() if k.startswith("GATE")},
+            **{f'GATE_{k}': 1 for k in accessible_gates[dlcstate][self.options.starting_scug]},
             **{f"Passage-{p}": 1 for p in (passages_all if self.options.msc_enabled else passages_vanilla)},
             "The Mark": 1,
             "The Glow": 1,

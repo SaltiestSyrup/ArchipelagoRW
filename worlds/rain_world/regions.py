@@ -101,7 +101,7 @@ all_regions = [
 
     RegionData("Outskirts filtration", "SU^", generate.whitelist_scugs(["Yellow", "White", "Gourmand"], True)),
     RegionData("Pipeyard", "VS", generate.msc(True)),
-    RegionData("Submerged Superstructure", "MS", generate.msc(True)),
+    RegionData("Submerged Superstructure", "MS", generate.blacklist_scugs(["Artificer"], True)),
     RegionData("Bitter Aerie", "MS^", generate.whitelist_scugs(["Rivlet"], True)),
     RegionData("Outer Expanse", "OE", generate.whitelist_scugs(["Yellow", "White", "Gourmand"], True)),
     RegionData("Outer Expanse filtration", "OE^", generate.whitelist_scugs(["Yellow", "White", "Gourmand"], True)),
@@ -151,7 +151,7 @@ all_connections = [
     Gate("Drainage System", "Chimney Canopy", 5, "DS_CC", Simple("MSC")),
 
     Gate("Shoreline", "Garbage Wastes", 2, "GW_SL"),
-    Gate("Shoreline", "Shaded Citadel", 2, "SH_SL"),
+    Gate("Shoreline", "Shaded Citadel", 2, "SH_SL", any_scug_except(["Saint"])),
     Gate("Shoreline", "Subterranean", 5, "SB_SL"),
     Gate("Shoreline", "Pipeyard", 3, "SL_VS", Simple("MSC")),
     Gate("Shoreline", "Submerged Superstructure", 5, "SL_MS", Simple("MSC")),
@@ -160,7 +160,7 @@ all_connections = [
     ConnectionData("Shoreline above Moon", "Shoreline"),
 
     Gate("Shaded Citadel", "Industrial Complex", 1, "HI_SH"),
-    Gate("Shaded Citadel", "Shoreline", 3, "SH_SL"),
+    Gate("Shaded Citadel", "Shoreline", 3, "SH_SL", any_scug_except(["Saint"])),
     Gate("Shaded Citadel", "The Exterior", 1, "SH_UW"),
     Gate("Shaded Citadel", "Garbage Wastes", 2, "GW_SH", Simple("MSC")),
     Gate("Shaded Citadel", "Waterfront Facility", 3, "SH_SL", one_of_these_scugs(["Artificer", "Spear"])),
@@ -192,7 +192,7 @@ all_connections = [
     Gate("Subterranean", "Drainage System", 1, "DS_SB"),
     Gate("Subterranean", "Shoreline", 2, "SB_SL"),
     Gate("Subterranean", "Pipeyard", 3, "SB_VS", Simple("MSC")),
-    Gate("Subterranean", "Outer Expanse", 1, "OE_SB",
+    Gate("Subterranean", "Outer Expanse", 1, "SB_OE",
          Compound(2, Simple("MSC"), one_of_these_scugs(["Yellow", "White", "Gourmand"]))),
     Gate("Subterranean", "Waterfront Facility", 2, "SB_SL", one_of_these_scugs(["Artificer", "Rivulet"])),
     Gate("Subterranean", "Undergrowth", 1, "DS_SB", one_of_these_scugs(["Saint"])),

@@ -12,6 +12,7 @@ def edible_for_which_scugs(food: str) -> list[str]:
         .difference({"Saint" if food in food_quest_saint_inedible else ""})
         .difference({"Yellow", "White", "Rivulet"} if food in food_quest_survivor_inedible else {})
         .difference({"Yellow", "White"} if food == "RedCentipede" else {})
+        .difference({"Artificer"} if food == "GlowWeed" else {})
     )
 
 
