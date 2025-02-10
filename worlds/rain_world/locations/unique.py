@@ -8,7 +8,7 @@ locations = {
     "Gift_Neuron": LocationData("Gift_Neuron", "Gift_Neuron", "Events", 4901, Simple(["Access-SL", "Access-SS"])),
     "Meet_FP": LocationData("Meet_FP", "Meet_FP", "Five Pebbles above puppet", 4902),
     "Meet_LttM": LocationData("Meet_LttM", "Meet_LttM", "Shoreline", 4903, Simple("The Mark")),
-    "Meet_LttM_Spear": LocationData("Meet_LttM", "Meet_LttM", "Looks to the Moon", 4904),
+    "Meet_LttM_Spear": LocationData("Meet_LttM_Spear", "Meet_LttM_Spear", "Looks to the Moon", 4904),
     "Kill_FP": LocationData("Kill_FP", "Kill_FP", "The Rot", 4905),
     "Save_LttM": LocationData("Save_LttM", "Save_LttM", "Shoreline", 4906, Simple("Object-NSHSwarmer")),
     "Ascend_FP": LocationData("Ascend_FP", "Ascend_FP", "Silent Construct", 4907, Simple("Karma", 8)),
