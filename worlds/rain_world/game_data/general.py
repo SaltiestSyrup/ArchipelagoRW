@@ -92,7 +92,7 @@ accessible_regions = {
         "Artificer": story_regions_vanilla.union({"LC", "LM"}).difference({"SL"}),
         "Rivulet": story_regions_vanilla.union({"RM", "MS", "MS^"}).difference({"SS"}),
         "Spear": story_regions_vanilla.union({"DM", "LM", "LM^", "SU^"}).difference({"SL"}),
-        "Saint": story_regions_vanilla.union({"UG", "CL", "HR"}).difference({"DS", "SH", "UW", "SS"}),
+        "Saint": story_regions_vanilla.union({"UG", "CL"}).difference({"DS", "SH", "UW", "SS"}),
     }
 }
 
