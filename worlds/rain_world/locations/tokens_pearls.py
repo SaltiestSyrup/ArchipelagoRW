@@ -53,9 +53,9 @@ def token_name(obj: dict) -> str:
     _region = obj["room"].split("_")[0]
 
     if obj["type"] == "GoldToken":  # arena level unlock
-        return f'Token-L-{_region}'
+        return f'Token-L-{obj["name"]}'
     elif obj["type"] == "RedToken":  # safari level unlock
-        return f'Token-S-{_region}'
+        return f'Token-S-{obj["name"]}'
     elif obj["type"] == "DevToken":
         return f'DevToken-{obj["name"]}-{_region}'
     elif "Token" in obj["type"]:
