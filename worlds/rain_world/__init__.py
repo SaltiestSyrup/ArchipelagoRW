@@ -166,5 +166,14 @@ class RainWorldWorld(World):
         self.multiworld.completion_condition[self.player] = Simple("Victory").check(self.player)
 
     def fill_slot_data(self) -> Mapping[str, Any]:
-        d = self.options.as_dict("which_gamestate", "random_starting_region", "passage_progress_without_survivor")
+        d = self.options.as_dict(
+            # Plugin needs to know...
+            "which_gamestate",  # ...which slugcat to enforce, and warn if MSC state is wrong
+            "random_starting_region",  # ...which region (and eventually shelter) to spawn in
+            "passage_progress_without_survivor",  # ...if this setting doesn't match Remix
+            "death_link",  # ...whether to listen for death link notifications
+            "checks_foodquest",  # ...whether the food quest should be available
+            "checks_broadcasts",  # ...whether broadcasts should be avilable
+            "which_victory_condition",  # ...which victory condition is a win
+        )
         return d

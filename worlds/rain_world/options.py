@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from Options import PerGameCommonOptions, Toggle, Range, OptionGroup, Choice, ProgressionBalancing, Accessibility, \
-    Visibility
+    Visibility, DeathLinkMixin, DeathLink
 from .game_data.general import setting_to_scug_id, scug_id_to_name
 
 
@@ -403,14 +403,14 @@ class WtTrapAlarm(WtGeneric):
 
 
 @dataclass
-class RainWorldOptions(PerGameCommonOptions):
+class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     #################################################################
     # IMPORTANT SETTINGS
     passage_progress_without_survivor: PassageProgressWithoutSurvivor
     which_gamestate: WhichGamestate
     which_victory_condition: WhichVictoryCondition
 
-    group_important = [PassageProgressWithoutSurvivor, WhichGamestate, WhichVictoryCondition]
+    group_important = [PassageProgressWithoutSurvivor, WhichGamestate, WhichVictoryCondition, DeathLink]
 
     #################################################################
     # GENERAL SETTINGS
