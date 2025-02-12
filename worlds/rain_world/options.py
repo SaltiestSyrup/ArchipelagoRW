@@ -131,6 +131,13 @@ class ChecksFoodQuest(Choice):
     default = 2
 
 
+class ChecksTokensPearls(Toggle):
+    """Whether all tokens and pearls should be visible to all slugcats."""
+    display_name = "All tokens and pearls"
+    default = False
+    visibility = Visibility.none
+
+
 #################################################################
 # DIFFICULTY SETTINGS
 class DifficultyHunter(Range):
@@ -444,9 +451,10 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     checks_broadcasts: ChecksBroadcasts
     checks_foodquest: ChecksFoodQuest
     passage_priority: PassagePriority
+    checks_tokens_pearls: ChecksTokensPearls
 
     group_checkpool = [
-        ChecksBroadcasts, ChecksFoodQuest, PassagePriority
+        ChecksBroadcasts, ChecksFoodQuest, PassagePriority, ChecksTokensPearls
     ]
 
     #################################################################

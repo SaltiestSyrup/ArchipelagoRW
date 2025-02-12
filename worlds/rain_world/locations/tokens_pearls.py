@@ -30,6 +30,8 @@ class TokenOrPearl(LocationData):
         def inner(options: RainWorldOptions) -> bool:
             if self.full_name.startswith("DevToken"):
                 return False
+            if options.checks_tokens_pearls:
+                return True
             if options.msc_enabled and options.starting_scug not in (self.msc_blacklist or []):
                 return True
             if not options.msc_enabled and options.starting_scug not in (self.vanilla_blacklist or []):

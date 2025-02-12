@@ -175,6 +175,7 @@ class RainWorldWorld(World):
             "death_link",  # ...whether to listen for death link notifications
             "checks_foodquest",  # ...whether the food quest should be available
             "checks_broadcasts",  # ...whether broadcasts should be avilable
+            "checks_tokens_pearls",  # ...whether all tokens should be available
             "which_victory_condition",  # ...which victory condition is a win
         )
         return d
