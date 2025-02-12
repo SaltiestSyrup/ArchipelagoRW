@@ -47,7 +47,7 @@ all_items: Dict[str, RainWorldItemData] = {
 
     #################################################################
     # UNIQUE
-    "The Glow": RainWorldItemData("The Glow", offset + 50, ItemClassification.useful),
+    "The Glow": RainWorldItemData("The Glow", offset + 50, ItemClassification.progression),
     "Disconnect_FP": RainWorldItemData("Disconnect_FP", offset + 51, ItemClassification.useful),
 
     #################################################################
@@ -62,6 +62,11 @@ all_items: Dict[str, RainWorldItemData] = {
     "Scug-Spear": RainWorldItemData("Scug-Spear", offset + 116, ItemClassification.progression),
     "Scug-Saint": RainWorldItemData("Scug-Saint", offset + 117, ItemClassification.progression),
     "Scug-Inv": RainWorldItemData("Scug-Inv", offset + 118, ItemClassification.progression),
+
+    #################################################################
+    # OPTIONSTATE
+
+    "Option-Glow": RainWorldItemData("Option-Glow", offset + 170, ItemClassification.progression),
 
     #################################################################
     # FILLER - WEAPONS

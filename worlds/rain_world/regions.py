@@ -133,14 +133,14 @@ all_connections = [
     Gate("Industrial Complex", "Outskirts", 2, "SU_HI"),
     Gate("Industrial Complex", "Garbage Wastes", 2, "HI_GW"),
     Gate("Industrial Complex", "Chimney Canopy", 3, "HI_CC"),
-    Gate("Industrial Complex", "Shaded Citadel", 5, "HI_SH"),
+    Gate("Industrial Complex", "Shaded Citadel", 5, "HI_SH", Simple(["The Glow", "Option-Glow"], 1)),
     Gate("Industrial Complex", "Pipeyard", 4, "HI_VS", Simple("MSC")),
     Gate("Industrial Complex", "Silent Construct", 4, "HI_VS", one_of_these_scugs(["Saint"])),
 
     Gate("Garbage Wastes", "Drainage System", 3, "DS_GW"),
     Gate("Garbage Wastes", "Industrial Complex", 2, "HI_GW"),
     Gate("Garbage Wastes", "Shoreline", 3, "GW_SL", any_scug_except(["Artificer", "Spear"])),
-    Gate("Garbage Wastes", "Shaded Citadel", 4, "GW_SH", Simple("MSC")),
+    Gate("Garbage Wastes", "Shaded Citadel", 4, "GW_SH", AllOf(Simple("MSC"), Simple(["The Glow", "Option-Glow"], 1))),
     Gate("Garbage Wastes", "Waterfront Facility", 3, "GW_SL", one_of_these_scugs(["Artificer", "Spear"])),
     Gate("Garbage Wastes", "Silent Construct", 4, "GW_SH", one_of_these_scugs(["Saint"])),
     Gate("Garbage Wastes", "Undergrowth", 3, "DS_GW", one_of_these_scugs(["Saint"])),
@@ -151,7 +151,8 @@ all_connections = [
     Gate("Drainage System", "Chimney Canopy", 5, "DS_CC", Simple("MSC")),
 
     Gate("Shoreline", "Garbage Wastes", 2, "GW_SL"),
-    Gate("Shoreline", "Shaded Citadel", 2, "SH_SL", any_scug_except(["Saint"])),
+    Gate("Shoreline", "Shaded Citadel", 2, "SH_SL",
+         AllOf(any_scug_except(["Saint"]), Simple(["The Glow", "Option-Glow"], 1))),
     Gate("Shoreline", "Subterranean", 5, "SB_SL"),
     Gate("Shoreline", "Pipeyard", 3, "SL_VS", Simple("MSC")),
     Gate("Shoreline", "Submerged Superstructure", 5, "SL_MS", Simple("MSC")),
@@ -166,7 +167,7 @@ all_connections = [
     Gate("Shaded Citadel", "Waterfront Facility", 3, "SH_SL", one_of_these_scugs(["Artificer", "Spear"])),
 
     Gate("The Exterior", "Chimney Canopy", 1, "CC_UW"),
-    Gate("The Exterior", "Shaded Citadel", 1, "SH_UW"),
+    Gate("The Exterior", "Shaded Citadel", 1, "SH_UW", Simple(["The Glow", "Option-Glow"], 1)),
     Gate("The Exterior", "Five Pebbles above puppet", 1, "SS_UW"),
     Gate("The Exterior", "Five Pebbles", 5, "UW_SS"),
     Gate("The Exterior", "Waterfront Facility", 3, "UW_SL", one_of_these_scugs(["Artificer", "Spear"])),
@@ -225,7 +226,8 @@ all_connections = [
     Gate("Waterfront Facility", "Pipeyard", 3, "GW_SL", Simple("MSC")),
     Gate("Waterfront Facility", "Subterranean", 5, "SB_SL", Simple("MSC")),
     Gate("Waterfront Facility", "The Exterior", 5, "UW_SL", Simple("MSC")),
-    Gate("Waterfront Facility", "Shaded Citadel", 2, "SH_SL", Simple("MSC")),
+    Gate("Waterfront Facility", "Shaded Citadel", 2, "SH_SL",
+         AllOf(Simple("MSC"), Simple(["The Glow", "Option-Glow"], 1))),
 
     Gate("Metropolis", "The Exterior", 5, "UW_LC", Simple("MSC")),
 

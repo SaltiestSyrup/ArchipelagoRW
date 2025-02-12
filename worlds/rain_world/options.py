@@ -170,8 +170,14 @@ class DifficultyNomad(Range):
 
 
 class DifficultyChieftain(Toggle):
-    """Whether or not a scavenger toll must be accessible before The Chieftain can be logically required."""
+    """Whether a scavenger toll must be accessible before The Chieftain can be logically required."""
     display_name = "The Chieftain requires toll"
+    default = True
+
+
+class DifficultyGlow(Toggle):
+    """Whether the neuron glow is logically required for Shaded Citadel."""
+    display_name = "Glow required for dark places"
     default = True
 
 
@@ -426,10 +432,11 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     difficulty_outlaw: DifficultyOutlaw
     difficulty_nomad: DifficultyNomad
     difficulty_chieftain: DifficultyChieftain
+    difficulty_glow: DifficultyGlow
 
     group_difficulty = [
         ProgressionBalancing, Accessibility, DifficultyMonk, DifficultyHunter, DifficultyOutlaw, DifficultyNomad,
-        DifficultyChieftain
+        DifficultyChieftain, DifficultyGlow
     ]
 
     #################################################################
