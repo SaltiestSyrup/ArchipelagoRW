@@ -210,7 +210,7 @@ food_quest_items = [
     "EggBug", "LillyPuck", "YellowLizard", "TubeWorm", "SSOracleSwarmer", "Centiwing",
     "DandelionPeach", "CyanLizard", "GooieDuck", "RedCentipede"
 ]
-alt_food_quest_items = {"Salamander": ["Salamander", "EelLizard"], "RedCentipede": ["RedCentipede", "Aquapede"]}
+alt_food_quest_items = {"Salamander": ["Salamander", "EelLizard"], "RedCentipede": ["RedCentipede", "AquaCenti"]}
 
 food_quest_survivor_inedible = {
     "BlackLizard", "JetFish", "Salamander", "Snail", "EggBug", "YellowLizard", "TubeWorm", "CyanLizard"

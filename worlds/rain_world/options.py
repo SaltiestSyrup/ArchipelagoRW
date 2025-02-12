@@ -113,13 +113,22 @@ class ExtraKarmaCapIncreases(Range):
 #################################################################
 # CHECK POOL SETTINGS
 class ChecksBroadcasts(Choice):
-    """Which slugcats broadcasts should be available to."""
+    """Which slugcats broadcasts should be available to.  Requires MSC."""
     display_name = "Broadcasts"
     option_all_slugcats = 2
     option_only_spearmaster = 1
     option_off = 0
     default = 1
     visibility = Visibility.none
+
+
+class ChecksFoodQuest(Choice):
+    """Which slugcats the food quest should be available to.  Requires MSC."""
+    display_name = "Food quest"
+    option_all_slugcats = 2
+    option_only_gourmand = 1
+    option_off = 0
+    default = 2
 
 
 #################################################################
@@ -426,10 +435,11 @@ class RainWorldOptions(PerGameCommonOptions):
     #################################################################
     # CHECK POOL SETTINGS
     checks_broadcasts: ChecksBroadcasts
+    checks_foodquest: ChecksFoodQuest
     passage_priority: PassagePriority
 
     group_checkpool = [
-        ChecksBroadcasts, PassagePriority
+        ChecksBroadcasts, ChecksFoodQuest, PassagePriority
     ]
 
     #################################################################
