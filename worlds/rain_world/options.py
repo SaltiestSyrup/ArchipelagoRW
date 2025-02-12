@@ -406,10 +406,9 @@ class RainWorldOptions(PerGameCommonOptions):
     #################################################################
     # GENERAL SETTINGS
     random_starting_region: RandomStartingRegion
-    passage_priority: PassagePriority
     extra_karma_cap_increases: ExtraKarmaCapIncreases
 
-    group_general = [RandomStartingRegion, PassagePriority, ExtraKarmaCapIncreases]
+    group_general = [RandomStartingRegion, ExtraKarmaCapIncreases]
 
     #################################################################
     # DIFFICULTY SETTINGS
@@ -427,6 +426,11 @@ class RainWorldOptions(PerGameCommonOptions):
     #################################################################
     # CHECK POOL SETTINGS
     checks_broadcasts: ChecksBroadcasts
+    passage_priority: PassagePriority
+
+    group_checkpool = [
+        ChecksBroadcasts, PassagePriority
+    ]
 
     #################################################################
     # FILLER SETTINGS
@@ -511,6 +515,7 @@ option_groups = [
     OptionGroup("Important", RainWorldOptions.group_important),
     OptionGroup("Start settings", RainWorldOptions.group_general, True),
     OptionGroup("Difficulty settings", RainWorldOptions.group_difficulty, True),
+    OptionGroup("Check pool", RainWorldOptions.group_checkpool, True),
     OptionGroup("Filler item relative weights", RainWorldOptions.group_filler, True),
     OptionGroup("Trap relative weights", RainWorldOptions.group_traps, True),
 ]
