@@ -17,10 +17,9 @@ the option for alternate victory conditions is available for most Slugcats.
 
 A few categories of changes happen when randomized.
 
-### Karma
+### Karma and Echoes
 Initial max karma is 1 by default, regardless of Slugcat.
-Raising max karma requires finding karma cap increases in the item pool,
-which may or may not be found at echoes.
+Raising max karma requires finding karma cap increases in the item pool rather than meeting echoes.
 Meeting echoes still requires a certain karma level depending on current max
 and is not possible with less than 5 karma -
 except for Artificer and Saint, who can see echoes by being at max karma with karma reinforcement.
@@ -29,18 +28,18 @@ There are at least 8 karma cap increases
 though more may be added through the settings.
 
 ### Gates
-Karma gates, in addition to requiring karma, require a key unique to each gate.
-Each gate has a key added to the item pool.
+Karma gates, in addition to requiring karma, require a key unique to each gate
+which is added to the item pool.
 Currently collected keys are displayed on the pause screen in-game.
 
 ### Passages
-Passage tokens are added to the item pool.
-Completing a passage may or may not award a passage token.
+Completing a passage is a check.
+Passage tokens are added to the item pool, rather than being awarded by completing passages.
 
 ### The Mark of Communication
 The Mark of Communication is added to the item pool.
-Meeting Five Pebbles as Monk, Survivor, Gourmand, or Artificer
-and meeting Looks to the Moon as Spearmaster may or may not award the Mark.
+Five Pebbles does not automatically give the Mark to Monk, Survivor, Gourmand, or Artificer,
+and Looks to the Moon does not automatically give Spearmaster the Mark.
 Hunter and Rivulet do not start with the Mark.
 The Mark is still required to make progress on The Scholar,
 and certain alternate victory conditions require the Mark.
@@ -50,12 +49,12 @@ Neuron glow is added to the item pool.
 Eating a neuron fly may or may not grant the glow.
 
 ### Story flags
-Story flags are added to the item pool.
-Hunter does not start with the green neuron
-and Artificer does not start with the citizen ID drone.
-The heart of The Rot may or may not contain the rarefaction cell for Rivulet.
-As Spearmaster, meeting Five Pebbles may or may not give their unique pearl,
-and meeting Looks to the Moon with the pearl in hand may or may not get it rewritten.
+Story flags are added to the item pool:
+- Hunter does not start with the green neuron.
+- Artificer does not start with the citizen ID drone.
+- The rarefaction cell is not found in the heart of The Rot.
+- Spearmaster does not receive their pearl by meeting Five Pebbles.
+- Spearmaster's pearl does not get rewritten by meeting Looks to the Moon with the pearl.
 
 ## Is the Archipelago mod compatible with other mods or DLC?
 

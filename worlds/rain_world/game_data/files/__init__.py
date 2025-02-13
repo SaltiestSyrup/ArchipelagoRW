@@ -7,12 +7,12 @@ from ..general import story_regions_vanilla
 path = dirname(realpath(__file__))
 
 # Dictionary of PlacedObjects.  data[objtype][dlcstate][scug] -> list of rooms.
-placed_objects: dict[str, dict[str, [dict[str, list[str]]]]] = json.load(open(join(path, "placed_objects.json")))
+placed_objects: dict[str, dict[str, dict[str, list[str]]]] = json.load(open(join(path, "placed_objects.json")))
 
 # Dictionary of creature spawners.  data[dentype][crittype][dlcstate][scug] -> list of rooms.
-creatures: dict[str, dict[str, dict[str, [dict[str, list[str]]]]]] = json.load(open(join(path, "creatures.json")))
+creatures: dict[str, dict[str, dict[str, dict[str, list[str]]]]] = json.load(open(join(path, "creatures.json")))
 
-# Batflies and neurons are not spawned by spawners.  Their locations are manually add to the dictionary here.
+# Batflies and neurons are not spawned by spawners.  Their locations are manually added to the dictionary here.
 creatures["normal"]["Fly"] = {
     "Vanilla": {"Yellow": [], "White": [], "Red": [],
                 "*ALL": [f"{r}_dummy" for r in set(story_regions_vanilla).difference({"SS"})]},
