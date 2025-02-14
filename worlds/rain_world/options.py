@@ -377,35 +377,40 @@ class WtTrapFlood(WtGeneric):
     """The relative weight of flood traps in the trap filler item pool."""
     display_name = "Flood"
     item_name = "Trap-Flood"
-    default = 15
+    default = 0
+    visibility = Visibility.none
 
 
 class WtTrapRain(WtGeneric):
     """The relative weight of rain traps in the trap filler item pool."""
     display_name = "Rain"
     item_name = "Trap-Rain"
-    default = 15
+    default = 0
+    visibility = Visibility.none
 
 
 class WtTrapGravity(WtGeneric):
     """The relative *weight* of gravity traps in the trap filler item pool."""
     display_name = "Gravity"
     item_name = "Trap-Gravity"
-    default = 15
+    default = 0
+    visibility = Visibility.none
 
 
 class WtTrapFog(WtGeneric):
     """The relative weight of fog traps in the trap filler item pool."""
     display_name = "Fog"
     item_name = "Trap-Fog"
-    default = 20
+    default = 0
+    visibility = Visibility.none
 
 
 class WtTrapKillSquad(WtGeneric):
     """The relative weight of kill squad traps in the trap filler item pool."""
     display_name = "KillSquad"
     item_name = "Trap-KillSquad"
-    default = 10
+    default = 0
+    visibility = Visibility.none
 
 
 class WtTrapAlarm(WtGeneric):
