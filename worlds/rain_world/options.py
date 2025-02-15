@@ -81,7 +81,7 @@ class RandomStartingRegion(Choice):
     option_shaded_citadel = 6
     option_the_exterior = 7
     option_five_pebbles = 8
-    option_chimney_cannopy = 9
+    option_chimney_canopy = 9
     option_sky_islands = 10
     option_farm_arrays = 11
     option_subterranean = 12
