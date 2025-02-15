@@ -464,8 +464,6 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
 
     #################################################################
     # FILLER SETTINGS
-    pct_traps: PctTraps
-
     wt_rocks: WtRock
     wt_spears: WtSpear
     wt_explosive_spears: WtExplosiveSpear
@@ -485,7 +483,6 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     wt_glowweed: WtGlowWeed
 
     group_filler = [
-        PctTraps,
         WtRock, WtSpear, WtExplosiveSpear, WtGrenade, WtFlashbang, WtSporePuff, WtCherrybomb,
         WtLillyPuck, WtFruit, WtBubbleFruit, WtEggbugEgg, WtJellyfish, WtMushroom, WtSlimeMold,
         WtFireEgg, WtGlowWeed
@@ -493,6 +490,8 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
 
     #################################################################
     # TRAP SETTINGS
+    pct_traps: PctTraps
+
     wt_stuns: WtTrapStun
     wt_zoomies: WtTrapZoomies
     wt_timers: WtTrapTimer
@@ -510,6 +509,7 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     wt_daddylonglegs: WtTrapDaddyLongLegs
 
     group_traps = [
+        PctTraps,
         WtTrapStun, WtTrapZoomies, WtTrapTimer, WtTrapAlarm, WtTrapKillSquad,
         WtTrapGravity, WtTrapRain, WtTrapFlood, WtTrapFog,
 
