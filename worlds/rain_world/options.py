@@ -524,12 +524,17 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     def starting_scug(self) -> str: return setting_to_scug_id[self.which_gamestate.value]
 
     def get_nontrap_weight_dict(self) -> dict[str, float]:
-        return {a.item_name: a.value for a in [
+        ret = {a.item_name: a.value for a in [
             self.wt_rocks, self.wt_spears, self.wt_explosive_spears, self.wt_grenades,
             self.wt_flashbangs, self.wt_sporepuffs, self.wt_cherrybombs, self.wt_lilypucks,
             self.wt_fruit, self.wt_bubblefruit, self.wt_eggbugeggs, self.wt_jellyfish,
             self.wt_mushrooms, self.wt_slimemold, self.wt_fireeggs, self.wt_glowweed
         ]}
+        if not self.msc_enabled:
+            for key in ("LillyPuck", "FireEgg", "GlowWeed"):
+                ret[f"Object-{key}"] = 0
+
+        return ret
 
     def get_trap_weight_dict(self) -> dict[str, float]:
         return {a.item_name: a.value for a in [
