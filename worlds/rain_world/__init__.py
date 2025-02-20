@@ -61,10 +61,7 @@ class RainWorldWorld(World):
         dlcstate = "MSC" if self.options.msc_enabled else "Vanilla"
         valid_start_regions = accessible_regions[dlcstate][self.options.starting_scug]
 
-        if self.options.random_starting_region.value == -1:
-            start_region_code = self.random.choice(list(valid_start_regions))
-            print(f'Random starting region for player {self.player}: {start_region_code}')
-        elif self.options.random_starting_region.value == 0:
+        if self.options.random_starting_region.value == 0:
             start_region_code = scug_id_to_starting_region[self.options.starting_scug]
         else:
             start_region_code = setting_to_region_code[self.options.random_starting_region.value]

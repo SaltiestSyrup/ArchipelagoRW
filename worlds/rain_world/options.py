@@ -90,7 +90,6 @@ class WhichGateBehavior(Choice):
 class RandomStartingRegion(Choice):
     """Where Slugcat will initially spawn."""
     display_name = "Random starting shelter"
-    option_random_valid = -1
     option_default_starting_point = 0
 
     option_outskirts = 1
