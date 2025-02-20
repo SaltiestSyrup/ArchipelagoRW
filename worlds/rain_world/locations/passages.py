@@ -69,7 +69,8 @@ cond_nomad = AllOf(
 # OUTLAW
 def generate_cond_outlaw(options: RainWorldOptions) -> Condition:
     return Simple(
-        list(set(game_data.files.creatures["normal"].keys()).difference(set(game_data.general.outlaw_insignificant))),
+        # TODO
+        list(set(game_data.general.lizards_any).difference(set(game_data.general.outlaw_insignificant))),
         options.difficulty_outlaw.value
     )
 

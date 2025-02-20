@@ -3,7 +3,7 @@ from typing import Callable
 from BaseClasses import MultiWorld
 from .classes import LocationData
 from ..options import RainWorldOptions
-from ..game_data.files import tokens_pearls
+from ..game_data import static_data
 from ..game_data.general import region_code_to_name, scugs_all, scugs_vanilla
 from ..conditions.classes import AnyOf, AllOf, Simple, Condition
 
@@ -59,47 +59,54 @@ class TokenOrPearl(LocationData):
             )
 
 
-def token_name(obj: dict) -> str:
-    _region = obj["room"].split("_")[0]
-
-    if obj["type"] == "GoldToken":  # arena level unlock
-        return f'Token-L-{obj["name"]}'
-    elif obj["type"] == "RedToken":  # safari level unlock
-        return f'Token-S-{obj["name"]}'
-    elif obj["type"] == "DevToken":
-        return f'DevToken-{obj["name"]}-{_region}'
-    elif "Token" in obj["type"]:
-        return f'Token-{obj["name"]}-{_region}'
+def token_name(name: str, kind: str, _region: str) -> str:
+    if kind == "GoldToken":  # arena level unlock
+        return f'Token-L-{name}'
+    elif kind == "RedToken":  # safari level unlock
+        return f'Token-S-{name}'
+    elif kind == "WhiteToken":
+        return f'Broadcast-{name}-{_region}'
+    elif kind == "DevToken":
+        return f'DevToken-{name}-{_region}'
+    elif "Token" in kind:
+        return f'Token-{name}-{_region}'
     else:
-        return f'Pearl-{obj["name"]}-{_region}'
+        return f'Pearl-{name}-{_region}'
 
 
-for obj in tokens_pearls["MSC"]:
-    if "Pearl" in obj["type"] and ("Misc" in obj["name"] or obj["name"].strip() == ''):
-        continue
-    if "WhiteToken" in obj["type"]:
-        continue
+for region, region_data in static_data["MSC"].items():
+    for room, room_data in region_data.items():
+        alted: set[str] = room_data.get("alted", set())
 
-    name = token_name(obj)
-    region = obj["room"].split("_")[0]
-    locations[name] = TokenOrPearl(token_name(obj), region_code_to_name[region], next_offset,
-                                   msc_blacklist=obj["blacklist"])
-    next_offset += 1
+        if "shinies" in room_data.keys():
+            for shiny_name, shiny_data in room_data["shinies"].items():
+                name = token_name(shiny_name, shiny_data["kind"], region)
+                locations[name] = TokenOrPearl(
+                    name, region_code_to_name[region], next_offset,
+                    msc_blacklist=shiny_data.get("filter", set()).union(
+                        alted.difference(shiny_data.get("whitelist", set()))
+                    )
+                )
+                next_offset += 1
 
 
-for obj in tokens_pearls["Vanilla"]:
-    if "Pearl" in obj["type"] and (obj["name"].startswith("Misc") or obj["name"].strip() == ''):
-        continue
+for region, region_data in static_data["Vanilla"].items():
+    for room, room_data in region_data.items():
+        alted: set[str] = room_data.get("alted", set())
 
-    name = token_name(obj)
-
-    if name in locations.keys():
-        locations[name].vanilla_blacklist = obj["blacklist"]
-    else:
-        region = obj["room"].split("_")[0]
-        locations[name] = TokenOrPearl(token_name(obj), region_code_to_name[region], next_offset,
-                                       vanilla_blacklist=obj["blacklist"])
-        next_offset += 1
+        if "shinies" in room_data.keys():
+            for shiny_name, shiny_data in room_data["shinies"].items():
+                name = token_name(shiny_name, shiny_data["kind"], region)
+                if name in locations.keys():
+                    locations[name].vanilla_blacklist = shiny_data.get("filter", set())
+                else:
+                    locations[name] = TokenOrPearl(
+                        name, region_code_to_name[region], next_offset,
+                        vanilla_blacklist=shiny_data.get("filter", set()).union(
+                            alted.difference(shiny_data.get("whitelist", set()))
+                        )
+                    )
+                    next_offset += 1
 
 
 def generate(_: RainWorldOptions) -> list[LocationData]:
