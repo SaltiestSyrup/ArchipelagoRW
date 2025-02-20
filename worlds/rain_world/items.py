@@ -24,6 +24,12 @@ class FillerItemData(RainWorldItemData):
         self.gamestate = gamestate or []
 
 
+class TrapItemData(RainWorldItemData):
+    def __init__(self, name: str, code: Optional[int], gamestate: Optional[list[str]] = None):
+        super().__init__(name, code, ItemClassification.trap)
+        self.gamestate = gamestate or []
+
+
 offset: int = constants.FIRST_ID
 
 all_items: Dict[str, RainWorldItemData] = {
@@ -106,23 +112,23 @@ all_items: Dict[str, RainWorldItemData] = {
 
     #################################################################
     # FILLER - NON-CREATURE TRAPS
-    "Trap-Stun": FillerItemData("Trap-Stun", 300 + offset),
-    "Trap-Zoomies": FillerItemData("Trap-Zoomies", 301 + offset),
-    "Trap-Timer": FillerItemData("Trap-Timer", 302 + offset),
-    "Trap-Flood": FillerItemData("Trap-Flood", 303 + offset),
-    "Trap-Rain": FillerItemData("Trap-Rain", 304 + offset),
-    "Trap-Gravity": FillerItemData("Trap-Gravity", 305 + offset),
-    "Trap-Fog": FillerItemData("Trap-Fog", 306 + offset),
-    "Trap-KillSquad": FillerItemData("Trap-KillSquad", 307 + offset),
-    "Trap-Alarm": FillerItemData("Trap-Alarm", 308 + offset),
+    "Trap-Stun": TrapItemData("Trap-Stun", 300 + offset),
+    "Trap-Zoomies": TrapItemData("Trap-Zoomies", 301 + offset),
+    "Trap-Timer": TrapItemData("Trap-Timer", 302 + offset),
+    "Trap-Flood": TrapItemData("Trap-Flood", 303 + offset),
+    "Trap-Rain": TrapItemData("Trap-Rain", 304 + offset),
+    "Trap-Gravity": TrapItemData("Trap-Gravity", 305 + offset),
+    "Trap-Fog": TrapItemData("Trap-Fog", 306 + offset),
+    "Trap-KillSquad": TrapItemData("Trap-KillSquad", 307 + offset),
+    "Trap-Alarm": TrapItemData("Trap-Alarm", 308 + offset),
 
     #################################################################
     # FILLER - CREATURE TRAPS
-    "Trap-RedLizard": FillerItemData("Trap-RedLizard", 330 + offset),
-    "Trap-RedCentipede": FillerItemData("Trap-RedCentipede", 331 + offset),
-    "Trap-SpitterSpider": FillerItemData("Trap-SpitterSpider", 332 + offset),
-    "Trap-BrotherLongLegs": FillerItemData("Trap-BrotherLongLegs", 333 + offset),
-    "Trap-DaddyLongLegs": FillerItemData("Trap-DaddyLongLegs", 334 + offset),
+    "Trap-RedLizard": TrapItemData("Trap-RedLizard", 330 + offset),
+    "Trap-RedCentipede": TrapItemData("Trap-RedCentipede", 331 + offset),
+    "Trap-SpitterSpider": TrapItemData("Trap-SpitterSpider", 332 + offset),
+    "Trap-BrotherLongLegs": TrapItemData("Trap-BrotherLongLegs", 333 + offset),
+    "Trap-DaddyLongLegs": TrapItemData("Trap-DaddyLongLegs", 334 + offset),
 }
 
 #################################################################
