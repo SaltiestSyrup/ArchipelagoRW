@@ -2,8 +2,8 @@ from .classes import LocationData, Echo
 from ..conditions.classes import Simple, AnyOf
 from ..conditions import generate
 
-cond_normal = AnyOf(Simple("Karma", 4), Simple(["Scug-Artificer", "KarmaFlower"]), Simple("Scug-Saint"))
-cond_no_saint = AnyOf(Simple("Karma", 4), Simple(["Scug-Artificer", "KarmaFlower"]))
+cond_normal = AnyOf(Simple("Karma", 4), Simple("KarmaFlower"), Simple("Scug-Saint"))
+cond_no_saint = AnyOf(Simple("Karma", 4), Simple("KarmaFlower"))
 
 locations: list[LocationData] = [
     Echo("CC", "Chimney Canopy", 5070, "", cond_normal),
