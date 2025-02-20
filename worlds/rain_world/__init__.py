@@ -173,7 +173,6 @@ class RainWorldWorld(World):
         d = self.options.as_dict(
             # Plugin needs to know...
             "which_gamestate",  # ...which slugcat to enforce, and warn if MSC state is wrong
-            "random_starting_region",  # ...which region (and eventually shelter) to spawn in
             "passage_progress_without_survivor",  # ...if this setting doesn't match Remix
             "death_link",  # ...whether to listen for death link notifications
             "checks_foodquest",  # ...whether the food quest should be available
@@ -181,4 +180,5 @@ class RainWorldWorld(World):
             "checks_tokens_pearls",  # ...whether all tokens should be available
             "which_victory_condition",  # ...which victory condition is a win
         )
+        d["random_starting_apregion"] = self.starting_region  # ...which region (and eventually shelter) to spawn in
         return d
