@@ -1,6 +1,5 @@
 __all__ = ["RainWorldWorld", "RainWorldWebWorld"]
 
-from random import choice, sample
 from typing import Mapping, Any
 
 from worlds.AutoWorld import World, WebWorld
@@ -63,7 +62,7 @@ class RainWorldWorld(World):
         valid_start_regions = accessible_regions[dlcstate][self.options.starting_scug]
 
         if self.options.random_starting_region.value == -1:
-            start_region_code = choice(list(valid_start_regions))
+            start_region_code = self.random.choice(list(valid_start_regions))
             print(f'Random starting region for player {self.player}: {start_region_code}')
         elif self.options.random_starting_region.value == 0:
             start_region_code = scug_id_to_starting_region[self.options.starting_scug]
@@ -97,7 +96,8 @@ class RainWorldWorld(World):
                 l for l in self.multiworld.get_locations(self.player)
                 if l.name.startswith("Passage-") and l.progress_type == LocationProgressType.DEFAULT
             ]
-            for loc in sample(unprioritized_passage_locations, min([num, len(unprioritized_passage_locations)])):
+            for loc in self.random.sample(unprioritized_passage_locations,
+                                          min([num, len(unprioritized_passage_locations)])):
                 loc.progress_type = LocationProgressType.PRIORITY
 
         #################################################################
