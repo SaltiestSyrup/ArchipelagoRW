@@ -65,6 +65,26 @@ class WhichVictoryCondition(Choice):
     option_alternate = 1
 
 
+class WhichGateBehavior(Choice):
+    """
+    **Key only**: A key for each accessible gate is placed into the pool.
+    These keys are required to use karma gates, and karma is not.
+
+    **Key and Karma**: Keys are required *and* gates have karma requirements.
+    The `Monk-style karma gates` Remix setting should be enabled.
+
+    **Key or Karma**: Either keys or karma are sufficient to use a gate.
+
+    **Karma only**: Unrandomized behavior.  Keys are not placed into the pool.
+    """
+    display_name = "Gate behavior"
+    option_key_only = 0
+    option_key_and_karma = 1
+    option_key_or_karma = 2
+    option_karma_only = 3
+    default = 0
+
+
 #################################################################
 # GENERAL SETTINGS
 class RandomStartingRegion(Choice):
@@ -427,8 +447,11 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     passage_progress_without_survivor: PassageProgressWithoutSurvivor
     which_gamestate: WhichGamestate
     which_victory_condition: WhichVictoryCondition
+    which_gate_behavior: WhichGateBehavior
 
-    group_important = [PassageProgressWithoutSurvivor, WhichGamestate, WhichVictoryCondition, DeathLink]
+    group_important = [
+        PassageProgressWithoutSurvivor, WhichGamestate, WhichVictoryCondition, WhichGateBehavior, DeathLink
+    ]
 
     #################################################################
     # GENERAL SETTINGS

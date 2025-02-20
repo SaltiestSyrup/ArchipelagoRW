@@ -2,7 +2,7 @@ from typing import NamedTuple, Callable, Optional
 
 from BaseClasses import Region, MultiWorld
 from . import RainWorldOptions
-from .conditions.classes import Condition, Simple, Compound, ConditionBlank, AllOf
+from .conditions.classes import Condition, Simple, Compound, ConditionBlank, AllOf, AnyOf
 from .conditions import generate
 from .game_data.general import setting_to_scug_id
 
@@ -16,7 +16,7 @@ class ConnectionData:
         self.dest = dest
         self.condition = condition
 
-    def make(self, player: int, multiworld: MultiWorld):
+    def make(self, player: int, multiworld: MultiWorld, options: RainWorldOptions):
         source = multiworld.get_region(self.source, player)
         dest = multiworld.get_region(self.dest, player)
         source.connect(dest, rule=self.condition.check(player))
@@ -32,15 +32,25 @@ class Gate(ConnectionData):
         self.gate_name = gate_name
         self.condition = condition
 
-    def make(self, player: int, multiworld: MultiWorld):
+    def make(self, player: int, multiworld: MultiWorld, options: RainWorldOptions):
         source = multiworld.get_region(self.source, player)
         dest = multiworld.get_region(self.dest, player)
-        conditions = [
-            Simple("Karma", self.cost - (1 if self.cost < 6 else 2)),
-            Simple(f"GATE_{self.gate_name}"),
-            self.condition
-        ]
-        rule = Compound(len(conditions), *conditions)
+
+        karma_items = self.cost - (1 if self.cost < 6 else 2)
+
+        match options.which_gate_behavior:
+            case "key_only":
+                rule = Simple(f"GATE_{self.gate_name}")
+            case "karma_only":
+                rule = Simple("Karma", karma_items)
+            case "key_and_karma":
+                rule = AllOf(Simple(f"GATE_{self.gate_name}"), Simple("Karma", karma_items))
+            case "key_or_karma":
+                rule = AnyOf(Simple(f"GATE_{self.gate_name}"), Simple("Karma", karma_items))
+            case _:
+                raise ValueError(f"{options.which_gate_behavior} is not a valid value for `which_gate_behavior`")
+
+        rule = AllOf(rule, self.condition)
         source.connect(dest, name=f'GATE_{self.gate_name} ({self.source} to {dest.name})', rule=rule.check(player))
 
 

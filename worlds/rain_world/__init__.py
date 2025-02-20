@@ -80,7 +80,7 @@ class RainWorldWorld(World):
             data.make(self.player, self.multiworld, self.options)
 
         for data in all_connections:
-            data.make(self.player, self.multiworld)
+            data.make(self.player, self.multiworld, self.options)
 
         # return for each datum is a bool for whether that location was actually generated
         locs = [data.make(self.player, self.multiworld, self.options) for data in locations.generate(self.options)]
@@ -121,7 +121,10 @@ class RainWorldWorld(World):
 
         pool = {
             "Karma": 8 + self.options.extra_karma_cap_increases.value,
-            **{f'GATE_{k}': 1 for k in accessible_gates[dlcstate][self.options.starting_scug]},
+            **{f'GATE_{k}': 1 for k in (
+                accessible_gates[dlcstate][self.options.starting_scug]
+                if self.options.which_gate_behavior != "karma_only" else []
+            )},
             **{f"Passage-{p}": 1 for p in (passages_all if self.options.msc_enabled else passages_vanilla)},
             "The Mark": 1,
             "The Glow": 1,
