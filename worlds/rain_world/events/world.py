@@ -1,53 +1,54 @@
 from .classes import StaticWorldEvent
 from ..options import RainWorldOptions
 
-from ..game_data.general import scugs_all, scugs_vanilla, region_code_to_name
-from ..conditions.classes import Simple, AnyOf, AllOf
+from ..game_data.general import scugs_all
 from ..game_data import static_data
+from ..regions.classes import RainWorldRegion, room_to_region
+from ..utils import effective_blacklist
 
 
-def generate_events_for_one_gamestate(options: RainWorldOptions) -> list[StaticWorldEvent]:
-    dlcstate = "MSC" if options.msc_enabled else "Vanilla"
+def generate_events_for_one_gamestate(options: RainWorldOptions,
+                                      regions: list[RainWorldRegion]) -> list[StaticWorldEvent]:
     ret = []
 
-    for region, region_data in static_data[dlcstate].items():
-        region_name = region_code_to_name[region]
+    for region in regions:
+        if (rooms := region.rooms) and len(rooms) > 0:
+            if region_data := static_data[options.dlcstate].get(region.code[:2], {}):
+                events = {}
 
-        for room, room_data in region_data.items():
-            if "OFFSCREEN" in room:  # TODO
-                continue
+                for room in rooms:
+                    if room_data := region_data.get(room, {}):
+                        for obj_type, obj_data in room_data.get("objects", {}).items():
+                            if len(current := events.get(obj_type, set(scugs_all))) > 0:
+                                incoming = effective_blacklist(
+                                    obj_data.get("filter", None), obj_data.get("whitelist", None), room_data
+                                )
+                                events[obj_type] = current.intersection(incoming)
 
-            if "objects" in room_data.keys():
-                for objtype, blacklist in room_data["objects"].items():
+                        for crit_type, crit_data in room_data.get("spawners", {}).get("normal", {}).items():
+                            if len(current := events.get(crit_type, set(scugs_all))) > 0:
+                                events[crit_type] = current.intersection(set(scugs_all).difference(crit_data))
+
+                        if room_tags := room_data.get("tags", []):
+                            if "SWARMROOM" in room_tags:
+                                events["Fly"] = set()
+                            if "SCAVOUTPOST" in room_tags:
+                                events["Toll"] = set()
+                            if "SHELTER" in room_tags:
+                                events["Shelter"] = set()
+
+                for event_type, event_blacklist in events.items():
                     ret.append(StaticWorldEvent(
-                        objtype, f'{room} {objtype}', region_name, scugs=set(scugs_all).difference(blacklist)
+                        event_type, f'{region.name} {event_type}', region.name,
+                        scugs=set(scugs_all).difference(event_blacklist)
                     ))
-
-            try:
-                for crittype, whitelist in room_data["spawners"]["normal"].items():
-                    ret.append(StaticWorldEvent(
-                        crittype, f'{room} {crittype}', region_name, scugs=whitelist
-                    ))
-            except KeyError:
-                pass
-
-            try:
-                if "SWARMROOM" in room_data["tags"]:
-                    ret.append(StaticWorldEvent("Fly", f'{room} Fly', region_name))
-                if "SCAVOUTPOST" in room_data["tags"]:
-                    ret.append(StaticWorldEvent("Toll", f'{room} Toll', region_name))
-                # HARDCODE
-                if "SHELTER" in room_data["tags"] and room not in ("GW_S08", "SL_S04"):
-                    ret.append(StaticWorldEvent(f"{region} Shelter", f'{room} Shelter', region_name))
-            except KeyError:
-                pass
 
     # HARDCODE
     for room in ("SS_E07", "SL_AI", "RM_AI", "DM_AI", "LC_LAB01"):
         ret.append(StaticWorldEvent("SSOracleSwarmer", f'{room} SSOracleSwarmer',
-                                    region_code_to_name[room.split("_")[0]]))
+                                    room_to_region[room]))
 
     if options.starting_scug in {"Yellow", "White", "Red", "Gourmand", "Rivulet", "Saint"}:
-        ret.append(StaticWorldEvent("Meet LttM", f'{room} LttM', "SL_AI"))
+        ret.append(StaticWorldEvent("Meet LttM", f'{room} LttM', room_to_region["SL_AI"]))
 
     return ret

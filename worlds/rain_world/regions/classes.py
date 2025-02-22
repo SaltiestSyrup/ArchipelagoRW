@@ -6,9 +6,10 @@ from ..conditions.classes import Condition, ConditionBlank, Simple, AnyOf, AllOf
 class RainWorldRegion(Region):
     game = "Rain World"
 
-    def __init__(self, name: str, player: int, multiworld: MultiWorld, populate: bool):
+    def __init__(self, name: str, player: int, multiworld: MultiWorld, populate: bool,
+                 rooms: set[str] | None = None, code: str = ""):
         super().__init__(name, player, multiworld)
-        self.populate = populate
+        self.populate, self.rooms, self.code = populate, rooms, code
 
 
 class RegionData:
@@ -77,7 +78,7 @@ class PhysicalRegion(RegionData):
     def make(self, player: int, multiworld: MultiWorld, options: RainWorldOptions):
         room_to_region.update({room: self.name for room in self.rooms})
         self.populate = self._gen(options)
-        region = RainWorldRegion(self.name, player, multiworld, self.populate)
+        region = RainWorldRegion(self.name, player, multiworld, self.populate, self.rooms, self.prefix)
         multiworld.regions.append(region)
 
     def _gen(self, options: RainWorldOptions) -> bool:
