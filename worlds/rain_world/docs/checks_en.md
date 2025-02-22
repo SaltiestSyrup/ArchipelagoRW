@@ -3,16 +3,18 @@
 Following is a summary of all randomized locations (checks)
 along with the items that would normally be at those locations.
 
-## Physical checks
-There are several *physical checks* available in most regions.
+## Tokens and pearls
+There are several physical checks available in most regions.
 These come in the form of tokens -
 the small holograms on stalks which unlock things for Arena or Safari -
 and the unique colored pearls, which count as checks when broguht to a shelter for the first time.
 Not all tokens and pearls are available to every slugcat,
 even if they exist in a region that every slugcat can visit.
 
+The Randomizer mod makes collectable tokens re-collectable if you've collected them on the save file already.
+
 For Spearmaster, broadcast tokens are also checks.
-Although some braodcast tokens give different chatlogs before and after meeting Five Pebbles,
+Although some broadcast tokens give different chatlogs before and after meeting Five Pebbles,
 they are not considered two separate checks.
 
 ## Echoes
@@ -22,10 +24,8 @@ By default, echo apperance follows the same rules as the unrandomized game:
 - For other slugcats:
   - If max karma is 7 or more, current karma must be at least 6.
   - If max karma is 5, current karma must be 5.
-  - If max karma is less than 5:
-    - Artificer may see echoes if current karma equals max karma
-    and karma flower reinforcement is active.
-    - Other slugcats cannot see echoes.
+  - If max karma is less than 5, current karma must be equal to max karma
+  and karma flower reinforcement must be active.
 
 Note that current karma is not logically constrained,
 so echo checks are considered accessible as soon as max karma reaches 5
@@ -101,3 +101,9 @@ but only Hunter and Gourmand can complete it logically.
 but may receive it as a filler item.  This check is not in logic.
 - <sup>b</sup> Monk and Survivor can only find Red Centipedes by lineage -
 which is not in logic - but Aquapedes are available without lineage.
+
+## Notes
+
+By default, the logic does not expect you to get creatures
+from precycle-only spawns or lineage dens (not even the first creatures of lineage dens)
+for the food quest or passages like The Dragon Slayer.
