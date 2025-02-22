@@ -1,7 +1,7 @@
 from BaseClasses import Item, ItemClassification
 from typing import Optional, Dict
-from . import constants, RainWorldOptions, game_data
-from .regions import all_gate_short_names
+from . import constants, game_data
+from .regions.gates import gates
 
 
 class RainWorldItem(Item):
@@ -133,8 +133,8 @@ all_items: Dict[str, RainWorldItemData] = {
 
 #################################################################
 # GATES
-for i, gate in enumerate(all_gate_short_names):
-    all_items[f"GATE_{gate}"] = RainWorldItemData(f"GATE_{gate}", offset + 500 + i, ItemClassification.progression)
+for i, gate in enumerate(g.name for g in gates):
+    all_items[gate] = RainWorldItemData(gate, offset + 500 + i, ItemClassification.progression)
 
 #################################################################
 item_name_to_id: Dict[str, int] = {

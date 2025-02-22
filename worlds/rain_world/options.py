@@ -543,6 +543,9 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     def msc_enabled(self) -> bool: return self.which_gamestate.value > 9
 
     @property
+    def dlcstate(self) -> str: return "MSC" if self.msc_enabled else "Vanilla"
+
+    @property
     def starting_scug(self) -> str: return setting_to_scug_id[self.which_gamestate.value]
 
     def get_nontrap_weight_dict(self) -> dict[str, float]:

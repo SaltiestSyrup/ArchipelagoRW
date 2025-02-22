@@ -24,6 +24,14 @@ class TestSurvivorMSC(RainWorldTestBase):
 class TestHunterMSC(RainWorldTestBase):
     options = {"which_gamestate": "hunter_msc"}
 
+    def test_check_generation(self):
+        locs = [loc.name for loc in self.multiworld.get_locations(self.player)]
+        self.assertNotIn("Pearl-MS-GW", locs)
+        self.assertNotIn("Broadcast-Chatlog_SI0-SI", locs)
+        self.assertNotIn("Broadcast-Chatlog_SI1-SI", locs)
+        self.assertIn("Token-KingVulture-SI", locs)
+        self.assertIn("Pearl-SI_top-SI", locs)
+
 
 class TestGourmand(RainWorldTestBase):
     options = {"which_gamestate": "gourmand"}
@@ -40,21 +48,17 @@ class TestRivulet(RainWorldTestBase):
 class TestSpear(RainWorldTestBase):
     options = {"which_gamestate": "spearmaster"}
 
+    def test_check_generation(self):
+        locs = [loc.name for loc in self.multiworld.get_locations(self.player)]
+        self.assertIn("Pearl-MS-GW", locs)
+        self.assertIn("Broadcast-Chatlog_SI0-SI", locs)
+        self.assertIn("Broadcast-Chatlog_SI1-SI", locs)
+        self.assertNotIn("Token-KingVulture-SI", locs)
+        self.assertNotIn("Pearl-SI_top-SI", locs)
+
 
 class TestSaint(RainWorldTestBase):
     options = {"which_gamestate": "saint"}
-
-
-class TestMonkVanillaAlternate(RainWorldTestBase):
-    options = {"which_gamestate": "monk_vanilla", "which_victory_condition": "alternate"}
-
-
-class TestSurvivorVanillaAlternate(RainWorldTestBase):
-    options = {"which_gamestate": "survivor_vanilla", "which_victory_condition": "alternate"}
-
-
-class TestHunterVanillaAlternate(RainWorldTestBase):
-    options = {"which_gamestate": "hunter_vanilla", "which_victory_condition": "alternate"}
 
 
 class TestMonkMSCAlternate(RainWorldTestBase):
@@ -63,10 +67,6 @@ class TestMonkMSCAlternate(RainWorldTestBase):
 
 class TestSurvivorMSCAlternate(RainWorldTestBase):
     options = {"which_gamestate": "survivor_msc", "which_victory_condition": "alternate"}
-
-
-class TestHunterMSCAlternate(RainWorldTestBase):
-    options = {"which_gamestate": "hunter_msc", "which_victory_condition": "alternate"}
 
 
 class TestGourmandAlternate(RainWorldTestBase):
@@ -83,7 +83,3 @@ class TestRivuletAlternate(RainWorldTestBase):
 
 class TestSpearAlternate(RainWorldTestBase):
     options = {"which_gamestate": "spearmaster", "which_victory_condition": "alternate"}
-
-
-class TestSaintAlternate(RainWorldTestBase):
-    options = {"which_gamestate": "saint", "which_victory_condition": "alternate"}

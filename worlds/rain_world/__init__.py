@@ -10,8 +10,7 @@ from .game_data.general import region_code_to_name, story_regions
 from .events import get_events
 from .utils import normalize, flounder2
 from .items import RainWorldItem, all_items, RainWorldItemData
-from . import locations
-from .regions import all_regions, all_connections
+from . import regions, locations
 from .game_data.general import (setting_to_scug_id, scug_id_to_starting_region, prioritizable_passages,
                                 setting_to_region_code, passages_all, passages_vanilla, accessible_regions,
                                 accessible_gates)
@@ -73,10 +72,7 @@ class RainWorldWorld(World):
         self.starting_region = region_code_to_name[start_region_code]
 
     def create_regions(self):
-        for data in all_regions:
-            data.make(self.player, self.multiworld, self.options)
-
-        for data in all_connections:
+        for data in regions.generate(self.options):
             data.make(self.player, self.multiworld, self.options)
 
         # return for each datum is a bool for whether that location was actually generated
@@ -96,13 +92,6 @@ class RainWorldWorld(World):
             for loc in self.random.sample(unprioritized_passage_locations,
                                           min([num, len(unprioritized_passage_locations)])):
                 loc.progress_type = LocationProgressType.PRIORITY
-
-        #################################################################
-        # PPWS: add a new free connection if PPWS is enabled.
-        if self.options.passage_progress_without_survivor:
-            self.multiworld.get_region('Menu', self.player).connect(
-                self.multiworld.get_region('PPwS Passages', self.player)
-            )
 
         #################################################################
         # STARTING REGION
@@ -135,7 +124,7 @@ class RainWorldWorld(World):
         precollect = {
             "MSC": 1 if self.options.msc_enabled else 0,
             f"Scug-{setting_to_scug_id[self.options.which_gamestate.value]}": 1,
-            "Option-Glow": 1 if self.options.difficulty_glow else 0,
+            "Option-Glow": 0 if self.options.difficulty_glow else 1,
         }
 
         for name, count in pool.items():

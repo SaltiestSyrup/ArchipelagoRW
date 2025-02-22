@@ -19,7 +19,7 @@ OBJECT_WHITELIST = [
     "SeedCob",  # for The Monk
     "BubbleGrass",  # for waterway traversal
 ]
-SHINY_LIST = ["BlueToken", "GreenToken", "RedToken", "GoldToken", "WhiteToken", "UniqueDataPearl"]
+SHINY_LIST = ["BlueToken", "GreenToken", "RedToken", "GoldToken", "WhiteToken", "UniqueDataPearl", "DataPearl"]
 
 ########################################################################################################################
 data = {}
@@ -166,6 +166,8 @@ for dlcstate, all_scugs in zip(("Vanilla", "MSC"), (scugs_vanilla, scugs_msc)):
                 name = custom_data[4 if "Pearl" in obj['type'] else 5]
                 if "Token" in obj['type']:
                     blacklist = set(custom_data[6].split("|")).union(blacklist or set())
+                elif "Misc" in name:
+                    continue
 
                 r_data["shinies"][name] = {"filter": blacklist, "kind": obj["type"]}
 
@@ -190,6 +192,16 @@ for dlcstate, all_scugs in zip(("Vanilla", "MSC"), (scugs_vanilla, scugs_msc)):
             for object_name, object_data in r_data['objects'].items():
                 if scug not in object_data["filter"]:
                     sdc(room_data, {scug}, "objects", object_name, "whitelist")
+
+########################################################################################################################
+    # Append region code to gate names (there are at least two version of every gate room).
+    # Yes, they're stored under different region dicts, but this simplifies the AP connection logic.
+    for region, region_data in data[dlcstate].items():
+        gates = {k: v for k, v in region_data.items() if "GATE" in v.get("tags", ())}
+        region_data.update({f'{k}[{region}]': v for k, v in gates.items()})
+
+        for key in gates.keys():
+            del region_data[key]
 
 ########################################################################################################################
 
