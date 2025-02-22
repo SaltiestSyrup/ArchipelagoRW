@@ -6,7 +6,7 @@ meaning that these items will not necessarily appear in their normal locations.
 For instance, echoes do not necessarily increase karma,
 and completing a passage does not necessarily award a token.
 - Karma cap increases (at least 8)
-- "Keys" for each region (except the starting region)
+- "Keys" for each accessible karma gate
 - Fast-travel tokens for each passage
 - The Mark of Communication
 - The neuron glow
