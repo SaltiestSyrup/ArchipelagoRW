@@ -217,6 +217,16 @@ class PctTraps(Range):
     default = 30
 
 
+class FillerJitter(Range):
+    """Each non-zero filler weight receives a random number, up to the jitter value, added to it.
+    The lower the setting, the less likely it is that items with small weights appear in the pool at all.
+    The higher the setting, the lower the influence of the item weights altogether."""
+    display_name = "Filler weight jitter"
+    range_start = 0
+    range_end = 100
+    default = 10
+
+
 class WtGeneric(Range):
     range_start = 0
     range_end = 100
@@ -489,17 +499,12 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     which_gamestate: WhichGamestate
     which_victory_condition: WhichVictoryCondition
     which_gate_behavior: WhichGateBehavior
+    random_starting_region: RandomStartingRegion
 
     group_important = [
-        PassageProgressWithoutSurvivor, WhichGamestate, WhichVictoryCondition, WhichGateBehavior, DeathLink
+        PassageProgressWithoutSurvivor, WhichGamestate, WhichVictoryCondition, WhichGateBehavior, DeathLink,
+        RandomStartingRegion
     ]
-
-    #################################################################
-    # GENERAL SETTINGS
-    random_starting_region: RandomStartingRegion
-    extra_karma_cap_increases: ExtraKarmaCapIncreases
-
-    group_general = [RandomStartingRegion, ExtraKarmaCapIncreases]
 
     #################################################################
     # DIFFICULTY SETTINGS
@@ -513,6 +518,16 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     group_difficulty = [
         ProgressionBalancing, Accessibility, DifficultyMonk, DifficultyHunter, DifficultyOutlaw, DifficultyNomad,
         DifficultyChieftain, DifficultyGlow
+    ]
+
+    #################################################################
+    # ITEM POOL SETTINGS
+    pct_traps: PctTraps
+    weight_jitter: FillerJitter
+    extra_karma_cap_increases: ExtraKarmaCapIncreases
+
+    group_itempool = [
+        ExtraKarmaCapIncreases, PctTraps, FillerJitter
     ]
 
     #################################################################
@@ -562,7 +577,6 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
 
     #################################################################
     # TRAP SETTINGS
-    pct_traps: PctTraps
 
     wt_stuns: WtTrapStun
     wt_zoomies: WtTrapZoomies
@@ -581,7 +595,6 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     wt_daddylonglegs: WtTrapDaddyLongLegs
 
     group_traps = [
-        PctTraps,
         WtTrapStun, WtTrapZoomies, WtTrapTimer, WtTrapAlarm, WtTrapKillSquad,
         WtTrapGravity, WtTrapRain, WtTrapFlood, WtTrapFog,
 
@@ -625,9 +638,9 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
 
 option_groups = [
     OptionGroup("Important", RainWorldOptions.group_important),
-    OptionGroup("Start settings", RainWorldOptions.group_general, True),
     OptionGroup("Difficulty settings", RainWorldOptions.group_difficulty, True),
-    OptionGroup("Check pool", RainWorldOptions.group_checkpool, True),
+    OptionGroup("Check pool settings", RainWorldOptions.group_checkpool, True),
+    OptionGroup("Item pool settings", RainWorldOptions.group_itempool, True),
     OptionGroup("Filler item relative weights", RainWorldOptions.group_filler, True),
     OptionGroup("Trap relative weights", RainWorldOptions.group_traps, True),
 ]

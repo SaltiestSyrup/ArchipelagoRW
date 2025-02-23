@@ -142,14 +142,17 @@ class RainWorldWorld(World):
         remaining_slots = self.location_count - added_items
         trap_fraction = self.options.pct_traps / 100
 
-        nontrap_weights = normalize(self.options.get_nontrap_weight_dict())
-        trap_weights = normalize(self.options.get_trap_weight_dict())
+        nontrap_weights = normalize(self.jitter(self.options.get_nontrap_weight_dict()))
+        trap_weights = normalize(self.jitter(self.options.get_trap_weight_dict()))
 
         d: dict[str, float] = {}
         d.update({k: v * (1 - trap_fraction) for k, v in nontrap_weights.items()})
         d.update({k: v * trap_fraction for k, v in trap_weights.items()})
 
         self.multiworld.itempool += [self.create_item(e) for e in flounder2(d, remaining_slots)]
+
+    def jitter(self, d: dict[Any, float]) -> dict[Any, float]:
+        return {k: 0 if v == 0 else (v + self.random.random() * self.options.weight_jitter) for k, v in d.items()}
 
     def set_rules(self) -> None:
         # ascension_item = Item("Ascension", ItemClassification.progression, None, self.player)
