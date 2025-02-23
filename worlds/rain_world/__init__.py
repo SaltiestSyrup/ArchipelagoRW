@@ -95,8 +95,9 @@ class RainWorldWorld(World):
 
         #################################################################
         # STARTING REGION
-        start = self.multiworld.get_region(self.starting_region, self.player)
-        self.multiworld.get_region('Starting region', self.player).connect(start)
+        if not hasattr(self.multiworld, "generation_is_fake"):
+            start = self.multiworld.get_region(self.starting_region, self.player)
+            self.multiworld.get_region('Starting region', self.player).connect(start)
 
     def create_item(self, name: str) -> RainWorldItem:
         return items.all_items[name].generate_item(self.player)
@@ -169,3 +170,9 @@ class RainWorldWorld(World):
             "random_starting_region", # ...which region (and eventually shelter) to spawn in
         )
         return d
+
+    def interpret_slot_data(self, slot_data: dict[str, Any]) -> None:
+        """Universal Tracker support - synchronize UT internal multiworld with actual slot data."""
+        starting_region = region_code_to_name[setting_to_region_code[slot_data["random_starting_region"]]]
+        menu = self.multiworld.get_region("Menu", self.player)
+        menu.connect(self.multiworld.get_region(starting_region, self.player))
