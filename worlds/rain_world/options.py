@@ -334,6 +334,48 @@ class WtGlowWeed(WtGeneric):
     default = 15
 
 
+class WtElectricSpear(WtGeneric):
+    """The relative weight of electric spears in the non-trap filler item pool."""
+    display_name = "Electric spear (MSC)"
+    item_name = "Object-ElectricSpear"
+    default = 3
+
+
+class WtSingularityBomb(WtGeneric):
+    """The relative weight of singularity bombs in the non-trap filler item pool."""
+    display_name = "Singularity Bomb (MSC)"
+    item_name = "Object-SingularityBomb"
+    default = 1
+
+
+class WtLantern(WtGeneric):
+    """The relative weight of lanterns in the non-trap filler item pool."""
+    display_name = "Lantern"
+    item_name = "Object-Lantern"
+    default = 15
+
+
+class WtKarmaFlower(WtGeneric):
+    """The relative weight of karma flowers in the non-trap filler item pool."""
+    display_name = "Karma flower"
+    item_name = "Object-KarmaFlower"
+    default = 5
+
+
+class WtVultureMask(WtGeneric):
+    """The relative weight of vulture masks in the non-trap filler item pool."""
+    display_name = "Vulture mask"
+    item_name = "Object-VultureMask"
+    default = 9
+
+
+class WtJokeRifle(WtGeneric):
+    """The relative weight of joke rifles in the non-trap filler item pool."""
+    display_name = "Joke rifle (MSC)"
+    item_name = "Object-JokeRifle"
+    default = 1
+
+
 #################################################################
 # TRAP SETTINGS
 class WtTrapStun(WtGeneric):
@@ -493,7 +535,12 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     wt_flashbangs: WtFlashbang
     wt_sporepuffs: WtSporePuff
     wt_cherrybombs: WtCherrybomb
+    wt_lanterns: WtLantern
+    wt_vulture_masks: WtVultureMask
     wt_lilypucks: WtLillyPuck
+    wt_electric_spears: WtElectricSpear
+    wt_singularity_bombs: WtSingularityBomb
+    wt_joke_rifles: WtJokeRifle
 
     wt_fruit: WtFruit
     wt_bubblefruit: WtBubbleFruit
@@ -501,12 +548,15 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     wt_jellyfish: WtJellyfish
     wt_mushrooms: WtMushroom
     wt_slimemold: WtSlimeMold
+    wt_karma_flowers: WtKarmaFlower
     wt_fireeggs: WtFireEgg
     wt_glowweed: WtGlowWeed
 
     group_filler = [
-        WtRock, WtSpear, WtExplosiveSpear, WtGrenade, WtFlashbang, WtSporePuff, WtCherrybomb,
-        WtLillyPuck, WtFruit, WtBubbleFruit, WtEggbugEgg, WtJellyfish, WtMushroom, WtSlimeMold,
+        WtRock, WtSpear, WtExplosiveSpear, WtGrenade, WtFlashbang, WtSporePuff, WtCherrybomb, WtLantern, WtVultureMask,
+        WtFruit, WtBubbleFruit, WtEggbugEgg, WtJellyfish, WtMushroom, WtSlimeMold, WtKarmaFlower,
+
+        WtLillyPuck, WtElectricSpear, WtSingularityBomb, WtJokeRifle,
         WtFireEgg, WtGlowWeed
     ]
 
@@ -553,10 +603,12 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
             self.wt_rocks, self.wt_spears, self.wt_explosive_spears, self.wt_grenades,
             self.wt_flashbangs, self.wt_sporepuffs, self.wt_cherrybombs, self.wt_lilypucks,
             self.wt_fruit, self.wt_bubblefruit, self.wt_eggbugeggs, self.wt_jellyfish,
-            self.wt_mushrooms, self.wt_slimemold, self.wt_fireeggs, self.wt_glowweed
+            self.wt_mushrooms, self.wt_slimemold, self.wt_fireeggs, self.wt_glowweed,
+            self.wt_electric_spears, self.wt_singularity_bombs, self.wt_lanterns,
+            self.wt_karma_flowers, self.wt_vulture_masks, self.wt_joke_rifles,
         ]}
         if not self.msc_enabled:
-            for key in ("LillyPuck", "FireEgg", "GlowWeed"):
+            for key in ("LillyPuck", "FireEgg", "GlowWeed", "ElectricSpear", "SingulaityBomb", "JokeRifle"):
                 ret[f"Object-{key}"] = 0
 
         return ret
