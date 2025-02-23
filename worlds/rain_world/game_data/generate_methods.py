@@ -4,6 +4,7 @@ re_3 = re.compile(r'\b(\w+)><([\d.]+)><([\d.]+)><([^,]*)')
 
 
 def parse_placed_objects(fp: str) -> list[dict]:
+    """Open `fp`, a room settings file, and parse its PlacedObjects.  Filter objects are applied."""
     room_objects = []
     filter_objects = []
     with open(fp, 'r') as file:
@@ -29,6 +30,16 @@ def parse_placed_objects(fp: str) -> list[dict]:
 
 
 def setdefaultchain(root: dict, value, *keys):
+    """
+    Starting with a root dictionary, access a sequence of keys, ensuring that dictionaries exist at each step,
+    then set a value.
+    :param root:  The root dictionary.
+    :param value:  The value to set.
+    If `None`, the no value is set; this just ensures that each dict in the chain exists.
+    If a set or list, and the value already at the target is the same, they are combined.
+    :param keys:  The sequence of keys to access.
+    :return:  None
+    """
     d = root
     for key in (keys if value is None else keys[:-1]):
         d = d.setdefault(key, {})
@@ -51,4 +62,5 @@ def setdefaultchain(root: dict, value, *keys):
 
 
 def splitstrip(text: str, *args) -> list[str]:
+    """Split a string, then strip() each element of the array."""
     return [i.strip() for i in text.split(*args)]
