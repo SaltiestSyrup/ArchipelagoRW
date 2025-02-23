@@ -29,6 +29,9 @@ class TokenOrPearl(LocationData):
         def inner(options: RainWorldOptions) -> bool:
             if self.full_name.startswith("DevToken"):
                 return False
+            # HARDCODE: This token is a bit underwater and not reasonable to survive getting as Artificer.
+            if self.full_name == "Token-BrotherLongLegs-GW" and options.starting_scug == "Artificer":
+                return False
             if options.msc_enabled and self.full_name.startswith("Broadcast"):
                 return (options.starting_scug == "Spear") + options.checks_broadcasts.value >= 2
             if options.msc_enabled and options.starting_scug not in (self.msc_blacklist or []):

@@ -40,6 +40,10 @@ class TestGourmand(RainWorldTestBase):
 class TestArtificer(RainWorldTestBase):
     options = {"which_gamestate": "artificer"}
 
+    def test_check_generation(self):
+        locs = [loc.name for loc in self.multiworld.get_locations(self.player)]
+        self.assertNotIn("Token-BrotherLongLegs-GW", locs)
+
 
 class TestRivulet(RainWorldTestBase):
     options = {"which_gamestate": "rivulet"}
