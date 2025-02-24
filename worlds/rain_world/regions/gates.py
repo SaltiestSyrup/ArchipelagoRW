@@ -1,7 +1,7 @@
 from BaseClasses import MultiWorld
 from .classes import room_to_region
 from ..options import RainWorldOptions
-from ..conditions.classes import Condition, ConditionBlank, Simple, AllOf
+from ..conditions.classes import Condition, ConditionBlank, Simple, AllOf, AnyOf
 from ..game_data.general import scugs_all, accessible_gates
 
 
@@ -25,18 +25,25 @@ class GateData:
 
             left = multiworld.get_region(room_to_region[f'{self.name}[{left_name}]'], player)
             right = multiworld.get_region(room_to_region[f'{self.name}[{right_name}]'], player)
-            left_condition = AllOf(
-                self.left_extra,
-                Simple("Karma", self.left - (1 if self.left < 6 else 2)),
-                Simple([f"Scug-{s}" for s in scugs], 1),
-                Simple(self.name)
-            )
-            right_condition = AllOf(
-                self.right_extra,
-                Simple("Karma", self.right - (1 if self.right < 6 else 2)),
-                Simple([f"Scug-{s}" for s in scugs], 1),
-                Simple(self.name)
-            )
+
+            match options.which_gate_behavior:
+                case "karma_only":
+                    left_cost = Simple("Karma", self.left - (1 if self.left < 6 else 2))
+                    right_cost = Simple("Karma", self.right - (1 if self.right < 6 else 2))
+                case "key_only":
+                    left_cost = Simple(self.name)
+                    right_cost = Simple(self.name)
+                case "key_and_karma":
+                    left_cost = AllOf(Simple(self.name), Simple("Karma", self.left - (1 if self.left < 6 else 2)))
+                    right_cost = AllOf(Simple(self.name), Simple("Karma", self.right - (1 if self.right < 6 else 2)))
+                case "key_or_karma":
+                    left_cost = AnyOf(Simple(self.name), Simple("Karma", self.left - (1 if self.left < 6 else 2)))
+                    right_cost = AnyOf(Simple(self.name), Simple("Karma", self.right - (1 if self.right < 6 else 2)))
+                case _:
+                    raise ValueError(f"invalid setting: {options.which_gate_behavior=}")
+
+            left_condition = AllOf(self.left_extra, Simple([f"Scug-{s}" for s in scugs], 1), left_cost)
+            right_condition = AllOf(self.right_extra, Simple([f"Scug-{s}" for s in scugs], 1), right_cost)
 
             if left.populate and right.populate:
                 left.connect(
