@@ -73,3 +73,12 @@ various story items (such as Hunter's green Neuron, Rivulet's rarefaction cell, 
 are added as primary progression items.
 Filler items come in the form of various foods, weapons, and traps.
 See [the items subpage](/tutorial/Rain%20World/items/en) for more details.
+
+## Where should I report problems?
+
+The Archipelago Discord `future-games` forum has a `Rain World` thread where problems may be reported.
+Alternatively, you can create an issue
+on the [APWorld GitHub](https://github.com/alphappy/ArchipelagoRW/issues)
+if it's an issue with the generation, player YAML settings, or the logic,
+or on the [Randomizer GitHub](https://github.com/SaltiestSyrup/RWRandomizer/issues)
+if it's an issue with the mod.

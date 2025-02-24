@@ -9,3 +9,4 @@ by navigating directly to the `.md` files in this folder:
 - [Compatibility](compatibility_en.md)
 - [Items](items_en.md)
 - [Settings](settings_en.md)
+- [Tracking](tracking_en.md)
