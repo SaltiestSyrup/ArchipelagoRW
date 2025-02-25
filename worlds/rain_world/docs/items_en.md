@@ -6,7 +6,7 @@ meaning that these items will not necessarily appear in their normal locations.
 For instance, echoes do not necessarily increase karma,
 and completing a passage does not necessarily award a token.
 - Karma cap increases (at least 8)
-- "Keys" for each accessible karma gate
+- "Keys" for each accessible karma gate (unless gate behavior is set to karma only)
 - Fast-travel tokens for each passage
 - The Mark of Communication
 - The neuron glow
@@ -31,7 +31,7 @@ Although they are "traps," some of them can be exploited for personal gain (or a
 The only thing that all traps have in common is that they affect the game world instantly.
 - **Stun**: Slugcat is briefly stunned.
 - **Creature**: a dangerous creature spawns in an adjacent room.
-This may be a Red Lizard, Red Centipede, Spitter Spider, any type of Vulture, or an Elite Scavenger.
+This may be a Red Lizard, Red Centipede, Spitter Spider, a Vulture, or an Elite Scavenger.
 The creature is immediately aware of Slugcat's position.
 - **Timer**: the current cycle timer is shortened.
 - **Zoomies**: Slugcat and/or creatures around them suddenly start moving much faster.

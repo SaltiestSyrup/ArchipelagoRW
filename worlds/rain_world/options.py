@@ -8,9 +8,8 @@ from .game_data.general import setting_to_scug_id, scug_id_to_name
 #################################################################
 # IMPORTANT SETTINGS
 class PassageProgressWithoutSurvivor(Toggle):
-    """Whether the Remix setting `Passage progress without Survivor` is enabled.
-    This affects logic for The Dragon Slayer, The Friend, The Nomad, and The Wanderer.
-    This **must** match the setting you use in-game."""
+    """Whether The Dragon Slayer, The Friend, and The Wanderer are completable without completing The Survivor.
+    This will override the actual value of the corresponding setting in the Rain World Remix menu."""
     display_name = "Passage progress without Survivor"
     default = True
 
@@ -43,22 +42,22 @@ class WhichGamestate(Choice):
 
 
 class WhichVictoryCondition(Choice):
-    """Whether ascension in the Subterranean Void Sea or a gamestate-specific alternative is the victory condition.
-    The alternative victory condition depends on the selected gamestate:
+    """Whether ascension or a gamestate-specific alternative is the victory condition.
+    The alternative victory condition depends on the selected gamestate.
 
     **Vanilla**, **Hunter**, **Saint**, or **Sofanthiel**: No alternate.
 
     **Monk** and **Survivor**: Reach Journey's End in Outer Expanse.
 
-    **Gourmand**: Receive the Mark, meet Five Pebbles, and reach Journey's End in Outer Expanse.
+    **Gourmand**: Receive the Mark and reach Journey's End in Outer Expanse.
 
-    **Artificer**: Receive the Mark, meet Five Pebbles, and kill the Chieftain in Metropolis.
+    **Artificer**: Receive the Mark and kill the Chieftain in Metropolis.
 
     **Rivulet**: Receive the Mark, receive the Rarefaction Cell and deliver it to Submerged Superstructure,
     then meet Looks to the Moon.
 
-    **Spearmaster**: Receive the Mark, receive the SM pearl and deliver it to Five Pebbles then to Looks to the Moon,
-    get the SM pearl signed, then deliver it to Communications Array in Sky Islands.
+    **Spearmaster**: Receive the Mark, the SM pearl, and Moon's message,
+    then deliver it to Communications Array in Sky Islands.
     """
     display_name = "Victory condition"
     option_ascension = 0
@@ -71,11 +70,12 @@ class WhichGateBehavior(Choice):
     These keys are required to use karma gates, and karma is not.
 
     **Key and Karma**: Keys are required *and* gates have karma requirements.
-    The `Monk-style karma gates` Remix setting should be enabled.
 
     **Key or Karma**: Either keys or karma are sufficient to use a gate.
 
     **Karma only**: Unrandomized behavior.  Keys are not placed into the pool.
+
+    Gates will have Monk-style behavior if you choose a setting other than **Key only**.
     """
     display_name = "Gate behavior"
     option_key_only = 0
@@ -112,7 +112,7 @@ class RandomStartingRegion(Choice):
 
 
 class PassagePriority(Range):
-    """Number of Passage completion checks that are marked as priority checks,
+    """Number of Passages that are randomly marked as priority checks,
     increasing the chance that they will contain progression items.
     These are in addition to any manually-set priorities."""
     display_name = "Priority Passages"

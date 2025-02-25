@@ -12,6 +12,8 @@ regardless of the selected victory condition.
 which affects when The Dragon Slayer, The Friend, and The Wanderer can be earned.
 Enabling PPwS makes it possible to earn these passages without first earning The Survivor.
 
+The Randomizer mod will override the behavior in-game to match your player YAML setting.
+
 ### Victory condition
 The default victory condition, ascension, logically requires raising max karma to 10
 (which requires 8 karma items) and accessing Subterranean (or, for Saint, Rubicon).

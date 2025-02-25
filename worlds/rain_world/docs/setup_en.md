@@ -36,7 +36,7 @@ You can generate a player YAML file by doing one of the following:
 
 Install an Archipelago release of the Randomizer mod by doing the following:
 1. Download a release [from GitHub](https://github.com/SaltiestSyrup/RWRandomizer/releases).
-   If you downloaded a specific release on the APWorld,
+   If you downloaded a specific release of the APWorld,
    that release page should point to the version(s) of the Randomizer mod that it is designed for.
 2. Unzip it and place the `rwrandomizer` folder in your mods folder
    (`Rain World\RainWorld_Data\StreamingAssets\mods`).
@@ -52,9 +52,6 @@ You should an `Archipelago` tab in this interface.
 There are a few mod settings that must be adjusted according to your player YAML file:
 - _Rain World Remix_ must be enabled.
 - If the `Game state` setting is not a `Vanilla` state, then _More Slugcats Expansion_ must be enabled.
-- The `Passage progress without Survivor` setting should match what is set in your _Rain World Remix_ settings.
-- If the `Gate Behavior` setting is not set to `Key Only`,
-then `Monk-style karma gates` in your _Rain World Remix_ settings should be enabled.
 
 ## 5. Join an Archipelago room
 

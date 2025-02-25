@@ -17,6 +17,8 @@ For Spearmaster, broadcast tokens are also checks.
 Although some broadcast tokens give different chatlogs before and after meeting Five Pebbles,
 they are not considered two separate checks.
 
+The `Misc2` pearl in Subterranean, though it appears on the interactive map, is not unique and is not a check.
+
 ## Echoes
 Visiting an echo is a check, and the karma cap increases they would normally give are placed in the item pool.
 By default, echo apperance follows the same rules as the unrandomized game:

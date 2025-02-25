@@ -2,8 +2,8 @@
 
 ## Where is the options page?
 
-The [player options page for this game](../player-options) contains all the options you need to configure and export a
-config file.
+The [player options page for this game](../player-options)
+contains all the options you need to configure and export a config file.
 
 ## What is the win condition?
 
@@ -53,13 +53,18 @@ Story flags are added to the item pool:
 - Spearmaster does not receive their pearl by meeting Five Pebbles.
 - Spearmaster's pearl does not get rewritten by meeting Looks to the Moon with the pearl.
 
+### Remix settings
+Certain Rain World Remix settings are overridden while the Randomizer mod is active:
+- Passage progress without Survivor (see [the checks subpage](/tutorial/Rain%20World/checks/en))
+- Monk-style gates for all campaigns (see [the settings subpage](/tutorial/Rain%20World/settings/en))
+
 ## Is the Archipelago mod compatible with other mods or DLC?
 
 More Slugcats Expansion (Downpour) is fully supported.
 Other mods are not directly supported, but most mods are still compatible with Archipelago.
 See [the compatibility subpage](/tutorial/Rain%20World/compatibility/en) for more details.
 
-## What counts as a check (location)?
+## What counts as a check?
 
 Collecting Arena/Safari tokens, bringing unique colored pearls to a shelter,
 meeting echoes, completing passages, completing parts of the food quest (if More Slugcats Expansion is enabled)
@@ -76,7 +81,7 @@ See [the items subpage](/tutorial/Rain%20World/items/en) for more details.
 
 ## Where should I report problems?
 
-The Archipelago Discord `future-games` forum has a `Rain World` thread where problems may be reported.
+The Archipelago Discord has a `Rain World` thread in the `future-game-design` forum where problems may be reported.
 Alternatively, you can create an issue
 on the [APWorld GitHub](https://github.com/alphappy/ArchipelagoRW/issues)
 if it's an issue with the generation, player YAML settings, or the logic,
