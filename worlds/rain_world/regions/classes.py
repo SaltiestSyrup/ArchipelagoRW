@@ -88,7 +88,7 @@ class PhysicalRegion(RegionData):
             case "SU":
                 # HARDCODE
                 if self.name == "Outskirts filtration":
-                    return options.msc_enabled and scug in ("Yellow", "White", "Gourmand", "Spear")
+                    return options.msc_enabled and scug in ("Yellow", "White", "Gourmand")
                 return True
             case "HI" | "GW" | "CC" | "SI" | "LF" | "SB":
                 return True
