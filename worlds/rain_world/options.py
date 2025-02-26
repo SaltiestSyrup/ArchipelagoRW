@@ -207,6 +207,17 @@ class DifficultyGlow(Toggle):
     default = True
 
 
+class DifficultyExtremeThreats(Choice):
+    """Whether eliminating an extreme threat could be required.
+    This includes Red Lizards for The Dragon Slayer and Red Centipedes or Aquapedes for the food quest.
+    "Capable slugcats" include Gourmand, Artificer, Spearmaster and Sofanthiel."""
+    display_name = "Extreme threats"
+    option_all_slugcats = 2
+    option_capable_slugcats = 1
+    option_off = 0
+    default = 1
+
+
 #################################################################
 # FILLER SETTINGS
 class PctTraps(Range):
@@ -514,10 +525,11 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     difficulty_nomad: DifficultyNomad
     difficulty_chieftain: DifficultyChieftain
     difficulty_glow: DifficultyGlow
+    difficulty_extreme_threats: DifficultyExtremeThreats
 
     group_difficulty = [
         ProgressionBalancing, Accessibility, DifficultyMonk, DifficultyHunter, DifficultyOutlaw, DifficultyNomad,
-        DifficultyChieftain, DifficultyGlow
+        DifficultyChieftain, DifficultyGlow, DifficultyExtremeThreats
     ]
 
     #################################################################

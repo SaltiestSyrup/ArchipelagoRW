@@ -186,9 +186,9 @@ passages_all = ["Chieftain", "DragonSlayer", "Friend", "Hunter", "Martyr", "Monk
 # Passages that can't be automatically set as priority until early logic detection improves.
 prioritizable_passages = set(passages_all) - {"Chieftain", "Traveller", "Mother"}
 
-dragonslayer_vanilla = ["GreenLizard", "PinkLizard", "BlueLizard", "WhiteLizard", "YellowLizard", "BlackLizard"]
-dragonslayer_msc = dragonslayer_vanilla + ["CyanLizard", "RedLizard", "SpitLizard", "ZoopLizard"]
-lizards_any = dragonslayer_msc + ["Salamander", "EelLizard", "TrainLizard"]
+dragonslayer_vanilla = {"GreenLizard", "PinkLizard", "BlueLizard", "WhiteLizard", "YellowLizard", "BlackLizard"}
+dragonslayer_msc = dragonslayer_vanilla.union({"CyanLizard", "RedLizard", "SpitLizard", "ZoopLizard"})
+lizards_any = dragonslayer_msc.union({"Salamander", "EelLizard", "TrainLizard"})
 
 echoes_vanilla = ['CC', 'SI', 'LF', 'SB', 'SH', 'UW']
 

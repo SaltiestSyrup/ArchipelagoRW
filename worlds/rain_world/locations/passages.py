@@ -3,13 +3,6 @@ from .. import game_data
 from ..options import RainWorldOptions
 from ..conditions.classes import Condition, Simple, AnyOf, AllOf
 
-#################################################################
-# LIZARDS
-cond_dragonslayer_vanilla = Simple(game_data.general.dragonslayer_vanilla)
-cond_dragonslayer_msc = AllOf(Simple(game_data.general.dragonslayer_msc, 6), Simple("MSC"))
-cond_dragonslayer = AnyOf(cond_dragonslayer_vanilla, cond_dragonslayer_msc)
-cond_friend = Simple(game_data.general.lizards_any, 1)
-
 
 #################################################################
 # CHIEFTAIN
@@ -22,6 +15,30 @@ def generate_cond_chieftain(options: RainWorldOptions) -> Condition:
         ),
         Simple([f"Scug-{s}" for s in set(game_data.general.setting_to_scug_id.values()) - {"Artificer"}], 1)
     )
+
+
+#################################################################
+# DRAGON SLAYER
+def generate_cond_dragonslayer(options: RainWorldOptions) -> Condition:
+    if not options.msc_enabled:
+        return Simple(game_data.general.dragonslayer_vanilla)
+    if options.difficulty_extreme_threats == 2:
+        return Simple(game_data.general.dragonslayer_msc, 6)
+    elif options.difficulty_extreme_threats == 1:
+        return AnyOf(
+            Simple(game_data.general.dragonslayer_msc.difference({"RedLizard"}), 6),
+            AllOf(
+                Simple(game_data.general.dragonslayer_msc, 6),
+                Simple(["Scug-Artificer", "Scug-Spear", "Scug-Inv"], 1)
+            )
+        )
+    else:
+        return Simple(game_data.general.dragonslayer_msc.difference({"RedLizard"}), 6)
+
+
+#################################################################
+# FRIEND
+cond_friend = Simple(game_data.general.lizards_any, 1)
 
 
 #################################################################
@@ -165,7 +182,8 @@ locations: dict[str, LocationData] = {
     "Pilgrim": Passage("Pilgrim", "Early Passages", 5002, cond_pilgrim),
     "Survivor": Passage("Survivor", "Early Passages", 5003, Simple("Karma", 4)),
 
-    "DragonSlayer": Passage("DragonSlayer", "PPwS Passages", 5020, cond_dragonslayer),
+    "DragonSlayer": Passage("DragonSlayer", "PPwS Passages", 5020,
+                            access_condition_generator=generate_cond_dragonslayer),
     "Friend": Passage("Friend", "PPwS Passages", 5021, cond_friend),
     "Traveller": Passage("Traveller", "PPwS Passages", 5022, cond_wanderer),
 

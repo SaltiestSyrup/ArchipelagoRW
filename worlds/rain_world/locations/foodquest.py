@@ -33,6 +33,10 @@ def generate(options: RainWorldOptions) -> list[LocationData]:
 
             # Hunter and Sofanthiel can complete the food quest.
 
+            if options.difficulty_extreme_threats + (options.starting_scug not in
+                                                     ["Gourmand", "Artificer", "Spear", "Inv"]):
+                foods = foods.difference({"RedCentipede"})
+
         else:  # not gourmand and food quest set to gourmand-only
             return []
 

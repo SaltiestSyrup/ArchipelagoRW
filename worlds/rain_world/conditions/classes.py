@@ -10,7 +10,7 @@ class Condition:
 
 
 class Simple(Condition):
-    def __init__(self, items: list[str] | str, count: Optional[int] = None,
+    def __init__(self, items: list[str] | set[str] | str, count: Optional[int] = None,
                  unique: Optional[bool] = None, negative: bool = False,
                  locations: bool = False):
         """
@@ -42,7 +42,7 @@ class Simple(Condition):
         :param locations:  Whether to treat `items` as a list of locations to check for access to
         rather than as a list of collected items.
         """
-        self.unique: bool = unique or (type(items) == list)
+        self.unique: bool = unique or (type(items) == list) or (type(items) == set)
         self.items: list[str] = [items] if type(items) == str else items
         self.count: int = count or len(self.items)
         self.negative: bool = negative
