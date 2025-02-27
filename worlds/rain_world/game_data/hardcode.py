@@ -10,3 +10,4 @@ def apply_hardcoded_exceptions(data: dict):
 
     # This token is not reasonably accessible for Artificer or at all for Sofanthiel.
     data["MSC"]["GW"]["GW_C09"]["shinies"]["BrotherLongLegs"]["filter"].update({"Artificer", "Inv"})
+    data["MSC"]["GW"]["GW_C09"]["shinies"]["BrotherLongLegs"]["whitelist"].difference_update({"Artificer", "Inv"})

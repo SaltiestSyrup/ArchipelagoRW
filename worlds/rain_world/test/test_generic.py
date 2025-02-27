@@ -33,6 +33,13 @@ class TestHunterMSC(RainWorldTestBase):
         self.assertIn("Pearl-SI_top-SI", locs)
 
 
+class TestHunterMSCShadedCitadel(RainWorldTestBase):
+    options = {"which_gamestate": "hunter_msc", "random_starting_shelter": "shaded_citadel"}
+
+    def test_karma_flower_absence(self):
+        self.assertAccessDependency(["Echo-SH"], [["Karma", "Karma", "Karma", "Karma"]], True)
+
+
 class TestGourmand(RainWorldTestBase):
     options = {"which_gamestate": "gourmand"}
 
