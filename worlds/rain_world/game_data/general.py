@@ -112,8 +112,10 @@ accessible_gates = {
         "Gourmand": gates_vanilla.union(gates_msc_red).union({"SB_OE", "OE_SU"}),
         "Artificer": gates_vanilla.union(gates_msc_red).union({"UW_LC"}).difference({"SL_MS", "MS_SL"}),
         "Rivulet": gates_vanilla.union(gates_msc_red),
-        "Spear": gates_vanilla.union(gates_msc_red).union({"SL_DM", "DM_SL"}),
-        "Saint": gates_vanilla.union(gates_msc_red).union({"SL_CL"}).difference({"SH_SL", "UW_SS", "SS_UW"}),
+        "Spear": gates_vanilla.union(gates_msc_red).union({"SL_DM", "DM_SL"}).difference({"SL_MS", "MS_SL"}),
+        "Saint": gates_vanilla.union(gates_msc_red).union({"SL_CL"}).difference(
+            {"SH_SL", "UW_SS", "SS_UW", "CC_UW", "SH_UW"}
+        ),
     }
 }
 
