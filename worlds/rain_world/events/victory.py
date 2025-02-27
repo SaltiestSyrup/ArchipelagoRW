@@ -19,9 +19,9 @@ def generate(options: RainWorldOptions) -> list[EventData]:
 
     if options.starting_scug == "Rivulet":
         return [
-            EventData("MeetLttM", "MeetLttM", "Shoreline"),
-            VictoryEvent("Old Friend", "Submerged Superstructure",
-                         Simple(["The Mark", "Object-EnergyCell", "MeetLttM"]))
+            EventData("Install rarefaction cell", "Submerged Superstucture Heart", "Submerged Superstructure",
+                      condition=Simple("Object-EnergyCell")),
+            VictoryEvent("Old Friend", "Shoreline", Simple("Install rarefaction cell"))
         ]
 
     ret = [EventData("MeetFP", "MeetFP", "Five Pebbles above puppet")]

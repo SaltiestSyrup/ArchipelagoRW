@@ -26,7 +26,7 @@ as well as certain additional actions that must be taken to actually reach the e
 | Monk or Survivor |                                                                        | - Reach Journey's End (Outer Expanse)                                                            |
 | Gourmand         | - Mark of Communication                                                | - Meet Five Pebbles to unlock the OE gate<br/>- Reach Journey's End (Outer Expanse)              |
 | Artificer        | - Mark of Communication<br/>- Citizen ID drone                         | - Kill the chieftain scavenger in Metropolis                                                     |
-| Rivulet          | - Mark of Communication<br/>- Rarefaction cell                         | - Install the rarefaction cell in Submerged Superstructure<br/>- Reunite with Looks the the Moon |
+| Rivulet          | - Rarefaction cell                                                     | - Install the rarefaction cell in Submerged Superstructure<br/>- Reunite with Looks the the Moon |
 | Spearmaster      | - Mark of Communication<br/>- Spearmaster's pearl<br/>- Moon's message | - Deliver the pearl to Communications Array                                                      |
 
 Hunter, Saint, and Sofanthiel do not have an alternate victory condition.
