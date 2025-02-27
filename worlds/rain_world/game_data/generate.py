@@ -204,8 +204,8 @@ for dlcstate, all_scugs in zip(("Vanilla", "MSC"), (scugs_vanilla, scugs_msc)):
                 # Tokens have their own blacklist in custom data, though it's not always used.
                 if "Token" in obj['type']:
                     blacklist = set(custom_data[6].split("|")).union(blacklist or set())
-                # Pearls with `Misc` in the name should be ignored.
-                elif "Misc" in name:
+                # Pearls with `Misc` in the name or a blank name should be ignored.
+                elif "Misc" in name or name.strip() == "":
                     continue
 
                 r_data["shinies"][name] = {"filter": blacklist, "kind": obj["type"]}
