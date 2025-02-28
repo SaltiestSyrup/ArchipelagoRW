@@ -47,11 +47,11 @@ class GateData:
 
             if left.populate and right.populate:
                 left.connect(
-                    right, f"{'east' if self.was_swapped else 'west'} through {self.name}",
+                    right, f"{'west' if self.was_swapped else 'east'} through {self.name}",
                     rule=left_condition.check(player)
                 )
                 right.connect(
-                    left, f"{'west' if self.was_swapped else 'east'} through {self.name}",
+                    left, f"{'east' if self.was_swapped else 'west'} through {self.name}",
                     rule=right_condition.check(player)
                 )
 
