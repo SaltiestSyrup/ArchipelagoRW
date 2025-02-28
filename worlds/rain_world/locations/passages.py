@@ -203,19 +203,18 @@ locations: dict[str, LocationData] = {
 
 
 def generate(options: RainWorldOptions) -> list[LocationData]:
-    keys = ["Survivor", "DragonSlayer", "Friend", "Traveller", "Monk", "Outlaw", "Saint"]
+    keys = ["Survivor", "Friend", "Traveller", "Monk", "Saint"]
 
     if options.starting_scug != "Artificer":
         keys.append("Chieftain")
 
     if options.starting_scug != "Saint":
-        keys.append("Hunter")
+        keys += ["Hunter", "Outlaw", "DragonSlayer"]
         if options.starting_scug != "Yellow" or options.msc_enabled:
             keys.append("Scholar")
 
     if options.msc_enabled:
         keys += ["Martyr", "Pilgrim", "Nomad"]
-
         if options.starting_scug in ["White", "Red", "Gourmand"]:
             keys.append("Mother")
 
