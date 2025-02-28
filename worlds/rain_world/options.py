@@ -218,6 +218,16 @@ class DifficultyExtremeThreats(Choice):
     default = 1
 
 
+class DifficultySubmerged(Toggle):
+    """Whether Submerged Superstructure is logically locked behind advancing the story state for Rivulet.
+    Advancing the story state - normally done by removing the rarefaction cell from The Rot -
+    causes the cycle duration to increase significantly, making Submerged Superstructure significantly easier.
+
+    This setting only impacts Rivulet."""
+    display_name = "Late Submerged"
+    default = True
+
+
 #################################################################
 # FILLER SETTINGS
 class PctTraps(Range):
@@ -526,10 +536,11 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     difficulty_chieftain: DifficultyChieftain
     difficulty_glow: DifficultyGlow
     difficulty_extreme_threats: DifficultyExtremeThreats
+    difficulty_submerged: DifficultySubmerged
 
     group_difficulty = [
         ProgressionBalancing, Accessibility, DifficultyMonk, DifficultyHunter, DifficultyOutlaw, DifficultyNomad,
-        DifficultyChieftain, DifficultyGlow, DifficultyExtremeThreats
+        DifficultyChieftain, DifficultyGlow, DifficultyExtremeThreats, DifficultySubmerged
     ]
 
     #################################################################

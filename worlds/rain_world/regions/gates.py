@@ -45,6 +45,10 @@ class GateData:
             left_condition = AllOf(self.left_extra, Simple([f"Scug-{s}" for s in scugs], 1), left_cost)
             right_condition = AllOf(self.right_extra, Simple([f"Scug-{s}" for s in scugs], 1), right_cost)
 
+            # HARDCODE
+            if self.name == "GATE_MS_SL" and options.starting_scug == "Rivulet" and options.difficulty_submerged:
+                left_condition = AllOf(left_condition, Simple("Disconnect_FP"))
+
             if left.populate and right.populate:
                 left.connect(
                     right, f"{'west' if self.was_swapped else 'east'} through {self.name}",
