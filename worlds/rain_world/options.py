@@ -53,7 +53,7 @@ class WhichVictoryCondition(Choice):
 
     **Artificer**: Receive the Mark and kill the Chieftain in Metropolis.
 
-    **Rivulet**: Receive the Mark, receive the Rarefaction Cell and deliver it to Submerged Superstructure,
+    **Rivulet**: Receive the Rarefaction Cell and deliver it to Submerged Superstructure,
     then meet Looks to the Moon.
 
     **Spearmaster**: Receive the Mark, the SM pearl, and Moon's message,
@@ -114,7 +114,8 @@ class RandomStartingRegion(Choice):
 class PassagePriority(Range):
     """Number of Passages that are randomly marked as priority checks,
     increasing the chance that they will contain progression items.
-    These are in addition to any manually-set priorities."""
+    These are in addition to any manually-prioiritized Passages,
+    and will not override any manually-excluded Passages."""
     display_name = "Priority Passages"
     range_start = 0
     range_end = 14
@@ -196,7 +197,8 @@ class DifficultyNomad(Range):
 
 
 class DifficultyChieftain(Toggle):
-    """Whether a scavenger toll must be accessible before The Chieftain can be logically required."""
+    """Whether a Scavenger toll must be accessible before The Chieftain can be logically required.
+    If disabled, Chieftain becomes accessible whenever any Scavengers are accessible."""
     display_name = "The Chieftain requires toll"
     default = True
 
@@ -239,7 +241,7 @@ class PctTraps(Range):
 
 
 class FillerJitter(Range):
-    """Each non-zero filler weight receives a random number, up to the jitter value, added to it.
+    """Each non-zero filler weight receives a random number, up to this jitter value, added to it.
     The lower the setting, the less likely it is that items with small weights appear in the pool at all.
     The higher the setting, the lower the influence of the item weights altogether."""
     display_name = "Filler weight jitter"
