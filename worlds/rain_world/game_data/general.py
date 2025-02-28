@@ -36,36 +36,6 @@ region_code_to_name = {
 region_name_to_code = {v: k for k, v in region_code_to_name.items()}
 regions_all = list(region_code_to_name.keys())
 
-scug_id_to_starting_region = {
-    "Yellow": "SU",
-    "White": "SU",
-    "Red": "LF",
-    "Gourmand": "SH",
-    "Artificer": "GW",
-    "Rivulet": "DS",
-    "Spear": "SU^",
-    "Saint": "SI",
-    "Inv": "SH"
-}
-
-setting_to_region_code = {
-    1: "SU",
-    2: "HI",
-    3: "DS",
-    4: "GW",
-    5: "SL",
-    6: "SH",
-    7: "UW",
-    8: "SS",
-    9: "CC",
-    10: "SI",
-    11: "LF",
-    12: "SB",
-
-    20: "VS",
-    21: "LM",
-}
-
 story_regions_vanilla = {"SU", "HI", "DS", "GW", "SL", "SH", "UW", "SS", "CC", "SI", "LF", "SB"}
 
 story_regions = {
@@ -125,6 +95,14 @@ story_regions_artificer = story_regions_msc.union({"LC", "LM"}).difference({"SL"
 story_regions_rivulet = story_regions_msc.union({"RM", "MS"}).difference({"SS"})
 story_regions_spearmaster = story_regions_msc.union({"DM", "LM"}).difference({"SL"})
 story_regions_saint = story_regions_msc.union({"UG", "CL", "HR"}).difference({"DS", "SH", "UW", "SS"})
+
+alternate_regions = {
+    "DS": {"Saint": "UG"},
+    "SH": {"Saint": "CL"},
+    "SL": {"Artificer": "LM", "Spear": "LM"},
+    "SS": {"Rivulet": "RM", "Saint": None},
+    "UW": {"Saint": None},
+}
 
 #################################################################
 # SCUG DATA

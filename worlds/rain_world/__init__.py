@@ -4,15 +4,17 @@ from typing import Mapping, Any
 
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Tutorial, LocationProgressType
+from .game_data.shelters import get_starts
 from .options import RainWorldOptions
 from .conditions.classes import Simple
 from .game_data.general import region_code_to_name, story_regions
 from .events import get_events
+from .regions.classes import room_to_region
 from .utils import normalize, flounder2
 from .items import RainWorldItem, all_items, RainWorldItemData
 from . import regions, locations
-from .game_data.general import (setting_to_scug_id, scug_id_to_starting_region, prioritizable_passages,
-                                setting_to_region_code, passages_all, passages_vanilla, accessible_regions,
+from .game_data.general import (setting_to_scug_id, prioritizable_passages,
+                                passages_all, passages_vanilla, accessible_regions,
                                 accessible_gates)
 
 
@@ -45,7 +47,8 @@ class RainWorldWorld(World):
     location_name_to_id = locations.classes.location_map
 
     location_count = 0
-    starting_region = 'SU'
+    starting_room = 'SU_C04'
+    start_is_default = True
 
     def generate_early(self) -> None:
         # This is the earliest that the options are available.  Player YAML failures should be tripped here.
@@ -57,19 +60,8 @@ class RainWorldWorld(World):
 
         #################################################################
         # STARTING REGION
-        dlcstate = "MSC" if self.options.msc_enabled else "Vanilla"
-        valid_start_regions = accessible_regions[dlcstate][self.options.starting_scug]
-
-        if self.options.random_starting_region.value == 0:
-            start_region_code = scug_id_to_starting_region[self.options.starting_scug]
-        else:
-            start_region_code = setting_to_region_code[self.options.random_starting_region.value]
-
-        if start_region_code not in valid_start_regions:
-            raise ValueError(f"Invalid YAML: {start_region_code} is not a valid starting region "
-                             f"for slugcat '{self.options.starting_scug}' and dlcstate '{dlcstate}'.")
-
-        self.starting_region = region_code_to_name[start_region_code]
+        self.starting_room = self.random.choice(get_starts(self.options))
+        self.start_is_default = self.options.random_starting_region == 0
 
     def create_regions(self):
         for data in regions.generate(self.options):
@@ -94,10 +86,13 @@ class RainWorldWorld(World):
                 loc.progress_type = LocationProgressType.PRIORITY
 
         #################################################################
-        # STARTING REGION
+        # STARTING REGION - defer this step for UT.
         if not hasattr(self.multiworld, "generation_is_fake"):
-            start = self.multiworld.get_region(self.starting_region, self.player)
-            self.multiworld.get_region('Menu', self.player).connect(start, "Starting region")
+            self.connect_starting_region(self.starting_room)
+
+    def connect_starting_region(self, room: str):
+        start = self.multiworld.get_region(room_to_region[room], self.player)
+        self.multiworld.get_region('Menu', self.player).connect(start, "Starting region")
 
     def create_item(self, name: str) -> RainWorldItem:
         return items.all_items[name].generate_item(self.player)
@@ -162,20 +157,19 @@ class RainWorldWorld(World):
     def fill_slot_data(self) -> Mapping[str, Any]:
         d = self.options.as_dict(
             # Plugin needs to know...
-            "which_gamestate",  # ...which slugcat to enforce, and warn if MSC state is wrong
-            "passage_progress_without_survivor",  # ...if this setting doesn't match Remix
-            "death_link",  # ...whether to listen for death link notifications
-            "checks_foodquest",  # ...whether the food quest should be available
-            "checks_broadcasts",  # ...whether broadcasts should be avilable
-            "checks_tokens_pearls",  # ...whether all tokens should be available
-            "which_victory_condition",  # ...which victory condition is a win
-            "which_gate_behavior", # ...how gates should behave
-            "random_starting_region", # ...which region (and eventually shelter) to spawn in
+            "which_gamestate",  # ...which slugcat to enforce, and warn if MSC state is wrong.
+            "passage_progress_without_survivor",  # ...if this setting doesn't match Remix.
+            "death_link",  # ...whether to listen for death link notifications.
+            "checks_foodquest",  # ...whether the food quest should be available.
+            "checks_broadcasts",  # ...whether broadcasts should be avilable.
+            "checks_tokens_pearls",  # ...whether all tokens should be available.
+            "which_victory_condition",  # ...which victory condition is a win.
+            "which_gate_behavior",  # ...how gates should behave.
         )
+        # ...which room to spawn in.  Empty string for default.
+        d["starting_room"] = "" if self.start_is_default else self.starting_room
         return d
 
     def interpret_slot_data(self, slot_data: dict[str, Any]) -> None:
         """Universal Tracker support - synchronize UT internal multiworld with actual slot data."""
-        starting_region = region_code_to_name[setting_to_region_code[slot_data["random_starting_region"]]]
-        menu = self.multiworld.get_region("Menu", self.player)
-        menu.connect(self.multiworld.get_region(starting_region, self.player), "Starting region")
+        self.connect_starting_region(slot_data["starting_room"])

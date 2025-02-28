@@ -88,7 +88,8 @@ class WhichGateBehavior(Choice):
 #################################################################
 # GENERAL SETTINGS
 class RandomStartingRegion(Choice):
-    """Where Slugcat will initially spawn."""
+    """Where Slugcat will initially spawn.
+    If not set to default, a random shelter in the region is selected."""
     display_name = "Random starting shelter"
     option_default_starting_point = 0
 
@@ -104,11 +105,44 @@ class RandomStartingRegion(Choice):
     option_sky_islands = 10
     option_farm_arrays = 11
     option_subterranean = 12
-
     option_pipeyard = 20
-    option_waterfront_facility = 21
+    option_outer_expanse = 22
+    option_metropolis = 23
+    option_looks_to_the_moon = 24
 
     default = 0
+
+    names = {
+        0: ("Default starting point", "!!!"),
+        1: ("Outskirts", "SU"),
+        2: ("Industrial Complex", "HI"),
+        3: ("Drainage System / Undergrowth", "DS"),
+        4: ("Garbage Wastes", "GW"),
+        5: ("Shoreline / Waterfront Facility", "SL"),
+        6: ("Shaded Citadel / Silent Construct", "SH"),
+        7: ("The Exterior", "UW"),
+        8: ("Five Pebbles / The Rot", "SS"),
+        9: ("Chimney Canopy", "CC"),
+        10: ("Sky Islands", "SI"),
+        11: ("Farm Arrays", "LF"),
+        12: ("Subterranean", "SB"),
+        20: ("Pipeyard", "VS"),
+        22: ("Outer Expanse", "OE"),
+        23: ("Metropolis", "LC"),
+        24: ("Looks to the Moon", "DM"),
+    }
+
+    @classmethod
+    def get_option_name(cls, value: int) -> str:
+        return cls.names[value][0]
+
+    @property
+    def code(self) -> str:
+        return self.__class__.names[self.value][1]
+
+    @property
+    def name(self) -> str:
+        return self.__class__.names[self.value][0]
 
 
 class PassagePriority(Range):
@@ -635,6 +669,9 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
 
     @property
     def starting_scug(self) -> str: return setting_to_scug_id[self.which_gamestate.value]
+
+    @property
+    def starting_scug_name(self) -> str: return scug_id_to_name[self.which_gamestate.value]
 
     def get_nontrap_weight_dict(self) -> dict[str, float]:
         ret = {a.item_name: a.value for a in [
