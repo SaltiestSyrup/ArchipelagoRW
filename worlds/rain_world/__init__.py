@@ -4,7 +4,7 @@ from typing import Mapping, Any
 
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Tutorial, LocationProgressType
-from .game_data.shelters import get_starts
+from .game_data.shelters import get_starts, ingame_capitalization
 from .options import RainWorldOptions
 from .conditions.classes import Simple
 from .game_data.general import region_code_to_name, story_regions
@@ -167,9 +167,10 @@ class RainWorldWorld(World):
             "which_gate_behavior",  # ...how gates should behave.
         )
         # ...which room to spawn in.  Empty string for default.
-        d["starting_room"] = "" if self.start_is_default else self.starting_room
+        d["starting_room"] = ("" if self.start_is_default
+                              else ingame_capitalization.get(self.starting_room, self.starting_room))
         return d
 
     def interpret_slot_data(self, slot_data: dict[str, Any]) -> None:
         """Universal Tracker support - synchronize UT internal multiworld with actual slot data."""
-        self.connect_starting_region(slot_data["starting_room"])
+        self.connect_starting_region(slot_data["starting_room"].upper())

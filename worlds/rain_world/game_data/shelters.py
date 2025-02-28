@@ -49,6 +49,15 @@ start_shelters = {
     'VS': ['VS_S04', 'VS_S01', 'VS_S05', 'VS_S08']
 }
 
+ingame_capitalization = {
+    "DS_S01R": "DS_S01r",
+    "DS_S02L": "DS_S02l",
+    "UG_S01R": "UG_S01r",
+    "UG_S02L": "UG_S02l",
+    "LC_SHELTER_ABOVE": "LC_shelter_above",
+    "LC_SHELTERTRAIN1": "LC_ShelterTrain1",
+}
+
 
 def get_starts(options: RainWorldOptions) -> list[str]:
     code, name = options.random_starting_region.code, options.random_starting_region.name
