@@ -76,6 +76,8 @@ def get_starts(options: RainWorldOptions) -> list[str]:
             return ["SI_SAINTINTRO"]
         elif scug == "Red":
             return ["LF_E04"]
+        elif scug == "Inv":
+            return ["SH_E03"]
         else:
             return ["SU_C04"]
 

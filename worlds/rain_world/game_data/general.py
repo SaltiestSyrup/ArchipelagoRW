@@ -49,6 +49,7 @@ story_regions = {
         "Rivulet": story_regions_vanilla.union({"RM", "MS"}).difference({"SS"}),
         "Spear": story_regions_vanilla.union({"DM", "LM"}).difference({"SL"}),
         "Saint": story_regions_vanilla.union({"UG", "CL", "HR"}).difference({"DS", "SH", "UW", "SS"}),
+        "Inv": story_regions_vanilla.union({"VS"}),
     }
 }
 
@@ -63,6 +64,7 @@ accessible_regions = {
         "Rivulet": story_regions_vanilla.union({"RM", "MS", "MS^"}).difference({"SS"}),
         "Spear": story_regions_vanilla.union({"DM", "LM", "LM^", "SU^"}).difference({"SL"}),
         "Saint": story_regions_vanilla.union({"UG", "CL"}).difference({"DS", "SH", "UW", "SS"}),
+        "Inv": story_regions_vanilla.union({"VS", "MS"}),
     }
 }
 
@@ -86,6 +88,7 @@ accessible_gates = {
         "Saint": gates_vanilla.union(gates_msc_red).union({"SL_CL"}).difference(
             {"SH_SL", "UW_SS", "SS_UW", "CC_UW", "SH_UW"}
         ),
+        "Inv": gates_vanilla.union(gates_msc_red),
     }
 }
 

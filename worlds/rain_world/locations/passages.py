@@ -134,7 +134,7 @@ regions_saint = game_data.general.story_regions_saint
 cond_wanderer_vanilla = AllOf(Simple([f"Access-{r}" for r in regions]), Simple("MSC", negative=True))
 cond_wanderer_msc_base = AllOf(
     Simple([f"Access-{r}" for r in regions_msc] + ["MSC"]),
-    Simple(["Scug-Yellow", "Scug-White", "Scug-Red"], 1)
+    Simple(["Scug-Yellow", "Scug-White", "Scug-Red", "Scug-Inv"], 1)
 )
 cond_wanderer_gourmand = Simple([f"Access-{r}" for r in regions_gourmand] + ["MSC", "Scug-Gourmand"])
 cond_wanderer_artificer = Simple([f"Access-{r}" for r in regions_artificer] + ["MSC", "Scug-Artificer"])
@@ -149,7 +149,7 @@ cond_wanderer = AnyOf(cond_wanderer_vanilla, cond_wanderer_msc_base, cond_wander
 def wanderer_regions(scug: str, msc: bool) -> set[str]:
     if not msc:
         return regions
-    elif scug in ["Yellow", "White", "Red"]:
+    elif scug in ["Yellow", "White", "Red", "Inv"]:
         return regions_msc
     else:
         return {
@@ -163,7 +163,7 @@ def wanderer_pip_factory(count: int) -> Condition:
         AllOf(Simple("MSC", negative=True), Simple([f"Access-{r}" for r in regions], count)),
         AllOf(
             Simple("MSC"),
-            Simple(["Scug-Yellow", "Scug-White", "Scug-Red"], 1),
+            Simple(["Scug-Yellow", "Scug-White", "Scug-Red", "Scug-Inv"], 1),
             Simple([f"Access-{r}" for r in regions_msc], count)
         ),
         AllOf(Simple("Scug-Gourmand"), Simple([f"Access-{r}" for r in regions_gourmand], count)),
@@ -210,7 +210,7 @@ def generate(options: RainWorldOptions) -> list[LocationData]:
 
     if options.starting_scug != "Saint":
         keys += ["Hunter", "Outlaw", "DragonSlayer"]
-        if options.starting_scug != "Yellow" or options.msc_enabled:
+        if (options.starting_scug != "Yellow" or options.msc_enabled) and options.starting_scug != "Inv":
             keys.append("Scholar")
 
     if options.msc_enabled:

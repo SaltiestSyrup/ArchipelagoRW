@@ -22,7 +22,7 @@ def generate(options: RainWorldOptions) -> list[LocationData]:
     if options.starting_scug in ["Yellow", "White", "Gourmand"]:
         keys.append("Gift_Neuron")
 
-    if options.starting_scug in ["Yellow", "White", "Red", "Gourmand", "Artificer", "Spear"]:
+    if options.starting_scug in ["Yellow", "White", "Red", "Gourmand", "Artificer", "Spear", "Inv"]:
         keys.append("Meet_FP")
 
     if options.starting_scug in ["Yellow", "White", "Red", "Gourmand", "Rivulet", "Saint"]:

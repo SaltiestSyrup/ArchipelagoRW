@@ -54,11 +54,6 @@ class RainWorldWorld(World):
         # This is the earliest that the options are available.  Player YAML failures should be tripped here.
 
         #################################################################
-        # SOFANTHIEL
-        if self.options.starting_scug == "Inv":
-            raise NotImplementedError("Invalid YAML: Starting slugcat Inv not implemented.")
-
-        #################################################################
         # STARTING REGION
         self.starting_room = self.random.choice(get_starts(self.options))
         self.start_is_default = self.options.random_starting_region == 0

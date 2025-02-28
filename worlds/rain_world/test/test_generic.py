@@ -72,6 +72,10 @@ class TestSaint(RainWorldTestBase):
     options = {"which_gamestate": "saint"}
 
 
+class TestSofanthiel(RainWorldTestBase):
+    options = {"which_gamestate": "sofanthiel"}
+
+
 class TestMonkMSCAlternate(RainWorldTestBase):
     options = {"which_gamestate": "monk_msc", "which_victory_condition": "alternate"}
 
