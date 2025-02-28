@@ -97,7 +97,7 @@ class RainWorldWorld(World):
         # STARTING REGION
         if not hasattr(self.multiworld, "generation_is_fake"):
             start = self.multiworld.get_region(self.starting_region, self.player)
-            self.multiworld.get_region('Starting region', self.player).connect(start)
+            self.multiworld.get_region('Menu', self.player).connect(start, "Starting region")
 
     def create_item(self, name: str) -> RainWorldItem:
         return items.all_items[name].generate_item(self.player)
@@ -178,4 +178,4 @@ class RainWorldWorld(World):
         """Universal Tracker support - synchronize UT internal multiworld with actual slot data."""
         starting_region = region_code_to_name[setting_to_region_code[slot_data["random_starting_region"]]]
         menu = self.multiworld.get_region("Menu", self.player)
-        menu.connect(self.multiworld.get_region(starting_region, self.player))
+        menu.connect(self.multiworld.get_region(starting_region, self.player), "Starting region")
