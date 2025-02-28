@@ -13,15 +13,15 @@ def generate(options: RainWorldOptions):
         RegionData("Food Quest",
                    options.msc_enabled and (options.checks_foodquest.value > 0 or options.starting_scug == "Gourmand")),
 
-        ConnectionData("Menu", "Events"),
-        ConnectionData("Menu", "Early Passages"),
-        ConnectionData("Early Passages", "Late Passages", Simple("Passage-Survivor", locations=True)),
-        ConnectionData("Late Passages", "PPwS Passages"),
-        ConnectionData("Menu", "Food Quest"),
+        ConnectionData("Menu", "Events", "Unique event checks"),
+        ConnectionData("Menu", "Early Passages", "Early Passages"),
+        ConnectionData("Early Passages", "Late Passages", "Late Passages", Simple("Passage-Survivor", locations=True)),
+        ConnectionData("Late Passages", "PPwS Passages", "PPwS Passages"),
+        ConnectionData("Menu", "Food Quest", "Food Quest"),
     ]
 
     if options.passage_progress_without_survivor:
-        ret.append(ConnectionData("Menu", "PPwS Passages"))
+        ret.append(ConnectionData("Menu", "PPwS Passages", "Bypass Survivor requirement"))
 
     return ret
 

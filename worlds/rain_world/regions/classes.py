@@ -24,15 +24,13 @@ class ConnectionData:
     """
     Represents a connection between Archi regions.
     """
-    def __init__(self, source: str, dest: str, forward: Condition = ConditionBlank, backward: Condition | None = None):
-        self.source, self.dest, self.forward, self.backward = source, dest, forward, backward
+    def __init__(self, source: str, dest: str, name: str, condition: Condition = ConditionBlank):
+        self.source, self.dest, self.name, self.condition = source, dest, name, condition
 
     def make(self, player: int, multiworld: MultiWorld, options: RainWorldOptions):
         source = multiworld.get_region(self.source, player)
         dest = multiworld.get_region(self.dest, player)
-        source.connect(dest, rule=self.forward.check(player))
-        if self.backward:
-            dest.connect(source, rule=self.backward.check(player))
+        source.connect(dest, self.name, rule=self.condition.check(player))
 
 
 class Gate(ConnectionData):
@@ -40,7 +38,7 @@ class Gate(ConnectionData):
     Represents a karma gate connection between actual regions.
     """
     def __init__(self, source: str, dest: str, cost: int, gate_name: str, condition: Condition = ConditionBlank):
-        super().__init__(source, dest)
+        super().__init__(source, dest, "")
         self.cost = cost
         self.gate_name = gate_name
         self.condition = condition

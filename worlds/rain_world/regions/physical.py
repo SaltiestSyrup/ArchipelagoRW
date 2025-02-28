@@ -5,7 +5,7 @@ from ..options import RainWorldOptions
 from .classes import ConnectionData, PhysicalRegion
 
 
-def _generate(options: RainWorldOptions) -> list[PhysicalRegion | ConnectionData]:
+def _generate(_: RainWorldOptions) -> list[PhysicalRegion | ConnectionData]:
     ret = []
     for region, region_data in static_data["MSC"].items():
         rooms = set(region_data.keys())
@@ -19,7 +19,9 @@ def _generate(options: RainWorldOptions) -> list[PhysicalRegion | ConnectionData
                 ret += [
                     PhysicalRegion("Outskirts", "SU", rooms.difference(filt)),
                     PhysicalRegion("Outskirts filtration", "SU^", filt),
-                    ConnectionData("Outskirts filtration", "Outskirts", backward=Simple("Scug-Saint")),
+                    ConnectionData("Outskirts filtration", "Outskirts", "Exit Survivor tutorial area"),
+                    ConnectionData("Outskirts", "Outskirts filtration", "Return to Survivor tutorial area",
+                                   Simple("Scug-Saint")),
                 ]
 
             case "MS":
@@ -30,8 +32,8 @@ def _generate(options: RainWorldOptions) -> list[PhysicalRegion | ConnectionData
                 ret += [
                     PhysicalRegion("Submerged Superstructure", "MS", rooms.difference(bitter)),
                     PhysicalRegion("Bitter Aerie", "MS^", bitter),
-                    ConnectionData("Submerged Superstructure", "Bitter Aerie",
-                                   forward=Simple(["Scug-Rivulet", "Object-EnergyCell"])),
+                    ConnectionData("Submerged Superstructure", "Bitter Aerie", "Rarefaction cell deposit cutscene",
+                                   Simple(["Scug-Rivulet", "Object-EnergyCell"])),
                 ]
 
             case "SB":
@@ -40,7 +42,9 @@ def _generate(options: RainWorldOptions) -> list[PhysicalRegion | ConnectionData
                 ret += [
                     PhysicalRegion("Subterranean", "SB", rooms.difference(ravine)),
                     PhysicalRegion("Subterranean ravine", "SB^", ravine),
-                    ConnectionData("Subterranean ravine", "Subterranean", backward=Simple("Scug-Saint")),
+                    ConnectionData("Subterranean", "Subterranean ravine", "Down the ravine"),
+                    ConnectionData("Subterranean ravine", "Subterranean ravine", "Up the ravine",
+                                   Simple("Scug-Saint")),
                 ]
 
             case "SS":
@@ -49,7 +53,7 @@ def _generate(options: RainWorldOptions) -> list[PhysicalRegion | ConnectionData
                 ret += [
                     PhysicalRegion("Five Pebbles", "SS", rooms.difference(above)),
                     PhysicalRegion("Five Pebbles above puppet", "SS^", above),
-                    ConnectionData("Five Pebbles", "Five Pebbles above puppet")
+                    ConnectionData("Five Pebbles", "Five Pebbles above puppet", "Out the access shaft")
                 ]
 
             case "VS":
@@ -59,8 +63,9 @@ def _generate(options: RainWorldOptions) -> list[PhysicalRegion | ConnectionData
                 ret += [
                     PhysicalRegion("Pipeyard", "VS", rooms.difference(sump)),
                     PhysicalRegion("Sump Tunnel", "VS^", sump),
-                    ConnectionData("Pipeyard", "Sump Tunnel",
-                                   Simple(list(set(scugs_all).difference({"Artificer"})), 1),
+                    ConnectionData("Pipeyard", "Sump Tunnel", "Enter Sump Tunnel",
+                                   Simple(list(set(scugs_all).difference({"Artificer"})), 1)),
+                    ConnectionData("Sump Tunnel", "Pipeyard", "Exit Sump Tunnel",
                                    Simple(list(set(scugs_all).difference({"Artificer"})), 1))
                 ]
 
@@ -79,7 +84,8 @@ def _generate(options: RainWorldOptions) -> list[PhysicalRegion | ConnectionData
             case _:
                 ret.append(PhysicalRegion(region_code_to_name[region], region, rooms))
 
-    ret.append(ConnectionData("Subterranean", "Rubicon", AllOf(Simple("Karma", 8), Simple("Scug-Saint"))))
+    ret.append(ConnectionData("Subterranean", "Rubicon", "Enter Rubicon",
+                              AllOf(Simple("Karma", 8), Simple("Scug-Saint"))))
 
     return ret
 
