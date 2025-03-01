@@ -33,9 +33,9 @@ class TokenOrPearl(LocationData):
                 return options.msc_enabled and (
                         (options.starting_scug == "Spear") + options.checks_broadcasts.value >= 2
                 )
-            if options.msc_enabled and self.msc_blacklist:
+            if options.msc_enabled and self.msc_blacklist is not None:
                 return options.starting_scug not in self.msc_blacklist
-            if not options.msc_enabled and self.vanilla_blacklist:
+            if not options.msc_enabled and self.vanilla_blacklist is not None:
                 return options.starting_scug not in self.vanilla_blacklist
             return False
         return inner
