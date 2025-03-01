@@ -21,12 +21,12 @@ The alternate victory condition varies by slugcat, and is only applicable if MSC
 Each victory condition requires certain items that are placed into the item pool,
 as well as certain additional actions that must be taken to actually reach the ending:
 
-| Slugcat          | Items                                                                  | Actions                                                                                          |
-|------------------|------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|
-| Monk or Survivor |                                                                        | - Reach Journey's End (Outer Expanse)                                                            |
-| Gourmand         | - Mark of Communication                                                | - Meet Five Pebbles to unlock the OE gate<br/>- Reach Journey's End (Outer Expanse)              |
-| Artificer        | - Mark of Communication<br/>- Citizen ID drone                         | - Kill the chieftain scavenger in Metropolis                                                     |
-| Rivulet          | - Rarefaction cell                                                     | - Install the rarefaction cell in Submerged Superstructure<br/>- Reunite with Looks the the Moon |
-| Spearmaster      | - Mark of Communication<br/>- Spearmaster's pearl<br/>- Moon's message | - Deliver the pearl to Communications Array                                                      |
+| Slugcat          | Items                                                                                             | Actions                                                                                          |
+|------------------|---------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|
+| Monk or Survivor |                                                                                                   | - Reach Journey's End (Outer Expanse)                                                            |
+| Gourmand         | - Mark of Communication                                                                           | - Meet Five Pebbles to unlock the OE gate<br/>- Reach Journey's End (Outer Expanse)              |
+| Artificer        | - Mark of Communication<br/>- Citizen ID drone                                                    | - Kill the chieftain scavenger in Metropolis                                                     |
+| Rivulet          | - Increased cycle duration (unless **Late Submerged** setting is disabled)<br/>- Rarefaction cell | - Install the rarefaction cell in Submerged Superstructure<br/>- Reunite with Looks the the Moon |
+| Spearmaster      | - Mark of Communication<br/>- Spearmaster's pearl<br/>- Moon's message                            | - Deliver the pearl to Communications Array                                                      |
 
 Hunter, Saint, and Sofanthiel do not have an alternate victory condition.

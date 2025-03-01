@@ -35,14 +35,17 @@ or, for Artificer, as soon as a karma flower is accessible.
 
 ## Unique checks
 There are several unique checks, mostly associated with the iterators:
-- Eating a neuron.  The glow is placed in the item pool.
-- Gifting a neuron to Looks to the Moon as Monk, Survivor, or Gourmand.
-- Meeting Five Pebbles.  The Mark of Communication (and, in Spearmaster's case, their embedded pearl)
-is placed in the item pool.
-- Meeting Looks to the Moon.
-- Reviving Looks to the Moon with the green neuron as Hunter.
-- Removing the rarefaction cell from The Rot as Rivulet.  The rarefaction cell is placed in the item pool.
-- Ascending Looks to the Moon and Five Pebbles as Saint.
+
+| Check                                 | Eligibility                 | Requirements                                                             |
+|---------------------------------------|-----------------------------|--------------------------------------------------------------------------|
+| Eat a neuron fly                      | Any                         | Access to any neuron fly                                                 |
+| Gift a neuron fly to Moon             | Monk, Survivor, or Gourmand | Access to a neuron fly and Moon                                          |
+| Meet Five Pebbles                     | Not Rivulet or Saint        | - Access to Five Pebbles<br/>- For Sofanthiel, the Mark of Communication |
+| Meet Looks to the Moon                | Not Artificer or Sofanthiel | - Access to Looks to the Moon<br/>- For Hunter, the green neuron fly     |
+| Revive Looks to the Moon              | Hunter                      | - Access to Looks to the Moon<br/>- The green neuron fly                 |
+| Remove Five Pebbles' rarefaction cell | Rivulet                     | Access to the heart of The Rot                                           |
+| Ascend Looks to the Moon              | Saint                       | - Access to Looks to the Moon<br/>-Max karma 10                          |
+| Ascend Five Pebbles                   | Saint                       | - Access to Five Pebbles<br/>-Max karma 10                               |
 
 ## Passages
 Completing a passage is a check, and the passage tokens (which allow for fast-travel)
@@ -60,23 +63,23 @@ There are four passages that may be earned before The Survivor is earned:
 There are three passages that may be earned before The Survivor,
 but if and only if the `Passage progress without survivor` setting is enabled:
 
-| Passage           | Eligibility                                 | Requirements                                                                            |
-|-------------------|---------------------------------------------|-----------------------------------------------------------------------------------------|
-| The Dragon Slayer | Any                                         | Access to six eligibile lizard types<sup>c</sup>                                        |
-| The Friend        | Any                                         | Access to one lizard                                                                    |
-| The Wanderer      | Any                                         | Access to every story region for the given slugcat; each individual pip is also a check |
+| Passage           | Eligibility | Requirements                                                                            |
+|-------------------|-------------|-----------------------------------------------------------------------------------------|
+| The Dragon Slayer | Not Saint   | Access to six eligibile lizard types<sup>c</sup>                                        |
+| The Friend        | Any         | Access to one lizard                                                                    |
+| The Wanderer      | Any         | Access to every story region for the given slugcat; each individual pip is also a check |
 
 The remaining seven passages can only be earned after The Survivor has been earned:
 
-| Passage       | Eligibility                                 | Requirements                                                                                                                         |
-|---------------|---------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------|
-| The Chieftain | Not Artificer                               | Access to a Scavenger (or Scavenger Outpost/Toll)<sup>a</sup>                                                                        |
-| The Hunter    | Not Saint                                   | Access to 3<sup>a</sup> types of meat                                                                                                |
-| The Monk      | Any                                         | Access to 3<sup>a</sup> types of non-meat foods                                                                                      |
-| The Nomad     | Any; MSC enabled                            | Access to 5<sup>a</sup> different regions                                                                                            |  
-| The Outlaw    | Not Saint                                   | Access to 5<sup>a</sup> eligible creatures                                                                                           |
-| The Saint     | Any                                         | None                                                                                                                                 |
-| The Scholar   | Not Monk (unless MSC is enabled); Not Saint | - The Mark of Communication<br/>- Access to three colored pearls<br/>- For Monk, Survivor, and Gourmand: access to Looks to the Moon |
+| Passage       | Eligibility                                             | Requirements                                                                                                                         |
+|---------------|---------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------|
+| The Chieftain | Not Artificer                                           | Access to a Scavenger (or Scavenger Outpost/Toll)<sup>a</sup>                                                                        |
+| The Hunter    | Not Saint                                               | Access to 3<sup>a</sup> types of meat                                                                                                |
+| The Monk      | Any                                                     | Access to 3<sup>a</sup> types of non-meat foods                                                                                      |
+| The Nomad     | Any; MSC enabled                                        | Access to 5<sup>a</sup> different regions                                                                                            |  
+| The Outlaw    | Not Saint                                               | Access to 5<sup>a</sup> eligible creatures                                                                                           |
+| The Saint     | Any                                                     | None                                                                                                                                 |
+| The Scholar   | Not Monk unless MSC is enabled; Not Saint or Sofanthiel | - The Mark of Communication<br/>- Access to three colored pearls<br/>- For Monk, Survivor, and Gourmand: access to Looks to the Moon |
 
 - <sup>a</sup> This is controlled by the player YAML settings.
 - <sup>b</sup> "Normal spawning" of slugpups does not occur in Five Pebbles or Submerged Superstructure.

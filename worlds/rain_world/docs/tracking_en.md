@@ -4,7 +4,7 @@
 Rain World partially supports the Universal Tracker (UT).
 To install it:
 1. Download a release of UT [from GitHub](https://github.com/FarisTheAncient/Archipelago/releases).
-Rain World has been tested with v0.1.16RC1.
+Rain World's compatibility with UT has been tested with UT v0.1.16RC1 and AP 0.6.0.
 2. Place the `.apworld` into the `worlds` folder of your AP installation.
 
 To use it in a multiworld:

@@ -18,9 +18,8 @@ the option for alternate victory conditions is available for most Slugcats.
 ### Karma and Echoes
 Initial max karma is 1 by default, regardless of Slugcat.
 Raising max karma requires finding karma cap increases in the item pool rather than meeting echoes.
-Meeting echoes still requires a certain karma level depending on current max
-and is not possible with less than 5 karma -
-except for Artificer and Saint, who can see echoes by being at max karma with karma reinforcement.
+Meeting echoes still requires either a certain karma level depending on current max
+or karma flower reinforcement (except for Saint, who can always see echoes).
 There are at least 8 karma cap increases
 (one increase is worth 2 as max karma jumps from 5 to 7),
 though more may be added through the settings.
@@ -28,10 +27,13 @@ though more may be added through the settings.
 ### Gates
 By default, karma gates require unique keys which are added to the pool instead of karma.
 Currently collected keys are displayed on the pause screen in-game.
+If gates are set to potentially use karma in the settings, they have Monk campaign behavior
+(they only need karma the first time they are used).
 
 ### Passages
 Completing a passage is a check.
 Passage tokens are added to the item pool, rather than being awarded by completing passages.
+Hunter and Saint can use passage tokens to fast travel.
 
 ### The Mark of Communication
 The Mark of Communication is added to the item pool.
@@ -43,13 +45,15 @@ and certain alternate victory conditions require the Mark.
 
 ### Neuron Glow
 Neuron glow is added to the item pool.
-Eating a neuron fly may or may not grant the glow.
+Eating a neuron fly does not automatically grant the glow.
+By default, Shaded Citadel, Filtration System, and parts of lower Pipeyard logically require the glow.
 
 ### Story flags
 Story flags are added to the item pool:
 - Hunter does not start with the green neuron.
 - Artificer does not start with the citizen ID drone.
 - The rarefaction cell is not found in the heart of The Rot.
+- Rivulet's increased cycle duration is an item in the pool.
 - Spearmaster does not receive their pearl by meeting Five Pebbles.
 - Spearmaster's pearl does not get rewritten by meeting Looks to the Moon with the pearl.
 

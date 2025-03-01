@@ -11,6 +11,7 @@ and completing a passage does not necessarily award a token.
 - The Mark of Communication
 - The neuron glow
 - Hunter's green neuron fly / NSH slag key
+- (MSC) Increased cycle duration for Rivulet
 - (MSC) The rarefaction cell for Rivulet
 - (MSC) The unique data pearl for Spearmaster
 - (MSC) Moon's message for Spearmaster's pearl
@@ -22,7 +23,8 @@ Randomization adds the following filler items to the pool:
 (rocks, spears, explosive spears, grenades, flashbangs, sporepuffs, and cherrybombs)
 - Several vanilla foods
 (blue fruit, bubble fruit, eggbug eggs, jellyfish, mushrooms, slime mold)
-- Several MSC weapons, if enabled (electric spears, lilypucks, singularity bombs)
+- A few other types of items (karma flowers, vulture masks, lanterns)
+- Several MSC weapons, if enabled (electric spears, lilypucks, singularity bombs, joke rifles)
 - Several MSC foods, if enabled (firebug eggs, glow weed, gooieducks)
 
 ### Traps
