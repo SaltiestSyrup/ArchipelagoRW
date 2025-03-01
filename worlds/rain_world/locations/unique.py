@@ -1,12 +1,14 @@
 from .classes import LocationData
 from ..options import RainWorldOptions
-from ..conditions.classes import Simple
-
+from ..conditions.classes import Simple, ConditionBlank
 
 locations = {
     "Eat_Neuron": LocationData("Eat_Neuron", "Eat_Neuron", "Events", 4900, Simple("SSOracleSwarmer")),
     "Gift_Neuron": LocationData("Gift_Neuron", "Gift_Neuron", "Events", 4901, Simple(["Access-SL", "Access-SS"])),
-    "Meet_FP": LocationData("Meet_FP", "Meet_FP", "Five Pebbles above puppet", 4902),
+    "Meet_FP": LocationData(
+        "Meet_FP", "Meet_FP", "Five Pebbles above puppet", 4902,
+        access_condition_generator=lambda opt: ConditionBlank if opt.starting_scug == "Inv" else Simple("The Mark")
+    ),
     "Meet_LttM": LocationData("Meet_LttM", "Meet_LttM", "Shoreline", 4903, Simple("The Mark")),
     "Meet_LttM_Spear": LocationData("Meet_LttM_Spear", "Meet_LttM_Spear", "Looks to the Moon", 4904),
     "Kill_FP": LocationData("Kill_FP", "Kill_FP", "The Rot", 4905),
