@@ -238,7 +238,8 @@ class DifficultyChieftain(Toggle):
 
 
 class DifficultyGlow(Toggle):
-    """Whether the neuron glow is logically required for Shaded Citadel."""
+    """Whether the neuron glow is logically required for Shaded Citadel,
+    parts of lower Pipeyard, and Filtration System."""
     display_name = "Glow required for dark places"
     default = True
 
