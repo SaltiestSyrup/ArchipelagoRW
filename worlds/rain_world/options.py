@@ -2,7 +2,6 @@ from dataclasses import dataclass
 
 from Options import PerGameCommonOptions, Toggle, Range, OptionGroup, Choice, ProgressionBalancing, Accessibility, \
     Visibility, DeathLinkMixin, DeathLink
-from .game_data.general import setting_to_scug_id, scug_id_to_name
 
 
 #################################################################
@@ -34,11 +33,38 @@ class WhichGamestate(Choice):
 
     default = 1
 
+    ids_names = {
+        0: ("Yellow", "Monk"),
+        1: ("White", "Survivor"),
+        2: ("Red", "Hunter"),
+        10: ("Yellow", "Monk"),
+        11: ("White", "Survivor"),
+        12: ("Red", "Hunter"),
+        13: ("Gourmand", "Gourmand"),
+        14: ("Artificer", "Artificer"),
+        15: ("Rivulet", "Rivulet"),
+        16: ("Spear", "Spearmaster"),
+        17: ("Saint", "Saint"),
+        18: ("Inv", "Sofanthiel"),
+    }
+
     @classmethod
     def get_option_name(cls, value: int) -> str:
         if value < 19:
-            return f"{scug_id_to_name[value]}{' (Vanilla)' if value < 10 else (' (MSC)' if value < 13 else '')}"
+            return f"{cls.ids_names[value][1]}{' (Vanilla)' if value < 10 else (' (MSC)' if value < 13 else '')}"
         return f"{value}"
+
+    @property
+    def scug_id(self) -> str:
+        return self.__class__.ids_names[self.value][0]
+
+    @property
+    def scug_name(self) -> str:
+        return self.__class__.ids_names[self.value][1]
+
+    @property
+    def dlcstate(self) -> str:
+        return "MSC" if self.value > 9 else "Vanilla"
 
 
 class WhichVictoryCondition(Choice):
@@ -666,13 +692,10 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     def msc_enabled(self) -> bool: return self.which_gamestate.value > 9
 
     @property
-    def dlcstate(self) -> str: return "MSC" if self.msc_enabled else "Vanilla"
+    def dlcstate(self) -> str: return self.which_gamestate.dlcstate
 
     @property
-    def starting_scug(self) -> str: return setting_to_scug_id[self.which_gamestate.value]
-
-    @property
-    def starting_scug_name(self) -> str: return scug_id_to_name[self.which_gamestate.value]
+    def starting_scug(self) -> str: return self.which_gamestate.scug_id
 
     def get_nontrap_weight_dict(self) -> dict[str, float]:
         ret = {a.item_name: a.value for a in [

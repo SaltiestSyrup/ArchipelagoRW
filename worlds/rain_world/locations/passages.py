@@ -11,7 +11,7 @@ def generate_cond_chieftain(options: RainWorldOptions) -> Condition:
         (
             Simple("Toll") if options.difficulty_chieftain else Simple(["Scavenger", "ScavengerElite"], 1)
         ),
-        Simple([f"Scug-{s}" for s in set(game_data.general.setting_to_scug_id.values()) - {"Artificer"}], 1)
+        Simple([f"Scug-{s}" for s in set(game_data.general.scugs_all) - {"Artificer"}], 1)
     )
 
 

@@ -33,7 +33,6 @@ region_code_to_name = {
     "LM^": "Eastern Precipice",
 }
 
-region_name_to_code = {v: k for k, v in region_code_to_name.items()}
 regions_all = list(region_code_to_name.keys())
 
 story_regions_vanilla = {"SU", "HI", "DS", "GW", "SL", "SH", "UW", "SS", "CC", "SI", "LF", "SB"}
@@ -50,21 +49,6 @@ story_regions = {
         "Spear": story_regions_vanilla.union({"DM", "LM"}).difference({"SL"}),
         "Saint": story_regions_vanilla.union({"UG", "CL", "HR"}).difference({"DS", "SH", "UW", "SS"}),
         "Inv": story_regions_vanilla.union({"VS"}),
-    }
-}
-
-accessible_regions = {
-    "Vanilla": story_regions["Vanilla"],
-    "MSC": {
-        "Yellow": story_regions_vanilla.union({"VS", "MS", "OE", "OE^", "SU^"}),
-        "White": story_regions_vanilla.union({"VS", "MS", "OE", "OE^", "SU^"}),
-        "Red": story_regions_vanilla.union({"VS", "MS"}),
-        "Gourmand": story_regions_vanilla.union({"OE", "OE^", "SU^"}),
-        "Artificer": story_regions_vanilla.union({"LC", "LM"}).difference({"SL"}),
-        "Rivulet": story_regions_vanilla.union({"RM", "MS", "MS^"}).difference({"SS"}),
-        "Spear": story_regions_vanilla.union({"DM", "LM", "LM^", "SU^"}).difference({"SL"}),
-        "Saint": story_regions_vanilla.union({"UG", "CL"}).difference({"DS", "SH", "UW", "SS"}),
-        "Inv": story_regions_vanilla.union({"VS", "MS"}),
     }
 }
 
@@ -109,54 +93,6 @@ alternate_regions = {
 
 #################################################################
 # SCUG DATA
-setting_to_scug_id = {
-    "monk": "Yellow",
-    "survivor": "White",
-    "hunter": "Red",
-    "gourmand": "Gourmand",
-    "artificer": "Artificer",
-    "rivulet": "Rivulet",
-    "spearmaster": "Spear",
-    "saint": "Saint",
-    "sofanthiel": "Inv",
-    "inv": "Inv",
-    0: "Yellow",
-    1: "White",
-    2: "Red",
-    10: "Yellow",
-    11: "White",
-    12: "Red",
-    13: "Gourmand",
-    14: "Artificer",
-    15: "Rivulet",
-    16: "Spear",
-    17: "Saint",
-    18: "Inv"
-}
-
-scug_id_to_name = {
-    "Yellow": "Monk",
-    "White": "Survivor",
-    "Red": "Hunter",
-    "Gourmand": "Gourmand",
-    "Artificer": "Artificer",
-    "Rivulet": "Rivulet",
-    "Spear": "Spearmaster",
-    "Inv": "Sofanthiel",
-    0: "Monk",
-    1: "Survivor",
-    2: "Hunter",
-    10: "Monk",
-    11: "Survivor",
-    12: "Hunter",
-    13: "Gourmand",
-    14: "Artificer",
-    15: "Rivulet",
-    16: "Spearmaster",
-    17: "Saint",
-    18: "Sofanthiel"
-}
-
 scugs_all = ['Yellow', 'White', 'Red', 'Gourmand', 'Artificer', 'Rivulet', 'Spear', 'Saint', 'Inv']
 scugs_vanilla = ['Yellow', 'White', 'Red']
 

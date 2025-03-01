@@ -13,9 +13,7 @@ from .regions.classes import room_to_region
 from .utils import normalize, flounder2
 from .items import RainWorldItem, all_items, RainWorldItemData
 from . import regions, locations
-from .game_data.general import (setting_to_scug_id, prioritizable_passages,
-                                passages_all, passages_vanilla, accessible_regions,
-                                accessible_gates)
+from .game_data.general import prioritizable_passages, passages_all, passages_vanilla, accessible_gates
 
 
 class RainWorldWebWorld(WebWorld):
@@ -114,7 +112,7 @@ class RainWorldWorld(World):
         }
         precollect = {
             "MSC": 1 if self.options.msc_enabled else 0,
-            f"Scug-{setting_to_scug_id[self.options.which_gamestate.value]}": 1,
+            f"Scug-{self.options.starting_scug}": 1,
             "Option-Glow": 0 if self.options.difficulty_glow else 1,
         }
 
