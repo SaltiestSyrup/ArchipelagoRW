@@ -115,9 +115,12 @@ def get_starts(options: RainWorldOptions) -> list[str]:
     if code == "SS":
         ret.remove("SS_S04")
 
-    # dark shelters near filtration system
-    if code == "SB" and options.difficulty_glow:
-        ret.remove("SB_S02")
-        ret.remove("SB_S04")
+    if options.difficulty_glow:
+        # dark shelters near filtration system
+        if code == "SB":
+            ret.remove("SB_S02")
+            ret.remove("SB_S04")
+        elif code == "VS":
+            ret.remove("VS_S03")
 
     return ret

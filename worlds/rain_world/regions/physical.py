@@ -39,12 +39,19 @@ def _generate(_: RainWorldOptions) -> list[PhysicalRegion | ConnectionData]:
             case "SB":
                 # Not in logic (except for Saint) to go back up the SB ravine.
                 ravine = {"SB_A10", "SB_F03", "SB_TOPSIDE", "SB_S09", "GATE_LF_SB[SB]"}
+                filt = {"SB_C05", "SB_C06", "SB_s03", "SB_S04", "SB_D04", "SB_F02", "SB_I01", "SB_E07", "SB_C10",
+                        "SB_B04", "SB_S10", "SB_G04", "GATE_SB_VS[SB]", "SB_F01", "SB_J03", "GATE_DS_SB[SB]", "SB_S02"}
                 ret += [
-                    PhysicalRegion("Subterranean", "SB", rooms.difference(ravine)),
+                    PhysicalRegion("Subterranean", "SB", rooms.difference(ravine.union(filt))),
                     PhysicalRegion("Subterranean ravine", "SB^", ravine),
                     ConnectionData("Subterranean", "Subterranean ravine", "Down the ravine"),
                     ConnectionData("Subterranean ravine", "Subterranean ravine", "Up the ravine",
                                    Simple("Scug-Saint")),
+
+                    PhysicalRegion("Filtration System", "SB^2", filt),
+                    ConnectionData("Subterranean", "Filtration System", "Enter Filtration System",
+                                   Simple(["The Glow", "Option-Glow"], 1)),
+                    ConnectionData("Filtration System", "Subterranean", "Exit Filtration System"),
                 ]
 
             case "SS":
@@ -60,13 +67,18 @@ def _generate(_: RainWorldOptions) -> list[PhysicalRegion | ConnectionData]:
                 # Not in logic to go through Sump Tunnel as Artificer.
                 sump = {"VS_B15", "VS_A11", "VS_B14", "VS_A12", "VS_A15", "VS_B18", "VS_D05", "VS_C08", "VS_E01",
                         "VS_B05", "VS_D02", "VS_S02", "GATE_SL_VS[VS]"}
+                filt = {"VS_C10", "VS_C12", "VS_C11", "VS_E02", "VS_B06", "BS_S03", "VS_H01", "GATE_SB_VS[VS]"}
                 ret += [
-                    PhysicalRegion("Pipeyard", "VS", rooms.difference(sump)),
+                    PhysicalRegion("Pipeyard", "VS", rooms.difference(sump.union(filt))),
                     PhysicalRegion("Sump Tunnel", "VS^", sump),
                     ConnectionData("Pipeyard", "Sump Tunnel", "Enter Sump Tunnel",
                                    Simple(list(set(scugs_all).difference({"Artificer"})), 1)),
                     ConnectionData("Sump Tunnel", "Pipeyard", "Exit Sump Tunnel",
-                                   Simple(list(set(scugs_all).difference({"Artificer"})), 1))
+                                   Simple(list(set(scugs_all).difference({"Artificer"})), 1)),
+                    PhysicalRegion("Pipeyard filtration", "VS^2", filt),
+                    ConnectionData("Pipeyard", "Pipeyard filtration", "Enter dark filtration area",
+                                   Simple(["The Glow", "Option-Glow"], 1)),
+                    ConnectionData("Pipeyard filtration", "Pipeyard", "Exit dark filtration area"),
                 ]
 
             # case "GW":
