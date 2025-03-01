@@ -9,9 +9,7 @@ from ..conditions.classes import Condition, Simple, AnyOf, AllOf
 def generate_cond_chieftain(options: RainWorldOptions) -> Condition:
     return AllOf(
         (
-            Simple([f"Access-{region}" for region in game_data.general.scavenger_tolls], 1)
-            if options.difficulty_chieftain else
-            Simple(["Scavenger", "ScavengerElite"], 1)
+            Simple("Toll") if options.difficulty_chieftain else Simple(["Scavenger", "ScavengerElite"], 1)
         ),
         Simple([f"Scug-{s}" for s in set(game_data.general.setting_to_scug_id.values()) - {"Artificer"}], 1)
     )
