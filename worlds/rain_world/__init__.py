@@ -47,6 +47,7 @@ class RainWorldWorld(World):
     location_count = 0
     starting_room = 'SU_C04'
     start_is_default = True
+    start_is_connected = False
 
     def generate_early(self) -> None:
         # This is the earliest that the options are available.  Player YAML failures should be tripped here.
@@ -84,8 +85,10 @@ class RainWorldWorld(World):
             self.connect_starting_region(self.starting_room)
 
     def connect_starting_region(self, room: str):
-        start = self.multiworld.get_region(room_to_region[room], self.player)
-        self.multiworld.get_region('Menu', self.player).connect(start, "Starting region")
+        if not self.start_is_connected:
+            start = self.multiworld.get_region(room_to_region[room], self.player)
+            self.multiworld.get_region('Menu', self.player).connect(start, "Starting region")
+            self.start_is_connected = True
 
     def create_item(self, name: str) -> RainWorldItem:
         return items.all_items[name].generate_item(self.player)
