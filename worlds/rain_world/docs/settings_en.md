@@ -7,13 +7,6 @@ How many extra karma cap items are placed into the pool.
 When set to `0`, there are exactly enough karma items to raise max karma to 10,
 regardless of the selected victory condition.
 
-### Passage progress without Survivor
-`Passage progress without Survivor` (PPwS) is a setting in the Rain World Remix settings
-which affects when The Dragon Slayer, The Friend, and The Wanderer can be earned.
-Enabling PPwS makes it possible to earn these passages without first earning The Survivor.
-
-The Randomizer mod will override the behavior in-game to match your player YAML setting.
-
 ### Victory condition
 The default victory condition, ascension, logically requires raising max karma to 10
 (which requires 8 karma items) and accessing Subterranean (or, for Saint, Rubicon).

@@ -7,11 +7,22 @@ from .conditions import GameStateFlag
 
 #################################################################
 # IMPORTANT SETTINGS
-class PassageProgressWithoutSurvivor(Toggle):
-    """Whether The Dragon Slayer, The Friend, and The Wanderer are completable without completing The Survivor.
+class PassageProgressWithoutSurvivor(Choice):
+    """How The Survivor affects earning other passages.
+
+    **Disabled**: Only The Martyr, The Mother, and The Pilgrim can be earned before The Survivor.
+
+    **Enabled**: The Dragon Slayer, The Friend, and The Wanderer can additionally be earned before The Survivor.
+
+    **Bypassed**: Every passage can be earned before The Survivor.
+
     This will override the actual value of the corresponding setting in the Rain World Remix menu."""
     display_name = "Passage progress without Survivor"
-    default = True
+    option_disabled = 0
+    option_enabled = 1
+    option_bypassed = 2
+
+    default = 2
 
 
 class WhichGamestate(Choice):

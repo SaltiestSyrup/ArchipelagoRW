@@ -65,8 +65,10 @@ There are several unique checks, mostly associated with the iterators:
 ## Passages
 Completing a passage is a check, and the passage tokens (which allow for fast-travel)
 that they would normally give are placed in the item pool.
-The logical requirement for each passage varies.
-There are four passages that may be earned before The Survivor is earned:
+The logical requirement varies between passages
+and also depends on the `Passage progress without Survivor` setting in the player YAML.
+
+There are four passages that may always be earned before The Survivor is earned, regardless of settings:
 
 | Passage           | Eligibility                                 | Requirements                                    |
 |-------------------|---------------------------------------------|-------------------------------------------------|
@@ -76,7 +78,7 @@ There are four passages that may be earned before The Survivor is earned:
 | The Survivor      | Any                                         | Max karma at least 5                            |
 
 There are three passages that may be earned before The Survivor,
-but if and only if the `Passage progress without survivor` setting is enabled:
+but only if the `Passage progress without Survivor` setting is either `enabled` or `bypassed`:
 
 | Passage           | Eligibility | Requirements                                                                                                                              |
 |-------------------|-------------|-------------------------------------------------------------------------------------------------------------------------------------------|
@@ -84,7 +86,8 @@ but if and only if the `Passage progress without survivor` setting is enabled:
 | The Friend        | Any         | Access to one lizard                                                                                                                      |
 | The Wanderer      | Any         | Access to every story region for the given slugcat; each individual pip is also a check                                                   |
 
-The remaining seven passages can only be earned after The Survivor has been earned:
+The remaining seven passages require The Survivor unless
+`Passage progress without Survivor` is `bypassed`:
 
 | Passage       | Eligibility                                             | Requirements                                                                                                                                                                                |
 |---------------|---------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
