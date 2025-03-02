@@ -129,15 +129,41 @@ food_quest_items = [
     "EggBug", "LillyPuck", "YellowLizard", "TubeWorm", "SSOracleSwarmer", "Centiwing",
     "DandelionPeach", "CyanLizard", "GooieDuck", "RedCentipede"
 ]
-alt_food_quest_items = {"Salamander": ["Salamander", "EelLizard"], "RedCentipede": ["RedCentipede", "AquaCenti"]}
 
-food_quest_survivor_inedible = {
-    "BlackLizard", "JetFish", "Salamander", "Snail", "EggBug", "YellowLizard", "TubeWorm", "CyanLizard"
+food_quest_expanded_items = [
+    "Centipede", "SmallCentipede", "VultureGrub", "SmallNeedleWorm",
+    "GreenLizard", "BlueLizard", "PinkLizard", "WhiteLizard", "RedLizard", "SpitLizard", "ZoopLizard", "TrainLizard",
+    "BigSpider", "SpitterSpider", "MotherSpider",
+    "Vulture", "KingVulture", "MirosVulture",
+    "LanternMouse", "CicadaA", "CicadaB", "Yeek", "BigNeedleWorm",
+    "DropBug", "MirosBird", "Scavenger", "ScavengerElite",
+    "DaddyLongLegs", "BrotherLongLegs", "TerrorLongLegs",
+    "PoleMimic", "TentaclePlant", "BigEel", "Inspector",
+]
+
+extreme_threat_creatures = {
+    "RedLizard", "TrainLizard", "RedCentipede", "AquaCenti", "BigEel", "MirosBird", "KingVulture", "MirosVulture",
+    "DaddyLongLegs", "BrotherLongLegs", "TerrorLongLegs", "ScavengerElite"
+}
+
+alt_food_quest_items = {
+    "Salamander": ["Salamander", "EelLizard"],
+    "RedCentipede": ["RedCentipede", "AquaCenti"],
+    "VultureGrub": ["VultureGrub", "DeadVultureGrub"],
+}
+
+food_quest_large_creatures = {
+    "BlackLizard", "JetFish", "Salamander", "Snail", "EggBug", "YellowLizard", "TubeWorm", "CyanLizard",
+    "GreenLizard", "BlueLizard", "PinkLizard", "WhiteLizard", "RedLizard", "SpitLizard", "ZoopLizard", "TrainLizard",
+    "BigSpider", "SpitterSpider", "MotherSpider",
+    "Vulture", "KingVulture", "MirosVulture",
+    "LanternMouse", "CicadaA", "CicadaB", "Yeek", "BigNeedleWorm",
+    "DropBug", "MirosBird", "Scavenger", "ScavengerElite",
+    "DaddyLongLegs", "BrotherLongLegs", "TerrorLongLegs",
 }
 food_quest_spearmaster_inedible = {
     "SlimeMold", "DangleFruit", "WaterNut", "JellyFish", "GlowWeed", "LillyPuck", "DandelionPeach", "GooieDuck"
 }
-food_quest_saint_inedible = {
-    "Fly", "BlackLizard", "JellyFish", "JetFish", "Salamander", "Snail", "Hazer", "EggBug", "YellowLizard", "TubeWorm",
-    "Centiwing", "CyanLizard", "RedCentipede"
-}
+food_quest_spearmaster_only = {"PoleMimic", "TentaclePlant", "BigEel", "Inspector"}
+
+food_quest_saint_inedible = {"Fly", "JellyFish", "Hazer"}

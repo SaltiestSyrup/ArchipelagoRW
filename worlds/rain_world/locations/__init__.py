@@ -8,6 +8,7 @@ from ..options import RainWorldOptions
 # Passages          5000 - 5046
 # Echoes            5070 - 5079
 # Food Quest        5250 - 5271
+#   Expanded        5272 - 5305
 
 
 def generate(options: RainWorldOptions) -> list[LocationData]:
