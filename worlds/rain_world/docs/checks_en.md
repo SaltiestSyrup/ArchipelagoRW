@@ -92,20 +92,37 @@ While randomized, the food quest appears for slugcats other than Gourmand.
 Each slugcat has the ability to fulfill part of the food quest,
 but only Hunter and Gourmand can complete it logically.
 
-| Food                                                                                                                           | Monk<br/>Survivor | Rivulet | Hunter<br/>Gourmand | Artificer    | Spearmaster | Saint |
-|--------------------------------------------------------------------------------------------------------------------------------|-------------------|---------|---------------------|--------------|-------------|-------|
-| Neuron Fly                                                                                                                     | ✔                 | ✔       | ✔                   | ✔            | ✔           | ✔     |
-| Glow Weed                                                                                                                      | ✔                 | ✔       | ✔                   | <sup>a</sup> |             | ✔     |
-| Blue Fruit<br/>Bubble Fruit<br/>Dandelion Peach<br/>Gooieduck<br/>Lilypuck<br/>Slime Mold                                      | ✔                 | ✔       | ✔                   | ✔            |             | ✔     |
-| Batfly<br/>Hazer                                                                                                               | ✔                 | ✔       | ✔                   | ✔            | ✔           |       |
-| Black Lizard<br/>Salamander / Eel Lizard<br/>Yellow Lizard<br/>Cyan Lizard<br/>Jetfish<br/>Snail<br/>Eggbug<br/>Grappling Worm |                   |         | ✔                   | ✔            | ✔           |       |
-| Aquapede / Red Centipede<br/>Centiwing                                                                                         | ✔<sup>b</sup>     | ✔       | ✔                   | ✔            | ✔           |       |
-| Jellyfish                                                                                                                      | ✔                 | ✔       | ✔                   | ✔            |             |       |
+| Food                                                                                                                           | Monk<br/>Survivor | Rivulet | Hunter<br/>Gourmand<br/>Sofanthiel | Artificer    | Spearmaster | Saint |
+|--------------------------------------------------------------------------------------------------------------------------------|-------------------|---------|------------------------------------|--------------|-------------|-------|
+| Neuron Fly                                                                                                                     | ✔                 | ✔       | ✔                                  | ✔            | ✔           | ✔     |
+| Glow Weed                                                                                                                      | ✔                 | ✔       | ✔                                  | <sup>a</sup> |             | ✔     |
+| Blue Fruit<br/>Bubble Fruit<br/>Dandelion Peach<br/>Gooieduck<br/>Lilypuck<br/>Slime Mold                                      | ✔                 | ✔       | ✔                                  | ✔            |             | ✔     |
+| Batfly<br/>Hazer                                                                                                               | ✔                 | ✔       | ✔                                  | ✔            | ✔           |       |
+| Black Lizard<br/>Salamander / Eel Lizard<br/>Yellow Lizard<br/>Cyan Lizard<br/>Jetfish<br/>Snail<br/>Eggbug<br/>Grappling Worm |                   |         | ✔                                  | ✔            | ✔           |       |
+| Aquapede / Red Centipede<br/>Centiwing                                                                                         | ✔<sup>b</sup>     | ✔       | ✔                                  | ✔            | ✔           |       |
+| Jellyfish                                                                                                                      | ✔                 | ✔       | ✔                                  | ✔            |             |       |
 
 - <sup>a</sup> Artificer does not find Glow Weed in their worldstate,
 but may receive it as a filler item.  This check is not in logic.
 - <sup>b</sup> Monk and Survivor can only find Red Centipedes by lineage -
 which is not in logic - but Aquapedes are available without lineage.
+
+## Expanded food quest
+If the `Expanded food quest` YAML setting is enabled, most creatures have entries in the food quest.
+The added creatures have similar accessibilities, mostly differing only due to what worldstates they can be found in.
+
+| Food                                                    | Monk<br/>Survivor<br/>Rivulet | Hunter | Gourmand | Artificer | Spearmaster | Saint | Sofanthiel |
+|---------------------------------------------------------|-------------------------------|--------|----------|-----------|-------------|-------|------------|
+| Centipede<br/>Vulture Grub<br/>Infant Noodlefly         | ✔                             | ✔      | ✔        | ✔         | ✔           |       | ✔          |
+| Strawberry Lizard<br/>Train Lizard                      |                               |        |          |           |             |       | ✔          |
+| Miros Vulture                                           |                               |        |          | ✔         | ✔           |       | ✔          | 
+| Vulture<br/>King Vulture                                |                               | ✔      |          | ✔         | ✔           |       |            | 
+| Yeek                                                    |                               |        | ✔        |           |             |       | ✔          |
+| Pole Plant<br/>Monster Kelp<br/>Leviathan<br/>Inspector |                               |        |          |           | ✔           |       |            |
+| Other                                                   |                               | ✔      | ✔        | ✔         | ✔           |       | ✔          |
+"Other" includes the remaining Lizards (Green, Blue, Pink, White, Red, and Caramel),
+Spiders (Big, Spitter, and Mother), Lantern Mice, Cicadas (black and white),
+adult Noodleflies, Dropwigs, Miros Birds, and Scavengers (regular and elite).
 
 ## Notes
 
