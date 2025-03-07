@@ -219,6 +219,12 @@ class ChecksTokensPearls(Toggle):
     visibility = Visibility.none
 
 
+class ChecksDevTokens(Toggle):
+    """Whether dev commentary tokens should be checks.  Requires MSC."""
+    display_name = "Dev tokens"
+    default = False
+
+
 #################################################################
 # DIFFICULTY SETTINGS
 class DifficultyHunter(Range):
@@ -623,9 +629,10 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     checks_foodquest: ChecksFoodQuest
     passage_priority: PassagePriority
     checks_tokens_pearls: ChecksTokensPearls
+    checks_devtokens: ChecksDevTokens
 
     group_checkpool = [
-        ChecksBroadcasts, ChecksFoodQuest, PassagePriority, ChecksTokensPearls
+        ChecksBroadcasts, ChecksFoodQuest, PassagePriority, ChecksTokensPearls, ChecksDevTokens
     ]
 
     #################################################################

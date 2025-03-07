@@ -32,7 +32,8 @@ OBJECT_WHITELIST = [
     "SeedCob",  # for The Monk
     "BubbleGrass",  # for waterway traversal
 ]
-SHINY_LIST = ["BlueToken", "GreenToken", "RedToken", "GoldToken", "WhiteToken", "UniqueDataPearl", "DataPearl"]
+SHINY_LIST = ["BlueToken", "GreenToken", "RedToken", "GoldToken", "WhiteToken", "DevToken",
+              "UniqueDataPearl", "DataPearl"]
 
 ########################################################################################################################
 data = {}

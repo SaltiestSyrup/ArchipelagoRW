@@ -25,7 +25,7 @@ class TokenOrPearl(LocationData):
 
     def _gen(self) -> Callable[[RainWorldOptions], bool]:
         def inner(options: RainWorldOptions) -> bool:
-            if self.full_name.startswith("DevToken"):
+            if options.msc_enabled and self.full_name.startswith("DevToken") and not options.checks_devtokens:
                 return False
             if self.full_name.startswith("Broadcast"):
                 return options.msc_enabled and (
@@ -37,19 +37,19 @@ class TokenOrPearl(LocationData):
         return inner
 
 
-def token_name(name: str, kind: str, _region: str) -> str:
+def token_name(name: str, kind: str, _room: str) -> str:
     if kind == "GoldToken":  # arena level unlock
         return f'Token-L-{name}'
     elif kind == "RedToken":  # safari level unlock
         return f'Token-S-{name}'
     elif kind == "WhiteToken":
-        return f'Broadcast-{name}-{_region}'
+        return f'Broadcast-{name}-{_room[:2]}'
     elif kind == "DevToken":
-        return f'DevToken-{name}-{_region}'
+        return f'DevToken-{_room}'
     elif "Token" in kind:
-        return f'Token-{name}-{_region}'
+        return f'Token-{name}-{_room[:2]}'
     else:
-        return f'Pearl-{name}-{_region}'
+        return f'Pearl-{name}-{_room[:2]}'
 
 
 for scuglist, (dlcstate, dlcstate_data) in zip((scugs_vanilla, scugs_all), static_data.items()):
@@ -57,7 +57,7 @@ for scuglist, (dlcstate, dlcstate_data) in zip((scugs_vanilla, scugs_all), stati
         for room, room_data in region_data.items():
             if "shinies" in room_data.keys():
                 for shiny_name, shiny_data in room_data["shinies"].items():
-                    name = token_name(shiny_name, shiny_data["kind"], region)
+                    name = token_name(shiny_name, shiny_data["kind"], room)
                     loc = locations.setdefault(name, TokenOrPearl(name, room, next_offset, GameStateFlag(0)))
 
                     can_see = (
