@@ -39,13 +39,13 @@ def _generate(options: RainWorldOptions) -> list[PhysicalRegion | ConnectionData
             case "SB":
                 # Not in logic (except for Saint) to go back up the SB ravine.
                 ravine = {"SB_A10", "SB_F03", "SB_TOPSIDE", "SB_S09", "GATE_LF_SB[SB]"}
-                filt = {"SB_C05", "SB_C06", "SB_s03", "SB_S04", "SB_D04", "SB_F02", "SB_I01", "SB_E07", "SB_C10",
+                filt = {"SB_C05", "SB_C06", "SB_S03", "SB_S04", "SB_D04", "SB_F02", "SB_I01", "SB_E07", "SB_C10",
                         "SB_B04", "SB_S10", "SB_G04", "GATE_SB_VS[SB]", "SB_F01", "SB_J03", "GATE_DS_SB[SB]", "SB_S02"}
                 ret += [
                     PhysicalRegion("Subterranean", "SB", rooms.difference(ravine.union(filt))),
                     PhysicalRegion("Subterranean ravine", "SB^", ravine),
-                    ConnectionData("Subterranean", "Subterranean ravine", "Down the ravine"),
-                    ConnectionData("Subterranean ravine", "Subterranean ravine", "Up the ravine",
+                    ConnectionData("Subterranean ravine", "Subterranean", "Down the ravine"),
+                    ConnectionData("Subterranean", "Subterranean ravine", "Up the ravine",
                                    Simple("Scug-Saint")),
 
                     PhysicalRegion("Filtration System", "SB^2", filt),
