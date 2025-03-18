@@ -51,16 +51,16 @@ all echoes are considered accessible once they are reachable.
 ## Unique checks
 There are several unique checks, mostly associated with the iterators:
 
-| Check                                 | Eligibility                 | Requirements                                                             |
-|---------------------------------------|-----------------------------|--------------------------------------------------------------------------|
-| Eat a neuron fly                      | Any                         | Access to any neuron fly                                                 |
-| Gift a neuron fly to Moon             | Monk, Survivor, or Gourmand | Access to a neuron fly and Moon                                          |
-| Meet Five Pebbles                     | Not Rivulet or Saint        | - Access to Five Pebbles<br/>- For Sofanthiel, the Mark of Communication |
-| Meet Looks to the Moon                | Not Artificer or Sofanthiel | - Access to Looks to the Moon<br/>- For Hunter, the green neuron fly     |
-| Revive Looks to the Moon              | Hunter                      | - Access to Looks to the Moon<br/>- The green neuron fly                 |
-| Remove Five Pebbles' rarefaction cell | Rivulet                     | Access to the heart of The Rot                                           |
-| Ascend Looks to the Moon              | Saint                       | - Access to Looks to the Moon<br/>-Max karma 10                          |
-| Ascend Five Pebbles                   | Saint                       | - Access to Five Pebbles<br/>-Max karma 10                               |
+| Check                                 | Eligibility                 | Requirements                                                  |
+|---------------------------------------|-----------------------------|---------------------------------------------------------------|
+| Eat a neuron fly                      | Any                         | Access to a neuron fly                                        |
+| Gift a neuron fly to Moon             | Monk, Survivor, or Gourmand | Access to a neuron fly and Looks to the Moon                  |
+| Meet Five Pebbles                     | Not Rivulet or Saint        | - Access to Five Pebbles<br/>- The Mark of Communication      |
+| Meet Looks to the Moon                | Not Artificer or Sofanthiel | - Access to Looks to the Moon<br/>- The Mark of Communication |
+| Revive Looks to the Moon              | Hunter                      | - Access to Looks to the Moon<br/>- The green neuron fly      |
+| Remove Five Pebbles' rarefaction cell | Rivulet                     | Access to the heart of The Rot                                |
+| Ascend Looks to the Moon              | Saint                       | - Access to Looks to the Moon<br/>-Max karma 10               |
+| Ascend Five Pebbles                   | Saint                       | - Access to Five Pebbles<br/>-Max karma 10                    |
 
 ## Passages
 Completing a passage is a check, and the passage tokens (which allow for fast-travel)
@@ -97,25 +97,73 @@ The remaining seven passages can only be earned after The Survivor has been earn
 | The Scholar   | Not Monk unless MSC is enabled; Not Saint or Sofanthiel | - The Mark of Communication<br/>- Access to three colored pearls<br/>- For Monk, Survivor, and Gourmand: access to Looks to the Moon                                                        |
 
 ## Food quest
-If MSC is enabled, each item of the food quest is a check when completed.
-While randomized, the food quest appears for slugcats other than Gourmand.
-Each slugcat has the ability to fulfill part of the food quest,
-but only Hunter and Gourmand can complete it logically.
+If an MSC gamestate is selected and the `Food quest` setting is enabled,
+each item of the food quest is a check when completed.
+Like the passages, food quest checks are awarded upon successful hibernation.
+Each slugcat has the ability to fulfill at least some part of the food quest.
 
-| Food                                                                                                                           | Monk<br/>Survivor | Rivulet | Hunter<br/>Gourmand | Artificer    | Spearmaster | Saint |
-|--------------------------------------------------------------------------------------------------------------------------------|-------------------|---------|---------------------|--------------|-------------|-------|
-| Neuron Fly                                                                                                                     | ✔                 | ✔       | ✔                   | ✔            | ✔           | ✔     |
-| Glow Weed                                                                                                                      | ✔                 | ✔       | ✔                   | <sup>a</sup> |             | ✔     |
-| Blue Fruit<br/>Bubble Fruit<br/>Dandelion Peach<br/>Gooieduck<br/>Lilypuck<br/>Slime Mold                                      | ✔                 | ✔       | ✔                   | ✔            |             | ✔     |
-| Batfly<br/>Hazer                                                                                                               | ✔                 | ✔       | ✔                   | ✔            | ✔           |       |
-| Black Lizard<br/>Salamander / Eel Lizard<br/>Yellow Lizard<br/>Cyan Lizard<br/>Jetfish<br/>Snail<br/>Eggbug<br/>Grappling Worm |                   |         | ✔                   | ✔            | ✔           |       |
-| Aquapede / Red Centipede<br/>Centiwing                                                                                         | ✔<sup>b</sup>     | ✔       | ✔                   | ✔            | ✔           |       |
-| Jellyfish                                                                                                                      | ✔                 | ✔       | ✔                   | ✔            |             |       |
+| Food                                                                                                                           | Monk<br/>Survivor<br/>Rivulet | Hunter<br/>Gourmand | Artificer    | Spearmaster | Saint |
+|--------------------------------------------------------------------------------------------------------------------------------|-------------------------------|---------------------|--------------|-------------|-------|
+| Neuron Fly<br/>Mushroom                                                                                                        | ✔                             | ✔                   | ✔            | ✔           | ✔     |
+| Glow Weed                                                                                                                      | ✔                             | ✔                   | <sup>a</sup> |             | ✔     |
+| Blue Fruit<br/>Bubble Fruit<br/>Dandelion Peach<br/>Gooieduck<br/>Lilypuck<br/>Slime Mold                                      | ✔                             | ✔                   | ✔            |             | ✔     |
+| Batfly<br/>Hazer                                                                                                               | ✔                             | ✔                   | ✔            | ✔           |       |
+| Black Lizard<br/>Salamander / Eel Lizard<br/>Yellow Lizard<br/>Cyan Lizard<br/>Jetfish<br/>Snail<br/>Eggbug<br/>Grappling Worm |                               | ✔                   | ✔            | ✔           |       |
+| Aquapede / Red Centipede<sup>b</sup><br/>Centiwing                                                                             | ✔<sup>c</sup>                 | ✔                   | ✔            | ✔           |       |
+| Jellyfish                                                                                                                      | ✔                             | ✔                   | ✔            |             |       |
 
-- <sup>a</sup> Artificer does not find Glow Weed in their worldstate,
-but may receive it as a filler item.  This check is not in logic.
-- <sup>b</sup> Monk and Survivor can only find Red Centipedes by lineage -
+- <sup>a</sup> Artificer can eat Glow Weed, but does not find any in their worldstate.
+- <sup>b</sup> This check is not generated unless the `Extreme threats` setting is enabled.
+- <sup>c</sup> Monk and Survivor can only find Red Centipedes by lineage -
 which is not in logic - but Aquapedes are available without lineage.
+
+### Expanded food quest
+If the food quest is enabled and `Expanded food quest` is enabled,
+then an additional set of food quest checks are added.
+
+| Food                                                                                                                                                                                                                                                                                                                               | Monk<br/>Survivor<br/>Rivulet | Hunter | Gourmand | Artificer | Spearmaster | Saint | Sofanthiel |
+|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------|--------|----------|-----------|-------------|-------|------------|
+| Popcorn Plant<sup>a</sup>                                                                                                                                                                                                                                                                                                          | ✔                             | ✔      | ✔        | ✔         | ✔           | ✔     | ✔          |
+| Centipede<sup>b</sup><br/>Noodlefly<sup>b</sup><br/>Vulture Grub                                                                                                                                                                                                                                                                   | ✔                             | ✔      | ✔        | ✔         | ✔           |       | ✔          |
+| Green Lizard<br/>Blue Lizard<br/>Pink Lizard<br/>White Lizard<br/>Red Lizard<sup>c</sup><br/>Caramel Lizard<br/>Big Spider<br/>Spitter Spider<sup>c</sup><br/>Mother Spider<sup>c</sup><br/>Lantern Mouse<br/>Cicada<sup>d</sup><br/>Dropwig<br/>Miros Bird<sup>c</sup><br/>Scavenger<sup>d</sup><br/>Rot<sup>c</sup> <sup>d</sup> |                               | ✔      | ✔        | ✔         | ✔           |       | ✔          |
+| Strawberry Lizard<br/>Train Lizard<sup>c</sup>                                                                                                                                                                                                                                                                                     |                               |        |          |           |             |       | ✔          |
+| Vulture<br/>King Vulture<sup>c</sup>                                                                                                                                                                                                                                                                                               |                               | ✔      | ✔        | ✔         | ✔           |       |            |
+| Miros Vulture<sup>c</sup>                                                                                                                                                                                                                                                                                                          |                               |        |          | ✔         | ✔           |       | ✔          |
+| Yeek                                                                                                                                                                                                                                                                                                                               |                               |        | ✔        |           |             |       | ✔          |
+| Pole Plant<br/>Monster Kelp<br/>Leviathan<sup>c</sup><br/>Inspector                                                                                                                                                                                                                                                                |                               |        |          |           | ✔           |       |            |
+
+- <sup>a</sup> This includes the seeds that drop during the blizzard for Saint. 
+- <sup>b</sup> This includes infants or adults.
+- <sup>c</sup> This check is not generated unless `Extreme threats` is enabled.
+- <sup>d</sup> This includes all variants.
+
+## Shelters
+If the `Sheltersanity` setting is enabled, then every functional shelter is a check when visited.
+Shelters which do not function in a given worldstate are not counted.
+
+| Region                   | Vanilla shelter count | MSC shelter count | Notes                                                                                                                  |
+|--------------------------|:----------------------|-------------------|------------------------------------------------------------------------------------------------------------------------|
+| Chimney Canopy           | 4                     | 6                 |                                                                                                                        |
+| Drainage System          | 4                     | 4                 |                                                                                                                        |
+| The Exterior             | 7                     | 7                 |                                                                                                                        |
+| Farm Arrays              | 7                     | 7                 | 1 is broken for Hunter, Artificer, Spearmaster, and Saint.                                                             |
+| Five Pebbles             | 5                     | 5                 |                                                                                                                        |
+| Garbage Wastes           | 8                     | 9                 |                                                                                                                        |
+| Industrial Complex       | 6                     | 6                 | 1 is broken for Hunter, Artificer, Spearmaster, and Saint.                                                             |
+| Outskirts                | 3                     | 4                 | 1 is only accessible for Monk, Survivor, and Gourmand through Outer Expanse.                                           |
+| Shaded Citadel           | 10                    | 11                |                                                                                                                        |
+| Shoreline                | 10                    | 14                | 1 is broken for Survivor, Hunter, Gourmand, Artificer, and Saint.<br/>1 other is only accessible to Rivulet and Saint. |
+| Sky Islands              | 3                     | 4                 |                                                                                                                        |
+| Subterranean             | 7                     | 9                 |                                                                                                                        |
+| Looks to the Moon        |                       | 12                |                                                                                                                        |
+| Metropolis               |                       | 9                 |                                                                                                                        |
+| Outer Expanse            |                       | 7                 | 1 is broken for Monk.                                                                                                  |
+| Pipeyard                 |                       | 10                | 1 is broken for Artificer and Spearmaster.                                                                             |
+| The Rot                  |                       | 9                 |                                                                                                                        |
+| Silent Construct         |                       | 14                |                                                                                                                        |
+| Submerged Superstructure |                       | 10                | 1 is broken for all slugcats except Monk.<br/>3 others are only accessible for Rivulet.                                |
+| Undergrowth              |                       | 4                 |                                                                                                                        |
+| Waterfront Facility      |                       | 10                | 1 is only accessible for Spearmaster.                                                                                  |
 
 ## Notes
 
