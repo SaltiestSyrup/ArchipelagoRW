@@ -1,5 +1,3 @@
-from typing import Callable
-
 from BaseClasses import MultiWorld
 from .classes import RoomLocation
 from ..conditions import GameStateFlag
@@ -7,9 +5,6 @@ from ..game_data.general import scugs_all, scugs_vanilla
 from ..options import RainWorldOptions
 from ..game_data import static_data
 from ..regions.classes import room_to_region
-
-locations = {}
-next_offset = 0
 
 
 class TokenOrPearl(RoomLocation):
@@ -45,25 +40,35 @@ def token_name(name: str, kind: str, _region: str) -> str:
         return f'Pearl-{name}-{_region}'
 
 
-for scuglist, (dlcstate, dlcstate_data) in zip((scugs_vanilla, scugs_all), static_data.items()):
-    for region, region_data in dlcstate_data.items():
-        for room, room_data in region_data.items():
-            if "shinies" in room_data.keys():
-                for shiny_name, shiny_data in room_data["shinies"].items():
-                    name = token_name(shiny_name, shiny_data["kind"], region)
-                    loc = locations.setdefault(name, TokenOrPearl(name, room, next_offset, GameStateFlag(0)))
+def initialize() -> dict[str, TokenOrPearl]:
+    offset = 0
+    ret = {}
 
-                    can_see = (
-                        room_data.get("whitelist", set(scuglist))
-                        .difference(room_data.get("blacklist", set()))
-                        .difference(shiny_data.get("filter", set()))
-                        .difference(room_data.get("alted", set()))
-                        .union(shiny_data.get("whitelist", set()))
-                        .difference({""})
-                    )
-                    loc.generation_flag[dlcstate, can_see] = True
+    for scuglist, (dlcstate, dlcstate_data) in zip((scugs_vanilla, scugs_all), static_data.items()):
+        for region, region_data in dlcstate_data.items():
+            for room, room_data in region_data.items():
+                if "shinies" in room_data.keys():
+                    for shiny_name, shiny_data in room_data["shinies"].items():
+                        name = token_name(shiny_name, shiny_data["kind"], region)
+                        if (loc := ret.get(name, None)) is None:
+                            loc = TokenOrPearl(name, room, offset, GameStateFlag(0))
+                            ret[name] = loc
+                            offset += 1
 
-                    next_offset += 1
+                        can_see = (
+                            room_data.get("whitelist", set(scuglist))
+                            .difference(room_data.get("blacklist", set()))
+                            .difference(shiny_data.get("filter", set()))
+                            .difference(room_data.get("alted", set()))
+                            .union(shiny_data.get("whitelist", set()))
+                            .difference({""})
+                        )
+                        loc.generation_flag[dlcstate, can_see] = True
+
+    return ret
+
+
+locations = initialize()
 
 
 def generate(_: RainWorldOptions) -> list[RoomLocation]:

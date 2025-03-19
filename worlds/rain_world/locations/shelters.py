@@ -6,8 +6,6 @@ from ..options import RainWorldOptions
 from ..game_data import static_data
 from ..utils import room_effective_whitelist as REW
 
-_offset = 5350
-
 broken_shelters = {
     "HI_S03": {"Red", "Artificer", "Spear", "Saint"},
     "LF_S07": {"Red", "Artificer", "Spear", "Saint"},
@@ -19,10 +17,8 @@ broken_shelters = {
 
 
 class Shelter(RoomLocation):
-    def __init__(self, room: str):
-        global _offset
-        super().__init__(f"Shelter - {room}", [], _offset, room)
-        _offset += 1
+    def __init__(self, room: str, offset: int):
+        super().__init__(f"Shelter - {room}", [], offset, room)
         self.gamestates = GameStateFlag(0)
 
     def pre_generate(self, player: int, multiworld: MultiWorld, options: RainWorldOptions) -> bool:
@@ -32,12 +28,18 @@ class Shelter(RoomLocation):
 
 
 def initialize() -> dict[str, Shelter]:
+    offset = 5350
     ret: dict[str, Shelter] = {}
+
     for dlcstate, dlcstate_data in static_data.items():
         for region, region_data in dlcstate_data.items():
             for room, room_data in region_data.items():
                 if "SHELTER" in room_data.get("tags", set()):
-                    shelter_data = ret.setdefault(room, Shelter(room))
+                    if (shelter_data := ret.get(room, None)) is None:
+                        shelter_data = Shelter(room, offset)
+                        ret[room] = shelter_data
+                        offset += 1
+
                     whitelist = REW(room_data, scugs_all if dlcstate == "MSC" else scugs_vanilla)
                     shelter_data.gamestates[dlcstate, whitelist] = True
 
