@@ -2,17 +2,19 @@ from BaseClasses import MultiWorld
 from .classes import LocationData, AbstractLocation
 from ..conditions import GameStateFlag
 from ..conditions.classes import Simple
-from ..game_data.general import extreme_threat_creatures
+from ..game_data.general import extreme_threat_creatures, wiki_names
 from ..options import RainWorldOptions
 
 _offset = 5250
 
 
 class FoodQuestPip(AbstractLocation):
-    def __init__(self, gamestates: int, items: str | list[str]):
+    def __init__(self, gamestates: int, items: str | list[str], proper_name: str | None = None):
         global _offset
         self.items = [items] if type(items) == str else items
         names = self.names(self.items)
+        if proper_name is not None:
+            names.insert(0, f"Food Quest - {proper_name}")
         super().__init__(names[0], names[1:], _offset, "Food Quest")
         _offset += 1
         self.gamestates = GameStateFlag(gamestates)
@@ -21,9 +23,12 @@ class FoodQuestPip(AbstractLocation):
 
     @staticmethod
     def names(items: list[str]) -> list[str]:
-        ret = [f"Food Quest - {' or '.join(items)}"]
-        if len(items) > 0:
-            ret += [f"Food Quest - {i}" for i in items]
+        ret = []
+        re_items = set(items).difference({"DeadHazer", "DeadVultureGrub"})
+        for itemlist in [[wiki_names[item][0] for item in re_items], re_items]:
+            ret += [f"Food Quest - {' or '.join(itemlist)}"]
+            if len(itemlist) > 0:
+                ret += [f"Food Quest - {item}" for item in itemlist]
         return ret
 
     def pre_generate(self, player: int, multiworld: MultiWorld, options: RainWorldOptions) -> bool:
@@ -62,9 +67,9 @@ pips: list[FoodQuestPip] = [
     FoodQuestPip(0b101_111_111_000, ["RedCentipede", "AquaCenti"]),
 
     FoodQuestPip(0b111_111_111_000, "SeedCob"),
-    FoodQuestPip(0b101_111_111_000, ["Centipede", "SmallCentipede"]),
+    FoodQuestPip(0b101_111_111_000, ["Centipede", "SmallCentipede"], "Centipede"),
     FoodQuestPip(0b101_111_111_000, ["VultureGrub", "DeadVultureGrub"]),
-    FoodQuestPip(0b101_111_111_000, ["SmallNeedleWorm", "BigNeedleWorm"]),
+    FoodQuestPip(0b101_111_111_000, ["SmallNeedleWorm", "BigNeedleWorm"], "Noodlefly"),
     FoodQuestPip(0b101_011_100_000, "GreenLizard"),
     FoodQuestPip(0b101_011_100_000, "BlueLizard"),
     FoodQuestPip(0b101_011_100_000, "PinkLizard"),
@@ -81,12 +86,12 @@ pips: list[FoodQuestPip] = [
     FoodQuestPip(0b001_011_100_000, "KingVulture"),
     FoodQuestPip(0b101_010_000_000, "MirosVulture"),
     FoodQuestPip(0b101_011_100_000, "LanternMouse"),
-    FoodQuestPip(0b101_011_100_000, ["CicadaA", "CicadaB"]),
+    FoodQuestPip(0b101_011_100_000, ["CicadaA", "CicadaB"], "Squidcada"),
     FoodQuestPip(0b100_001_000_000, "Yeek"),
     FoodQuestPip(0b101_011_100_000, "DropBug"),
     FoodQuestPip(0b101_011_100_000, "MirosBird"),
-    FoodQuestPip(0b101_011_100_000, ["Scavenger", "ScavengerElite"]),
-    FoodQuestPip(0b101_011_100_000, ["DaddyLongLegs", "BrotherLongLegs", "TerrorLongLegs", "HunterDaddy"]),
+    FoodQuestPip(0b101_011_100_000, ["Scavenger", "ScavengerElite"], "Scavenger"),
+    FoodQuestPip(0b101_011_100_000, ["DaddyLongLegs", "BrotherLongLegs", "TerrorLongLegs", "HunterDaddy"], "Rot"),
     FoodQuestPip(0b001_000_000_000, "PoleMimic"),
     FoodQuestPip(0b001_000_000_000, "TentaclePlant"),
     FoodQuestPip(0b001_000_000_000, "BigEel"),
