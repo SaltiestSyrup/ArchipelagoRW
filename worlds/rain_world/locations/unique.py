@@ -1,17 +1,28 @@
-from .classes import LocationData, AbstractLocation
+from .classes import LocationData, AbstractLocation, RoomLocation
 from ..options import RainWorldOptions
-from ..conditions.classes import Simple
+from ..conditions.classes import Simple, Condition, ConditionBlank
+
+
+class RoomLocationSimpleAccess(RoomLocation):
+    def __init__(self, description: str, alt_names: list[str] | None, offset: int | None, room: str,
+                 access_condition: Condition = ConditionBlank):
+        super().__init__(description, alt_names, offset, room)
+        self.access_condition = access_condition
+
 
 locations = {
-    "Eat_Neuron": AbstractLocation("Eat_Neuron", [], 4900, "Events", Simple("SSOracleSwarmer")),
-    "Gift_Neuron": AbstractLocation("Gift_Neuron", [], 4901, "Events", Simple(["Access-SL", "Access-SS"])),
-    "Meet_FP": AbstractLocation("Meet_FP", [], 4902, "Five Pebbles above puppet", Simple("The Mark")),
-    "Meet_LttM": AbstractLocation("Meet_LttM", [], 4903, "Shoreline", Simple("The Mark")),
-    "Meet_LttM_Spear": AbstractLocation("Meet_LttM_Spear", [], 4904, "Looks to the Moon"),
-    "Kill_FP": AbstractLocation("Kill_FP", [], 4905, "The Rot"),
-    "Save_LttM": AbstractLocation("Save_LttM", [], 4906, "Shoreline", Simple("Object-NSHSwarmer")),
-    "Ascend_FP": AbstractLocation("Ascend_FP", [], 4907, "Silent Construct", Simple("Karma", 8)),
-    "Ascend_LttM": AbstractLocation("Ascend_LttM", [], 4908, "Shoreline", Simple("Karma", 8)),
+    "Eat_Neuron": AbstractLocation("Eat a Neuron Fly", ["Eat_Neuron"], 4900, "Events", Simple("SSOracleSwarmer")),
+    "Gift_Neuron": RoomLocationSimpleAccess(
+        "Give a Neuron Fly to Looks to the Moon", ["Gift_Neuron"], 4901, "SL_AI", Simple(["Access-SL", "Access-SS"])),
+    "Meet_FP": RoomLocationSimpleAccess("Meet Five Pebbles", ["Meet_FP"], 4902, "SS_AI", Simple("The Mark")),
+    "Meet_LttM": RoomLocationSimpleAccess("Meet Looks to the Moon", ["Meet_LttM"], 4903, "SL_AI", Simple("The Mark")),
+    "Meet_LttM_Spear": RoomLocationSimpleAccess("Meet Looks to the Moon", ["Meet_LttM_Spear"], 4904, "DM_AI"),
+    "Kill_FP": RoomLocationSimpleAccess("Remove Rarefaction Cell", ["Kill_FP"], 4905, "RM_CORE"),
+    "Save_LttM": RoomLocationSimpleAccess(
+        "Revive Looks to the Moon", ["Save_LttM"], 4906, "SL_AI", Simple("Object-NSHSwarmer")),
+    "Ascend_FP": RoomLocationSimpleAccess("Ascend Five Pebbles", ["Ascend_FP"], 4907, "CL_AI", Simple("Karma", 8)),
+    "Ascend_LttM": RoomLocationSimpleAccess(
+        "Ascend Looks to the Moon", ["Ascend_LttM"], 4908, "SL_AI", Simple("Karma", 8)),
 }
 
 

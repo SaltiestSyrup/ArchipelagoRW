@@ -12,11 +12,19 @@ class FoodQuestPip(AbstractLocation):
     def __init__(self, gamestates: int, items: str | list[str]):
         global _offset
         self.items = [items] if type(items) == str else items
-        super().__init__(f"FoodQuest-{self.items[0]}", [], _offset, "Food Quest")
+        names = self.names(self.items)
+        super().__init__(names[0], names[1:], _offset, "Food Quest")
         _offset += 1
         self.gamestates = GameStateFlag(gamestates)
         self.expanded = False
         self.access_condition = Simple(items, 1)
+
+    @staticmethod
+    def names(items: list[str]) -> list[str]:
+        ret = [f"Food Quest - {' or '.join(items)}"]
+        if len(items) > 0:
+            ret += [f"Food Quest - {i}" for i in items]
+        return ret
 
     def pre_generate(self, player: int, multiworld: MultiWorld, options: RainWorldOptions) -> bool:
         if not options.satisfies(self.gamestates):
