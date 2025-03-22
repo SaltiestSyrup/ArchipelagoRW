@@ -6,17 +6,29 @@ from ..options import RainWorldOptions
 from ..game_data import static_data
 from ..regions.classes import room_to_region
 
+name_format = {
+    "BlueToken": "Arena Token - {0}",
+    "GreenToken": "Arena Token - {0}",
+    "GoldToken": "Level Token - {0}",
+    "RedToken": "Safari Token",
+    "WhiteToken": "Broadcast - {0}",
+    "DevToken": "Dev Token - {0}",
+    "UniqueDataPearl": "Pearl - {0}",
+    "DataPearl": "Pearl - {0}",
+}
+
 
 class TokenOrPearl(RoomLocation):
-    def __init__(self, name: str, r: str, offset: int, flag: GameStateFlag):
-        super().__init__(name, [], offset, r)
-        self.generation_flag = flag
+    def __init__(self, name: str, kind: str, r: str, offset: int, old_name: str):
+        super().__init__(name_format[kind].format(name), [old_name], offset, r)
+        self.generation_flag = GameStateFlag(0)
         self.room = r
+        self.kind = kind
 
     def pre_generate(self, player: int, multiworld: MultiWorld, options: RainWorldOptions) -> bool:
-        if self.full_name.startswith("DevToken"):
+        if self.kind == "DevToken":
             return False
-        if self.full_name.startswith("Broadcast"):
+        if self.kind == "WhiteToken":
             if not (options.msc_enabled and (options.starting_scug == "Spear") + options.checks_broadcasts.value >= 2):
                 return False
         if not options.satisfies(self.generation_flag):
@@ -51,7 +63,7 @@ def initialize() -> dict[str, TokenOrPearl]:
                     for shiny_name, shiny_data in room_data["shinies"].items():
                         name = token_name(shiny_name, shiny_data["kind"], region)
                         if (loc := ret.get(name, None)) is None:
-                            loc = TokenOrPearl(name, room, offset, GameStateFlag(0))
+                            loc = TokenOrPearl(shiny_name, shiny_data["kind"], room, offset, name)
                             ret[name] = loc
                             offset += 1
 

@@ -3,6 +3,8 @@
 Following is a summary of all randomized locations (checks)
 along with the items that would normally be at those locations.
 
+For details on how checks are named, see [the naming subpage](/tutorial/Rain%20World/naming/en).
+
 ## Tokens and pearls
 There are several physical checks available in most regions.
 These come in the form of tokens -
@@ -17,7 +19,8 @@ For Spearmaster, broadcast tokens are also checks.
 Although some broadcast tokens give different chatlogs before and after meeting Five Pebbles,
 they are not considered two separate checks.
 
-The `Misc2` pearl in Subterranean, though it appears on the interactive map, is not unique and is not a check.
+`Misc2` pearls, such as the one in Subterranean,
+though they appear on the interactive map, are not unique and are not checks.
 
 ## Echoes
 Visiting an echo is a check, and the karma cap increases they would normally give are placed in the item pool.

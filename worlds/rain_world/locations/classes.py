@@ -6,6 +6,7 @@ from ..conditions.classes import ConditionBlank, Condition
 from ..constants import FIRST_ID
 from worlds.generic.Rules import add_rule
 from ..regions.classes import room_to_region
+from ..game_data.general import region_code_to_name
 
 location_map: dict[str, int] = {}
 
@@ -47,15 +48,11 @@ class LocationData:
 
 
 class RoomLocation(LocationData):
-    def __init__(self, full_name: str, alt_names: list[str] | None, offset: Optional[int], room: str):
+    def __init__(self, description: str, alt_names: list[str] | None, offset: Optional[int], room: str):
         """
         Represents a location that exists in a specific room.
-        :param full_name:
-        :param alt_names:
-        :param offset:
-        :param room:
         """
-        super().__init__(full_name, alt_names, offset)
+        super().__init__(f'{region_code_to_name[room.split("_")[0]]} - {description}', alt_names, offset)
         self.room = room
 
     def pre_generate(self, player: int, multiworld: MultiWorld, options: RainWorldOptions) -> bool:
