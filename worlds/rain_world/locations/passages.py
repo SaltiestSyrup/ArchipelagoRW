@@ -99,16 +99,16 @@ def generate_cond_outlaw(options: RainWorldOptions) -> Condition:
 
 #################################################################
 # PILGRIM
-cond_pilgrim = AllOf(
-    Simple("MSC"),
-    Simple([f"Echo-{e}" for e in ('CC', 'SI', 'LF', 'SB')], locations=True),
-    AnyOf(Simple("Scug-Saint"), Simple(["Echo-SH", "Echo-UW"], locations=True)),
-    AnyOf(
-        Simple([f"Scug-{scug}" for scug in set(game_data.general.scugs_all) - {"Artificer", "Saint"}], 1),
-        AllOf(Simple("Scug-Artificer"), Simple("Echo-LC", locations=True)),
-        AllOf(Simple("Scug-Saint"), Simple(["Echo-UG", "Echo-SL", "Echo-CL"], locations=True)),
-    )
-)
+def generate_cond_pilgrim(options: RainWorldOptions) -> Condition:
+    if options.starting_scug == "Saint":
+        echoes = ["CC", "SI", "LF", "SB", "UG", "SL", "CL"]
+    elif options.starting_scug == "Artificer":
+        echoes = ["CC", "SI", "LF", "SB", "UW", "SH", "LC"]
+    else:
+        echoes = ["CC", "SI", "LF", "SB", "UW", "SH"]
+
+    return Simple([f"{game_data.general.region_code_to_name[e]} - Echo" for e in echoes], locations=True)
+
 
 #################################################################
 # SCHOLAR
@@ -184,7 +184,7 @@ def wanderer_pip_factory(count: int) -> Condition:
 locations: dict[str, LocationData] = {
     "Martyr": Passage("Martyr", "Early Passages", 5000),
     "Mother": Passage("Mother", "Early Passages", 5001, cond_mother),
-    "Pilgrim": Passage("Pilgrim", "Early Passages", 5002, cond_pilgrim),
+    "Pilgrim": Passage("Pilgrim", "Early Passages", 5002, access_condition_generator=generate_cond_pilgrim),
     "Survivor": Passage("Survivor", "Early Passages", 5003, Simple("Karma", 4)),
 
     "DragonSlayer": Passage("DragonSlayer", "PPwS Passages", 5020,

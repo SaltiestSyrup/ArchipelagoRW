@@ -26,11 +26,11 @@ class TestHunterMSC(RainWorldTestBase):
 
     def test_check_generation(self):
         locs = [loc.name for loc in self.multiworld.get_locations(self.player)]
-        self.assertNotIn("Pearl-MS-GW", locs)
-        self.assertNotIn("Broadcast-Chatlog_SI0-SI", locs)
-        self.assertNotIn("Broadcast-Chatlog_SI1-SI", locs)
-        self.assertIn("Token-KingVulture-SI", locs)
-        self.assertIn("Pearl-SI_top-SI", locs)
+        self.assertNotIn("Garbage Wastes - Pearl - MS", locs)
+        self.assertNotIn("Sky Islands - Broadcast - Chatlog_SI0", locs)
+        self.assertNotIn("Sky Islands - Broadcast - Chatlog_SI1", locs)
+        self.assertIn("Sky Islands - Arena Token - KingVulture", locs)
+        self.assertIn("Sky Islands - Pearl - SI_top", locs)
 
 
 class TestHunterMSCShadedCitadel(RainWorldTestBase):
@@ -38,7 +38,7 @@ class TestHunterMSCShadedCitadel(RainWorldTestBase):
                "difficulty_echo_low_karma": 1}
 
     def test_karma_flower_absence(self):
-        self.assertAccessDependency(["Echo-SH"], [["Karma", "Karma", "Karma", "Karma"]], True)
+        self.assertAccessDependency(["Shaded Citadel - Echo"], [["Karma", "Karma", "Karma", "Karma"]], True)
 
 
 class TestGourmand(RainWorldTestBase):
@@ -50,7 +50,7 @@ class TestArtificer(RainWorldTestBase):
 
     def test_check_generation(self):
         locs = [loc.name for loc in self.multiworld.get_locations(self.player)]
-        self.assertNotIn("Token-BrotherLongLegs-GW", locs)
+        self.assertNotIn("Garbage Wastes - Arena Token - BrotherLongLegs", locs)
 
 
 class TestRivulet(RainWorldTestBase):
@@ -59,7 +59,7 @@ class TestRivulet(RainWorldTestBase):
     def test_86(self):
         # https://github.com/alphappy/ArchipelagoRW/issues/86
         locs = [loc.name for loc in self.multiworld.get_locations(self.player)]
-        self.assertIn("Token-MirosBird-SH", locs)
+        self.assertIn("Shaded Citadel - Arena Token - MirosBird", locs)
 
 
 class TestSpear(RainWorldTestBase):
@@ -67,11 +67,11 @@ class TestSpear(RainWorldTestBase):
 
     def test_check_generation(self):
         locs = [loc.name for loc in self.multiworld.get_locations(self.player)]
-        self.assertIn("Pearl-MS-GW", locs)
-        self.assertIn("Broadcast-Chatlog_SI0-SI", locs)
-        self.assertIn("Broadcast-Chatlog_SI1-SI", locs)
-        self.assertNotIn("Token-KingVulture-SI", locs)
-        self.assertNotIn("Pearl-SI_top-SI", locs)
+        self.assertIn("Garbage Wastes - Pearl - MS", locs)
+        self.assertIn("Sky Islands - Broadcast - Chatlog_SI0", locs)
+        self.assertIn("Sky Islands - Broadcast - Chatlog_SI1", locs)
+        self.assertNotIn("Sky Islands - Arena Token - KingVulture", locs)
+        self.assertNotIn("Sky Islands - Pearl - SI_top", locs)
 
 
 class TestSaint(RainWorldTestBase):
