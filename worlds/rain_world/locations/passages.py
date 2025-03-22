@@ -201,7 +201,8 @@ locations: dict[str, LocationData] = {
     "Nomad": Passage("Nomad", "Late Passages", 5046, access_condition_generator=generate_cond_nomad),
     **{
         f"Wanderer-{i}": LocationData(
-            f"Wanderer-{i}", [], 5049 + i, "PPwS Passages", wanderer_pip_factory(i)
+            f"The Wanderer - {i} pip{'s' if i > 1 else ''}",
+            [f"Wanderer-{i}"], 5049 + i, "PPwS Passages", wanderer_pip_factory(i)
         ) for i in range(1, 15)
     }
 }

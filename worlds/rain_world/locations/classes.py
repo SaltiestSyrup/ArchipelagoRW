@@ -70,8 +70,16 @@ class Passage(AbstractLocation):
     def __init__(self, name: str, region: str, offset: int,
                  access_condition: Condition = ConditionBlank,
                  access_condition_generator:  Optional[Callable[[RainWorldOptions], Condition]] = None):
-        super().__init__(f"Passage-{name}", [], offset, region, access_condition)
+        super().__init__(f"Passage - {self.proper_name(name)}", [f"Passage-{name}"], offset, region, access_condition)
         self.acc_gen = access_condition_generator
+
+    @staticmethod
+    def proper_name(name: str):
+        if name == "Traveller":
+            return "The Wanderer"
+        elif name == "DragonSlayer":
+            return "The Dragon Slayer"
+        return f'The {name}'
 
     def pre_generate(self, player: int, multiworld: MultiWorld, options: RainWorldOptions) -> bool:
         if self.acc_gen is not None:
