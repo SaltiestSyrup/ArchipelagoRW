@@ -9,6 +9,7 @@ from ..regions.classes import room_to_region
 from ..game_data.general import region_code_to_name
 
 location_map: dict[str, int] = {}
+location_hints: dict[str, set[str]] = {}
 
 
 class LocationData:
@@ -29,7 +30,9 @@ class LocationData:
         self.progress_type: LocationProgressType = LocationProgressType.DEFAULT
         if offset is not None:
             self.id = offset + FIRST_ID
-            location_map.update({name: self.id for name in [full_name] + alt_names})
+            location_map[full_name] = self.id
+            for alt_name in self.alt_names:
+                location_hints.setdefault(alt_name, set()).update({full_name})
 
     def make(self, player: int, multiworld: MultiWorld, options: RainWorldOptions) -> bool:
         if self.pre_generate(player, multiworld, options):
