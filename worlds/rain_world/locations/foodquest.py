@@ -29,6 +29,7 @@ class FoodQuestPip(AbstractLocation):
             ret += [f"Food Quest - {' or '.join(itemlist)}"]
             if len(itemlist) > 0:
                 ret += [f"Food Quest - {item}" for item in itemlist]
+        ret += [f"FoodQuest-{items[0]}"]
         return ret
 
     def pre_generate(self, player: int, multiworld: MultiWorld, options: RainWorldOptions) -> bool:
