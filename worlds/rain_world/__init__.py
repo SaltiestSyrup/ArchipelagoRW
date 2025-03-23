@@ -45,6 +45,9 @@ class RainWorldWorld(World):
     item_name_to_id = items.item_name_to_id
     location_name_to_id = locations.classes.location_map
 
+    item_name_groups = items.item_hints
+    location_name_groups = locations.classes.location_hints
+
     location_count = 0
     starting_room = 'SU_C04'
     start_is_default = True
@@ -178,6 +181,21 @@ class RainWorldWorld(World):
         d["checks_foodquest_accessibility"] = (
             self.foodquest_accessibility_flag if self.options.checks_foodquest_expanded else 0)
         return d
+
+    def generate_output(self, output_directory: str) -> None:
+        from pprint import pprint
+        with open(f'{output_directory}/location_name_to_id.txt', 'w') as f:
+            pprint(self.location_name_to_id, f)
+        with open(f'{output_directory}/location_id_to_name.txt', 'w') as f:
+            pprint(self.location_id_to_name, f)
+        with open(f'{output_directory}/item_name_to_id.txt', 'w') as f:
+            pprint(self.item_name_to_id, f)
+        with open(f'{output_directory}/item_id_to_name.txt', 'w') as f:
+            pprint(self.item_id_to_name, f)
+        with open(f'{output_directory}/item_hints.txt', 'w') as f:
+            pprint(self.item_name_groups, f)
+        with open(f'{output_directory}/location_hints.txt', 'w') as f:
+            pprint(self.location_name_groups, f)
 
     def interpret_slot_data(self, slot_data: dict[str, Any]) -> None:
         """Universal Tracker support - synchronize UT internal multiworld with actual slot data."""

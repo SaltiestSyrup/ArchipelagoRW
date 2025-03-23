@@ -12,6 +12,7 @@ class RainWorldItem(Item):
 class RainWorldItemData:
     def __init__(self, name: str, code: Optional[int], item_type: ItemClassification = ItemClassification.filler):
         self.name = name
+        self.hints: list[str] = []
         self.code = code
         self.item_type = item_type
 
@@ -21,8 +22,8 @@ class RainWorldItemData:
 
 class GateKeyItemData(RainWorldItemData):
     def __init__(self, names: list[str], code: Optional[int]):
-        self.names = names
         super().__init__(names[0], code, ItemClassification.progression)
+        self.hints = names[1:]
 
 
 class FillerItemData(RainWorldItemData):
@@ -141,11 +142,14 @@ all_items: Dict[str, RainWorldItemData] = {
 # GATES
 gate_keys: dict[str, GateKeyItemData] = {
     names[0]: GateKeyItemData(names, offset + 500 + i)
-    for i, names in enumerate(g.names for g in gates)
+    for i, names in enumerate([g.names for g in gates])
 }
 all_items.update(gate_keys)
 
 #################################################################
 item_name_to_id: Dict[str, int] = {k: v.code for k, v in all_items.items()}
-for gate_key in gate_keys.values():
-    item_name_to_id.update({name: gate_key.code for name in gate_key.names})
+
+item_hints: dict[str, set[str]] = {}
+for item in all_items.values():
+    for hint in item.hints:
+        item_hints.setdefault(hint, set()).update({item.name})

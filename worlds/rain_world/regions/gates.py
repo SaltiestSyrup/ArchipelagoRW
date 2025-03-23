@@ -2,8 +2,7 @@ from BaseClasses import MultiWorld
 from .classes import room_to_region
 from ..options import RainWorldOptions
 from ..conditions.classes import Condition, ConditionBlank, Simple, AllOf, AnyOf
-from ..game_data.general import scugs_all, accessible_gates, region_code_to_name, alternate_regions, \
-    direct_alternate_regions
+from ..game_data.general import scugs_all, accessible_gates, region_code_to_name, direct_alternate_regions
 
 
 class GateData:
@@ -85,9 +84,7 @@ class GateData:
             right_alt = region_code_to_name[alt]
             ret += [f'Gate: {left_name} to {right_alt}', f'Gate: {right_alt} to {left_name}']
 
-        ret.append(self.name)
-        ret.append(ret.pop(0))
-        return ret
+        return ret + [self.name]
 
     def is_accessible(self, options: RainWorldOptions):
         return self.name[5:] in accessible_gates[options.dlcstate][options.starting_scug]
