@@ -381,154 +381,154 @@ class WtGeneric(Range):
 class WtRock(WtGeneric):
     """The relative weight of rocks in the non-trap filler item pool."""
     display_name = "Rock"
-    item_name = "Object-Rock"
+    item_name = "Rock"
     default = 100
 
 
 class WtSpear(WtGeneric):
     """The relative weight of spears in the non-trap filler item pool."""
     display_name = "Spear"
-    item_name = "Object-Spear"
+    item_name = "Spear"
     default = 40
 
 
 class WtExplosiveSpear(WtGeneric):
     """The relative weight of explosive spears in the non-trap filler item pool."""
-    display_name = "ExplosiveSpear"
-    item_name = "Object-ExplosiveSpear"
+    display_name = "Explosive Spear"
+    item_name = "Explosive Spear"
     default = 10
 
 
 class WtGrenade(WtGeneric):
     """The relative weight of grenades in the non-trap filler item pool."""
     display_name = "Grenade"
-    item_name = "Object-ScavengerBomb"
+    item_name = "Grenade"
     default = 10
 
 
 class WtFlashbang(WtGeneric):
     """The relative weight of flashbangs in the non-trap filler item pool."""
     display_name = "Flashbang"
-    item_name = "Object-FlareBomb"
+    item_name = "Flashbang"
     default = 20
 
 
 class WtSporePuff(WtGeneric):
     """The relative weight of spore puffs in the non-trap filler item pool."""
-    display_name = "Spore puff"
-    item_name = "Object-PuffBall"
+    display_name = "Spore Puff"
+    item_name = "Spore Puff"
     default = 20
 
 
 class WtCherrybomb(WtGeneric):
     """The relative weight of cherrybombs in the non-trap filler item pool."""
     display_name = "Cherrybomb"
-    item_name = "Object-FirecrackerPlant"
+    item_name = "Cherrybomb"
     default = 30
 
 
 class WtLillyPuck(WtGeneric):
     """The relative weight of lilypucks in the non-trap filler item pool."""
     display_name = "Lilypuck (MSC)"
-    item_name = "Object-LillyPuck"
+    item_name = "Lilypuck"
     default = 20
 
 
 class WtFruit(WtGeneric):
     """The relative weight of blue fruit in the non-trap filler item pool."""
-    display_name = "Blue fruit"
-    item_name = "Object-DangleFruit"
+    display_name = "Blue Fruit"
+    item_name = "Blue Fruit"
     default = 60
 
 
 class WtBubbleFruit(WtGeneric):
     """The relative weight of bubble fruit in the non-trap filler item pool."""
-    display_name = "Bubble fruit"
-    item_name = "Object-WaterNut"
+    display_name = "Bubble Fruit"
+    item_name = "Bubble Fruit"
     default = 40
 
 
 class WtEggbugEgg(WtGeneric):
     """The relative weight of eggbug eggs in the non-trap filler item pool."""
-    display_name = "Eggbug egg"
-    item_name = "Object-EggBugEgg"
+    display_name = "Eggbug Egg"
+    item_name = "Eggbug Egg"
     default = 30
 
 
 class WtJellyfish(WtGeneric):
     """The relative weight of jellyfish in the non-trap filler item pool."""
     display_name = "Jellyfish"
-    item_name = "Object-JellyFish"
+    item_name = "Jellyfish"
     default = 15
 
 
 class WtMushroom(WtGeneric):
     """The relative weight of mushrooms in the non-trap filler item pool."""
     display_name = "Mushroom"
-    item_name = "Object-Mushroom"
+    item_name = "Mushroom"
     default = 15
 
 
 class WtSlimeMold(WtGeneric):
     """The relative weight of slime mold in the non-trap filler item pool."""
-    display_name = "Slime mold"
-    item_name = "Object-SlimeMold"
+    display_name = "Slime Mold"
+    item_name = "Slime Mold"
     default = 35
 
 
 class WtFireEgg(WtGeneric):
     """The relative weight of firebug eggs in the non-trap filler item pool."""
     display_name = "Firebug egg (MSC)"
-    item_name = "Object-FireEgg"
+    item_name = "Fire Egg"
     default = 5
 
 
 class WtGlowWeed(WtGeneric):
     """The relative weight of glow weed in the non-trap filler item pool."""
-    display_name = "Glow weed (MSC)"
-    item_name = "Object-GlowWeed"
+    display_name = "Glow Weed (MSC)"
+    item_name = "Glow Weed"
     default = 15
 
 
 class WtElectricSpear(WtGeneric):
     """The relative weight of electric spears in the non-trap filler item pool."""
-    display_name = "Electric spear (MSC)"
-    item_name = "Object-ElectricSpear"
+    display_name = "Electric Spear (MSC)"
+    item_name = "Electric Spear"
     default = 3
 
 
 class WtSingularityBomb(WtGeneric):
     """The relative weight of singularity bombs in the non-trap filler item pool."""
     display_name = "Singularity Bomb (MSC)"
-    item_name = "Object-SingularityBomb"
+    item_name = "Singularity Bomb"
     default = 1
 
 
 class WtLantern(WtGeneric):
     """The relative weight of lanterns in the non-trap filler item pool."""
     display_name = "Lantern"
-    item_name = "Object-Lantern"
+    item_name = "Lantern"
     default = 15
 
 
 class WtKarmaFlower(WtGeneric):
     """The relative weight of karma flowers in the non-trap filler item pool."""
-    display_name = "Karma flower"
-    item_name = "Object-KarmaFlower"
+    display_name = "Karma Flower"
+    item_name = "Karma Flower"
     default = 5
 
 
 class WtVultureMask(WtGeneric):
     """The relative weight of vulture masks in the non-trap filler item pool."""
-    display_name = "Vulture mask"
-    item_name = "Object-VultureMask"
+    display_name = "Vulture Mask"
+    item_name = "Vulture Mask"
     default = 9
 
 
 class WtJokeRifle(WtGeneric):
     """The relative weight of joke rifles in the non-trap filler item pool."""
-    display_name = "Joke rifle (MSC)"
-    item_name = "Object-JokeRifle"
+    display_name = "Joke Rifle (MSC)"
+    item_name = "Joke Rifle"
     default = 1
 
 
@@ -536,104 +536,104 @@ class WtJokeRifle(WtGeneric):
 # TRAP SETTINGS
 class WtTrapStun(WtGeneric):
     """The relative weight of stun traps in the trap filler item pool."""
-    display_name = "Stun"
-    item_name = "Trap-Stun"
+    display_name = "Stun trap"
+    item_name = "Stun trap"
     default = 100
 
 
 class WtTrapZoomies(WtGeneric):
     """The relative weight of zoomies traps in the trap filler item pool."""
-    display_name = "Zoomies"
-    item_name = "Trap-Zoomies"
+    display_name = "Zoomies trap"
+    item_name = "Zoomies trap"
     default = 70
 
 
 class WtTrapTimer(WtGeneric):
     """The relative weight of timer traps in the trap filler item pool."""
-    display_name = "Timer"
-    item_name = "Trap-Timer"
+    display_name = "Timer trap"
+    item_name = "Timer trap"
     default = 100
 
 
 class WtTrapRedLizard(WtGeneric):
     """The relative weight of red lizard traps in the trap filler item pool."""
-    display_name = "RedLizard"
-    item_name = "Trap-RedLizard"
+    display_name = "Red Lizard trap"
+    item_name = "Red Lizard trap"
     default = 40
 
 
 class WtTrapRedCentipede(WtGeneric):
     """The relative weight of red centipede traps in the trap filler item pool."""
-    display_name = "RedCentipede"
-    item_name = "Trap-RedCentipede"
+    display_name = "Red Centipede trap"
+    item_name = "Red Centipede trap"
     default = 25
 
 
 class WtTrapSpitterSpider(WtGeneric):
     """The relative weight of spitter spider traps in the trap filler item pool."""
-    display_name = "RedCentipede"
-    item_name = "Trap-RedCentipede"
+    display_name = "Red Centipede trap"
+    item_name = "Red Centipede trap"
     default = 30
 
 
 class WtTrapBrotherLongLegs(WtGeneric):
     """The relative weight of brother long legs traps in the trap filler item pool."""
-    display_name = "BrotherLongLegs"
-    item_name = "Trap-BrotherLongLegs"
+    display_name = "Brother Long Legs trap"
+    item_name = "Brother Long Legs trap"
     default = 15
 
 
 class WtTrapDaddyLongLegs(WtGeneric):
     """The relative weight of daddy long legs traps in the trap filler item pool."""
-    display_name = "DaddyLongLegs"
-    item_name = "Trap-DaddyLongLegs"
+    display_name = "Daddy Long Legs trap"
+    item_name = "Daddy Long Legs trap"
     default = 5
 
 
 class WtTrapFlood(WtGeneric):
     """The relative weight of flood traps in the trap filler item pool."""
-    display_name = "Flood"
-    item_name = "Trap-Flood"
+    display_name = "Flood trap"
+    item_name = "Flood trap"
     default = 0
     visibility = Visibility.none
 
 
 class WtTrapRain(WtGeneric):
     """The relative weight of rain traps in the trap filler item pool."""
-    display_name = "Rain"
-    item_name = "Trap-Rain"
+    display_name = "Rain trap"
+    item_name = "Rain trap"
     default = 0
     visibility = Visibility.none
 
 
 class WtTrapGravity(WtGeneric):
     """The relative *weight* of gravity traps in the trap filler item pool."""
-    display_name = "Gravity"
-    item_name = "Trap-Gravity"
+    display_name = "Gravity trap"
+    item_name = "Gravity trap"
     default = 0
     visibility = Visibility.none
 
 
 class WtTrapFog(WtGeneric):
     """The relative weight of fog traps in the trap filler item pool."""
-    display_name = "Fog"
-    item_name = "Trap-Fog"
+    display_name = "Fog trap"
+    item_name = "Fog trap"
     default = 0
     visibility = Visibility.none
 
 
 class WtTrapKillSquad(WtGeneric):
     """The relative weight of kill squad traps in the trap filler item pool."""
-    display_name = "KillSquad"
-    item_name = "Trap-KillSquad"
+    display_name = "Killsquad trap"
+    item_name = "Killsquad trap"
     default = 0
     visibility = Visibility.none
 
 
 class WtTrapAlarm(WtGeneric):
     """The relative weight of alarm traps in the trap filler item pool."""
-    display_name = "Alarm"
-    item_name = "Trap-Alarm"
+    display_name = "Alarm trap"
+    item_name = "Alarm trap"
     default = 15
 
 
@@ -777,8 +777,8 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
             self.wt_karma_flowers, self.wt_vulture_masks, self.wt_joke_rifles,
         ]}
         if not self.msc_enabled:
-            for key in ("LillyPuck", "FireEgg", "GlowWeed", "ElectricSpear", "SingularityBomb", "JokeRifle"):
-                ret[f"Object-{key}"] = 0
+            for key in ("Lilypuck", "Fire Egg", "Glow Weed", "Electric Spear", "Singularity Bomb", "Joke Rifle"):
+                ret[f"{key}"] = 0
 
         return ret
 
