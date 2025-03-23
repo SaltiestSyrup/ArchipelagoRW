@@ -91,6 +91,8 @@ alternate_regions = {
     "UW": {"Saint": None},
 }
 
+direct_alternate_regions = {"DS": ["UG"], "SH": ["CL"], "SL": ["LM"], "SS": ["RM"]}
+
 #################################################################
 # SCUG DATA
 scugs_all = ['Yellow', 'White', 'Red', 'Gourmand', 'Artificer', 'Rivulet', 'Spear', 'Saint', 'Inv']
@@ -102,6 +104,10 @@ passages_vanilla = ["Chieftain", "DragonSlayer", "Friend", "Hunter", "Monk",
                     "Outlaw", "Saint", "Scholar", "Survivor", "Traveller"]
 passages_all = ["Chieftain", "DragonSlayer", "Friend", "Hunter", "Martyr", "Monk", "Mother",
                 "Nomad", "Outlaw", "Pilgrim", "Saint", "Scholar", "Survivor", "Traveller"]
+
+passage_proper_names = {p: f"The {p}" for p in passages_all}
+passage_proper_names.update({"DragonSlayer": "The Dragon Slayer", "Traveller": "The Wanderer"})
+
 # Passages that can't be automatically set as priority until early logic detection improves.
 prioritizable_passages = set(passages_all) - {"Chieftain", "Traveller", "Mother"}
 

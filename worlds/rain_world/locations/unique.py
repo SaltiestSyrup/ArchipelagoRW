@@ -19,7 +19,7 @@ locations = {
     "Meet_LttM_Spear": RoomLocationSimpleAccess("Meet Looks to the Moon", ["Meet_LttM_Spear"], 4904, "DM_AI"),
     "Kill_FP": RoomLocationSimpleAccess("Remove Rarefaction Cell", ["Kill_FP"], 4905, "RM_CORE"),
     "Save_LttM": RoomLocationSimpleAccess(
-        "Revive Looks to the Moon", ["Save_LttM"], 4906, "SL_AI", Simple("Object-NSHSwarmer")),
+        "Revive Looks to the Moon", ["Save_LttM"], 4906, "SL_AI", Simple("Slag Key")),
     "Ascend_FP": RoomLocationSimpleAccess("Ascend Five Pebbles", ["Ascend_FP"], 4907, "CL_AI", Simple("Karma", 8)),
     "Ascend_LttM": RoomLocationSimpleAccess(
         "Ascend Looks to the Moon", ["Ascend_LttM"], 4908, "SL_AI", Simple("Karma", 8)),
