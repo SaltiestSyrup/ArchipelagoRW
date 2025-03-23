@@ -55,18 +55,18 @@ direct abbreviations (e.g., `IC` for Industrial Complex) are not accepted.
 Checks which don't exist in a specific region (or are considered unique) don't have a `Region` in their name.
 `Type` and `Name` depend on the check:
 
-| Kind of check       | `Region` | `Type`         | `Name`                                                     |
-|---------------------|----------|----------------|------------------------------------------------------------|
-| Blue or green token | Physical | `Arena Token`  | ID (e.g., `BigSpider` or `Spearmaster`)                    |
-| Yellow token        | Physical | `Level Token`  | ID (e.g., `gutter` or `DS`)                                |
-| Red token           | Physical | `Safari Token` | None (only one per region)                                 |
-| Broadcast           | Physical | `Broadcast`    | ID (e.g., `SI_chatlog3`)                                   |
-| Pearl               | Physical | `Pearl`        | ID (e.g., `SI_west`) or wiki color name (`dark green`)     |
-| Echo                | Physical | `Echo`         | None (only one per region)                                 |
-| Shelter             | Physical | `Shelter`      | Room name, all caps (e.g., `SU_S05` or `LC_SHELTERTRAIN1`) |
-| Food Quest          |          | `Food Quest`   | Food(s) (e.g., `Blue fruit` or `Salamander or Eel Lizard`) |
-| Passage             |          | `Passage`      | Passage name (e.g., `The Survivor`)                        |
-| Wanderer pip        |          | `The Wanderer` | Pip count (e.g., `5 pips`)                                 |
+| Kind of check       | `Region` | `Type`         | `Name`                                                                                                      |
+|---------------------|----------|----------------|-------------------------------------------------------------------------------------------------------------|
+| Blue or green token | Physical | `Arena Token`  | ID (e.g., `BigSpider` or `Spearmaster`)                                                                     |
+| Yellow token        | Physical | `Level Token`  | ID (e.g., `gutter` or `DS`)                                                                                 |
+| Red token           | Physical | `Safari Token` | None (only one per region)                                                                                  |
+| Broadcast           | Physical | `Broadcast`    | ID (e.g., `Chatlog_SI3`)                                                                                    |
+| Pearl               | Physical | `Pearl`        | ID (e.g., `SI_west`) or wiki color name (`dark green`)                                                      |
+| Echo                | Physical | `Echo`         | None (only one per region)                                                                                  |
+| Shelter             | Physical | `Shelter`      | Room name, all caps (e.g., `SU_S05` or `LC_SHELTERTRAIN1`)                                                  |
+| Food Quest          |          | `Food Quest`   | Wiki names or internal names of food(s) (e.g., `Blue fruit` or `DangleFruit` or `Salamander or Eel Lizard`) |
+| Passage             |          | `Passage`      | Passage name (e.g., `The Survivor`)                                                                         |
+| Wanderer pip        |          | `The Wanderer` | Pip count (e.g., `5 pips` or `1 pip`)                                                                       |
 
 Here are some examples of complete check names:
 - `Shaded Citadel - Arena Token - BigSpider`
