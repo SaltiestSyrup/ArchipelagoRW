@@ -13,7 +13,7 @@ from .regions.classes import room_to_region
 from .regions.gates import gates
 from .utils import normalize, flounder2
 from .items import RainWorldItem, all_items, RainWorldItemData
-from . import regions, locations
+from . import regions, locations, options
 from .game_data.general import prioritizable_passages, passages_all, passages_vanilla, accessible_gates
 
 
