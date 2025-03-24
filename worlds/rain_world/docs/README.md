@@ -8,6 +8,8 @@ by navigating directly to the `.md` files in this folder.
 - [Checks](checks_en.md)
 - [Compatibility](compatibility_en.md)
 - [Items](items_en.md)
+- [Naming](naming_en.md)
+- [Remix](remix_en.md)
 - [Settings](settings_en.md)
 - [Tracking](tracking_en.md)
 

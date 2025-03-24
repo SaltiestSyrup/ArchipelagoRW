@@ -53,6 +53,8 @@ There are a few mod settings that must be adjusted according to your player YAML
 - _Rain World Remix_ must be enabled.
 - If the `Game state` setting is not a `Vanilla` state, then _More Slugcats Expansion_ must be enabled.
 
+For recommended Remix settings, see [the Remix subpage](/tutorial/Rain%20World/remix/en).
+
 ## 5. Join an Archipelago room
 
 When the Archipelago room is open, the Randomizer mod Remix menu interface 
