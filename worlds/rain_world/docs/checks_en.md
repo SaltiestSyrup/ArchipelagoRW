@@ -3,7 +3,8 @@
 Following is a summary of all randomized locations (checks)
 along with the items that would normally be at those locations.
 
-For details on how checks are named, see [the naming subpage](/tutorial/Rain%20World/naming/en).
+For details on how checks are named (for the purpose of setting the player YAML or hinting),
+see [the naming subpage](/tutorial/Rain%20World/naming/en).
 
 ## Tokens and pearls
 There are several physical checks available in most regions.

@@ -17,7 +17,10 @@ and [the settings subpage](/tutorial/Rain%20World/settings/en)
 for more on the specific settings that Rain World uses.
 You need a player YAML file even if you choose to leave all settings at their defaults.
 
-You can generate a player YAML file by doing one of the following:
+You can get a player YAML file by doing one of the following:
+- Download a template from a release page.
+  1. If you downloaded an `.apworld` from [the releases page](https://github.com/alphappy/ArchipelagoRW/releases),
+  that page will also contain template YAMLs that can be manually edited.
 - Generate the template file.
   1. Open the Archipelago Launcher and select `Generate Template Options`.
   2. Find `Rain World.yaml` in `Players/Templates` of your AP installation.
