@@ -182,25 +182,10 @@ class RainWorldWorld(World):
             self.foodquest_accessibility_flag if self.options.checks_foodquest_expanded else 0)
         return d
 
-    def generate_output(self, output_directory: str) -> None:
-        if False:
-            from pprint import pprint
-            with open(f'{output_directory}/location_name_to_id.txt', 'w') as f:
-                pprint(self.location_name_to_id, f)
-            with open(f'{output_directory}/location_id_to_name.txt', 'w') as f:
-                pprint(self.location_id_to_name, f)
-            with open(f'{output_directory}/item_name_to_id.txt', 'w') as f:
-                pprint(self.item_name_to_id, f)
-            with open(f'{output_directory}/item_id_to_name.txt', 'w') as f:
-                pprint(self.item_id_to_name, f)
-            with open(f'{output_directory}/item_hints.txt', 'w') as f:
-                pprint(self.item_name_groups, f)
-            with open(f'{output_directory}/location_hints.txt', 'w') as f:
-                pprint(self.location_name_groups, f)
-        if True:
-            import json
-            with open(f'{output_directory}/client_map.json', 'w') as f:
-                json.dump({"locations": locations.classes.location_client_map, "items": items.item_client_names}, f)
+    # def generate_output(self, output_directory: str) -> None:
+    #     import json
+    #     with open(f'{output_directory}/client_map.json', 'w') as f:
+    #         json.dump({"locations": locations.classes.location_client_map, "items": items.item_client_names}, f)
 
     def interpret_slot_data(self, slot_data: dict[str, Any]) -> None:
         """Universal Tracker support - synchronize UT internal multiworld with actual slot data."""
