@@ -30,9 +30,7 @@ You can get a player YAML file by doing one of the following:
   If you haven't done this before, several Python packages will need to install first.
   2. Once the WebHost is running, navigate to `localhost` in a browser.
   3. Select `Supported Games`, then find `Rain World` in the game list.
-  4. Go to the [game options page](/games/Rain%20World/player-options)
-  (or the [weighted options page](/games/Rain%20World/weighted-options))
-  and adjust settings as desired.
+  4. Go to the game options page (or the weighted options page) and adjust settings as desired.
   5. Click `Export Options` at the bottom.
 
 ## 3. Install the Randomizer mod
