@@ -52,7 +52,7 @@ all_items: Dict[str, RainWorldItemData] = {
     "The Mark": RainWorldItemData("The Mark", "The Mark", offset + 1, ItemClassification.progression),
     "Citizen ID Drone": RainWorldItemData("Citizen ID Drone", "IdDrone", offset + 2, ItemClassification.progression),
     "Rarefaction Cell": RainWorldItemData("Rarefaction Cell", "Object-EnergyCell", offset + 3, ItemClassification.progression),
-    "Spearmaster's Pearl": RainWorldItemData("Spearmaster's Pearl", "Pearlobject-Spearlmasterpearl", offset + 4, ItemClassification.progression),
+    "Spearmaster's Pearl": RainWorldItemData("Spearmaster's Pearl", "PearlObject-Spearmasterpearl", offset + 4, ItemClassification.progression),
     "Moon's Final Message": RainWorldItemData("Moon's Final Message", "Rewrite_Spear_Pearl", offset + 5, ItemClassification.progression),
     "Slag Key": RainWorldItemData("Slag Key", "Object-NSHSwarmer", offset + 6, ItemClassification.progression),
 
@@ -121,7 +121,7 @@ all_items: Dict[str, RainWorldItemData] = {
     "Batnip": FillerItemData("Batnip", "Object-FlyLure", 271 + offset),
     "Lantern": FillerItemData("Lantern", "Object-Lantern", 272 + offset),
     "Karma Flower": FillerItemData("Karma Flower", "Object-KarmaFlower", 273 + offset),
-    "Vulture Mask": FillerItemData("Vulture Mask", "Object-VulutreMask", 274 + offset),
+    "Vulture Mask": FillerItemData("Vulture Mask", "Object-VultureMask", 274 + offset),
     "Joke Rifle": FillerItemData("Joke Rifle", "Object-JokeRifle", 275 + offset, ["MSC"]),
 
     #################################################################
@@ -140,9 +140,9 @@ all_items: Dict[str, RainWorldItemData] = {
     # FILLER - CREATURE TRAPS
     "Red Lizard trap": TrapItemData("Red Lizard trap", "Trap-RedLizard", 330 + offset),
     "Red Centipede trap": TrapItemData("Red Centipede trap", "Trap-RedCentipede", 331 + offset),
-    "Spitter Spider trap": TrapItemData("Spitter Spider trap", "Trap-SpitteSpider", 332 + offset),
+    "Spitter Spider trap": TrapItemData("Spitter Spider trap", "Trap-SpitterSpider", 332 + offset),
     "Brother Long Legs trap": TrapItemData("Brother Long Legs trap", "Trap-BrotherLongLegs", 333 + offset),
-    "Daddy Long Legs trap": TrapItemData("Daddy Long Legs trap", "Trap-DaddylongLegs", 334 + offset),
+    "Daddy Long Legs trap": TrapItemData("Daddy Long Legs trap", "Trap-DaddyLongLegs", 334 + offset),
 }
 
 #################################################################
