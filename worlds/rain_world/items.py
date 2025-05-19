@@ -28,7 +28,14 @@ class RainWorldItemData:
 class GateKeyItemData(RainWorldItemData):
     def __init__(self, names: list[str], code: Optional[int]):
         super().__init__(names[0], names[-1], code, ItemClassification.progression)
-        self.hints = names[1:]
+        _, left_code, right_code = names[-1].split("_")
+        self.hints = names[1:] + [region_code_to_name[left_code], region_code_to_name[right_code]]
+
+
+class PassageTokenItemData(RainWorldItemData):
+    def __init__(self, name: str, client_name: str, code: Optional[int]):
+        super().__init__(name, client_name, code, ItemClassification.useful)
+        self.hints = ["Passage Token"]
 
 
 class FillerItemData(RainWorldItemData):
@@ -59,8 +66,8 @@ all_items: Dict[str, RainWorldItemData] = {
     #################################################################
     # PASSAGE TOKENS
     **{
-        f"Passage Token - {pv}": RainWorldItemData(
-            f"Passage Token - {pv}", f"Passage-{pk}", offset + 20 + i, ItemClassification.useful
+        f"Passage Token - {pv}": PassageTokenItemData(
+            f"Passage Token - {pv}", f"Passage-{pk}", offset + 20 + i
         )
         for i, (pk, pv) in enumerate(game_data.general.passage_proper_names.items())
     },
