@@ -118,9 +118,8 @@ cond_scholar = AnyOf(
         Simple(["Scug-White", "Scug-Gourmand"], 1),
         Simple(["Access-SL", "The Mark"])
     ),
-    Simple(["Scug-Red", "Scug-Rivulet"], 1),
     AllOf(
-        Simple(["Scug-Artificer", "Scug-Spear"], 1),
+        Simple(["Scug-Artificer", "Scug-Spear", "Scug-Red", "Scug-Rivulet"], 1),
         Simple("The Mark")
     ),
 )
