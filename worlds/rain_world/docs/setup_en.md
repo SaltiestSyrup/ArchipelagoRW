@@ -55,14 +55,19 @@ Configure Rain World and your mods by doing the following:
       2. Open the *Betas* tab.
       3. Select the desired version in the `Beta Participation` dropdown.
          Select `None` to use the most recent version.
-2. (Re)start Rain World.
-3. Go to the Remix menu and enable the following:
+2. If you are running Linux (which includes Steam Deck):
+   1. Right-click on Rain World in the library and select *Properties...*
+   2. Open the *General* tab.
+   3. In the `LAUNCH OPTIONS` box, add `WINEDLLOVERRIDES="winhttp=n,b" %command%`.
+3. (Re)start Rain World.
+4. Go to the Remix menu and enable the following:
    1. Rain World Remix
    2. Check Randomizer
    3. More Slugcats Expansion, if and only if you enabled it in your player YAML settings
    4. The Watcher, if and only if you enabled it in your player YAML settings
-4. Restart Rain World.
-5. Go to the Remix menu and verify that the mod has loaded correctly
+   5. For other mods, see [the compatibility subpage](/tutorial/Rain%20World/compatibility/en).
+5. Restart Rain World.
+6. Go to the Remix menu and verify that the mod has loaded correctly
 by clicking on the `Check Randomizer` to open its Remix interface.
 You should an `Archipelago` tab in this interface.
 
