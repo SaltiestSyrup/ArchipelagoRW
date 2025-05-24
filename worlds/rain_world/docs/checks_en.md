@@ -23,6 +23,10 @@ they are not considered two separate checks.
 `Misc2` pearls, such as the one in Subterranean,
 though they appear on the interactive map, are not unique and are not checks.
 
+## Karma flowers
+If `checks_karma_flowers` is enabled, eating a fixed karma flower spawn is a check.
+If two karma flowers exist in the same room, they are not two separate checks.
+
 ## Echoes
 Visiting an echo is a check, and the karma cap increases they would normally give are placed in the item pool.
 Whether an echo appears depends on some combination of 

@@ -73,10 +73,6 @@ A pair of two-way warp points is two separate checks.
 The check is earned even if the warp is not currently usable
 (e.g., cannot enter ripplespace or don't have the key).
 
-### Fixed Karma Flowers
-If `checks_karma_flowers` is enabled, each fixed Karma Flower spawn is a check.
-The check is earned by grabbing the Karma Flower.
-
 ### Throne warp points
 (UNIMPLEMENTED) 
 Creating a semipermanent warp point in The Throne is a check.
@@ -108,10 +104,6 @@ Watcher cannot earn The Pilgrim, The Nomad, The Scholar, The Wanderer, or The Mo
 * (UNIMPLEMENTED) If `checks_food_quest` is enabled, Watcher can earn certain food quest checks.
 
 ## Settings
-
-### Karma Flower checks
-`checks_karma_flowers` controls whether fixed Karma Flowers are checks.
-Enabling this is strongly reccomended as otherwise Watcher has relatively few checks.
 
 ### Rot spread checks
 `checks_spread_rot` controls whether spreading the Rot to a new region is a check.

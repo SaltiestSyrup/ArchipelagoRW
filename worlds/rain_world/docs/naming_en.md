@@ -62,6 +62,7 @@ Checks which don't exist in a specific region (or are considered unique) don't h
 | Red token           | Physical | `Safari Token` | None (only one per region)                                                                                  |
 | Broadcast           | Physical | `Broadcast`    | ID (e.g., `Chatlog_SI3`)                                                                                    |
 | Pearl               | Physical | `Pearl`        | ID (e.g., `SI_west`) or wiki color name (`dark green`)                                                      |
+| Karma flower        | Physical | `Karma Flower` | Room name, all caps (e.g., `CC_B06`)                                                                        |
 | Echo                | Physical | `Echo`         | None (only one per region)                                                                                  |
 | Shelter             | Physical | `Shelter`      | Room name, all caps (e.g., `SU_S05` or `LC_SHELTERTRAIN1`)                                                  |
 | Food Quest          |          | `Food Quest`   | Wiki names or internal names of food(s) (e.g., `Blue fruit` or `DangleFruit` or `Salamander or Eel Lizard`) |
@@ -74,6 +75,7 @@ Here are some examples of complete check names:
 - `Garbage Wastes - Safari Token`
 - `Sky Islands - Broadcast - Chatlog_SI3`
 - `Waterfront Facility - Pearl - SL_chimney`
+- `Chimney Canopy - Karma Flower - CC_B06`
 - `The Exterior - Echo`
 - `Undergrowth - Shelter - UG_S03`
 - `Food Quest - Red Centipede or Aquapede`
