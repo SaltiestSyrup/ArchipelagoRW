@@ -7,7 +7,7 @@ INITIAL_OFFSET = 1200
 
 class FlowerLocation(RoomLocation):
     def __init__(self, offset: int, room: str):
-        super().__init__(f"Karma Flower - {room}", f"Karma Flower - {room}", [], offset, room)
+        super().__init__(f"Karma Flower - {room}", f"Flower-{room}", [], offset, room)
 
 
 def initialize() -> list[FlowerLocation]:
