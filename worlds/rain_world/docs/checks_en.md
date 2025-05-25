@@ -24,7 +24,7 @@ they are not considered two separate checks.
 though they appear on the interactive map, are not unique and are not checks.
 
 ## Karma flowers
-If `checks_karma_flowers` is enabled, eating a fixed karma flower spawn is a check.
+If `checks_flowersanity` is enabled, eating a fixed karma flower spawn is a check.
 If two karma flowers exist in the same room, they are not two separate checks.
 
 ## Echoes

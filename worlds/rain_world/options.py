@@ -834,7 +834,7 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     checks_tokens_pearls: ChecksTokensPearls
     checks_sheltersanity: ChecksSheltersanity
     checks_submerged: ChecksSubmerged
-    checks_karma_flowers: ChecksKarmaFlowers
+    checks_flowersanity: ChecksKarmaFlowers
     checks_devtokens: ChecksDevTokens
 
     group_checkpool = [
