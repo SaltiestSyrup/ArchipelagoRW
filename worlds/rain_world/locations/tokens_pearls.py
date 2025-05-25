@@ -13,7 +13,7 @@ name_format = {
     "GoldToken": "Level Token - {0}",
     "RedToken": "Safari Token",
     "WhiteToken": "Broadcast - {0}",
-    "DevToken": "Dev Token - {0}",
+    "DevToken": "Dev Token - {1}",
     "UniqueDataPearl": "Pearl - {0}",
     "DataPearl": "Pearl - {0}",
 }
@@ -21,13 +21,13 @@ name_format = {
 
 class TokenOrPearl(RoomLocation):
     def __init__(self, name: str, kind: str, r: str, offset: int, old_name: str):
-        super().__init__(name_format[kind].format(name), old_name, [], offset, r)
+        super().__init__(name_format[kind].format(name, r), old_name, [], offset, r)
         self.generation_flag = GameStateFlag(0)
         self.room = r
         self.kind = kind
 
     def pre_generate(self, player: int, multiworld: MultiWorld, options: RainWorldOptions) -> bool:
-        if self.kind == "DevToken":
+        if self.kind == "DevToken" and not options.checks_devtokens:
             return False
         if self.kind == "WhiteToken":
             if not (options.msc_enabled and (options.starting_scug == "Spear") + options.checks_broadcasts.value >= 2):
@@ -46,7 +46,8 @@ class TokenOrPearl(RoomLocation):
         return super().pre_generate(player, multiworld, options)
 
 
-def token_name(name: str, kind: str, _region: str) -> str:
+def token_name(name: str, kind: str, _room: str) -> str:
+    _region = _room.split("_")[0]
     if kind == "GoldToken":  # arena level unlock
         return f'Token-L-{name}'
     elif kind == "RedToken":  # safari level unlock
@@ -54,7 +55,7 @@ def token_name(name: str, kind: str, _region: str) -> str:
     elif kind == "WhiteToken":
         return f'Broadcast-{name}-{_region}'
     elif kind == "DevToken":
-        return f'DevToken-{name}-{_region}'
+        return f'DevToken-{_room}'
     elif "Token" in kind:
         return f'Token-{name}-{_region}'
     else:
@@ -70,7 +71,7 @@ def initialize() -> dict[str, TokenOrPearl]:
             for room, room_data in region_data.items():
                 if "shinies" in room_data.keys():
                     for shiny_name, shiny_data in room_data["shinies"].items():
-                        name = token_name(shiny_name, shiny_data["kind"], region)
+                        name = token_name(shiny_name, shiny_data["kind"], room)
                         if (loc := ret.get(name, None)) is None:
                             loc = TokenOrPearl(shiny_name, shiny_data["kind"], room, offset, name)
                             ret[name] = loc

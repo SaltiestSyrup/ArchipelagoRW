@@ -33,7 +33,8 @@ OBJECT_WHITELIST = [
     "BubbleGrass",  # for waterway traversal
     "VultureGrub", "DeadVultureGrub",  # expanded food quest
 ]
-SHINY_LIST = ["BlueToken", "GreenToken", "RedToken", "GoldToken", "WhiteToken", "UniqueDataPearl", "DataPearl"]
+SHINY_LIST = ["BlueToken", "GreenToken", "RedToken", "GoldToken", "WhiteToken", "DevToken",
+              "UniqueDataPearl", "DataPearl"]
 
 ########################################################################################################################
 data = {}

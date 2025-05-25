@@ -378,6 +378,12 @@ class ChecksTokensPearls(Toggle):
     visibility = Visibility.none
 
 
+class ChecksDevTokens(Toggle):
+    """Whether dev commentary tokens should be checks.  Requires MSC."""
+    display_name = "Dev tokens"
+    default = False
+
+
 class ChecksSheltersanity(Toggle):
     """Whether each shelter is a check."""
     display_name = "Sheltersanity"
@@ -829,10 +835,11 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     checks_sheltersanity: ChecksSheltersanity
     checks_submerged: ChecksSubmerged
     checks_karma_flowers: ChecksKarmaFlowers
+    checks_devtokens: ChecksDevTokens
 
     group_checkpool = [
         ChecksBroadcasts, ChecksFoodQuest, ChecksFoodQuestExpanded, PassagePriority, ChecksTokensPearls,
-        ChecksSheltersanity, ChecksSubmerged, ChecksKarmaFlowers,
+        ChecksDevTokens, ChecksSheltersanity, ChecksSubmerged, ChecksKarmaFlowers,
     ]
 
     #################################################################
