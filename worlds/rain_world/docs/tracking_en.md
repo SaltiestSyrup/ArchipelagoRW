@@ -1,5 +1,18 @@
 # Rain World location tracking
 
+## Client tracker
+A tracker appears on the pause menu in-game if the `Use gate map` option is enabled
+in the `Base` tab of the Check Randomizer Remix settings.
+Each region is represented by a node and each karma gate is represented by a connection between nodes.
+The connections are bright once the key for that gate is obtained.
+Hovering over a node displays an icon for each check in that region.
+The icons are bright and colored once the check is collected.
+Food quest and passages are under their own nodes.
+
+## PopTracker
+A PopTracker pack is maintained here:
+https://github.com/ThePirateJaz/Rain-World-PopTracker/releases
+
 ## Universal Tracker
 Rain World partially supports the Universal Tracker (UT).
 To install it:
