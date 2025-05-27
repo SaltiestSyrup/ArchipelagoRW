@@ -714,8 +714,8 @@ class WtTrapRedCentipede(WtGeneric):
 
 class WtTrapSpitterSpider(WtGeneric):
     """The relative weight of spitter spider traps in the trap filler item pool."""
-    display_name = "Red Centipede trap"
-    item_name = "Red Centipede trap"
+    display_name = "Spitter Spider trap"
+    item_name = "Spitter Spider trap"
     default = 30
 
 
@@ -730,31 +730,21 @@ class WtTrapDaddyLongLegs(WtGeneric):
     """The relative weight of daddy long legs traps in the trap filler item pool."""
     display_name = "Daddy Long Legs trap"
     item_name = "Daddy Long Legs trap"
-    default = 5
-
-
-class WtTrapFlood(WtGeneric):
-    """The relative weight of flood traps in the trap filler item pool."""
-    display_name = "Flood trap"
-    item_name = "Flood trap"
-    default = 0
-    visibility = Visibility.none
+    default = 10
 
 
 class WtTrapRain(WtGeneric):
     """The relative weight of rain traps in the trap filler item pool."""
     display_name = "Rain trap"
     item_name = "Rain trap"
-    default = 0
-    visibility = Visibility.none
+    default = 50
 
 
 class WtTrapGravity(WtGeneric):
     """The relative *weight* of gravity traps in the trap filler item pool."""
     display_name = "Gravity trap"
     item_name = "Gravity trap"
-    default = 0
-    visibility = Visibility.none
+    default = 10
 
 
 class WtTrapFog(WtGeneric):
@@ -902,7 +892,6 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     wt_killsquads: WtTrapKillSquad
     wt_alarms: WtTrapAlarm
     wt_fogs: WtTrapFog
-    wt_floods: WtTrapFlood
     wt_rains: WtTrapRain
     wt_gravity: WtTrapGravity
 
@@ -914,7 +903,7 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
 
     group_traps = [
         WtTrapStun, WtTrapZoomies, WtTrapTimer, WtTrapAlarm, WtTrapKillSquad,
-        WtTrapGravity, WtTrapRain, WtTrapFlood, WtTrapFog,
+        WtTrapGravity, WtTrapRain, WtTrapFog,
 
         WtTrapRedLizard, WtTrapRedCentipede, WtTrapSpitterSpider,
         WtTrapBrotherLongLegs, WtTrapDaddyLongLegs
@@ -988,7 +977,7 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     def get_trap_weight_dict(self) -> dict[str, float]:
         return {a.item_name: a.value for a in [
             self.wt_stuns, self.wt_zoomies, self.wt_timers, self.wt_alarms, self.wt_killsquads,
-            self.wt_gravity, self.wt_rains, self.wt_floods, self.wt_fogs,
+            self.wt_gravity, self.wt_rains, self.wt_fogs,
 
             self.wt_redcentipede, self.wt_redlizard, self.wt_spitterspider,
             self.wt_brotherlonglegs, self.wt_daddylonglegs
