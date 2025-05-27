@@ -134,12 +134,11 @@ all_items: Dict[str, RainWorldItemData] = {
     "Stun trap": TrapItemData("Stun trap", "Trap-Stun", 300 + offset),
     "Zoomies trap": TrapItemData("Zoomies trap", "Trap-Zoomies", 301 + offset),
     "Timer trap": TrapItemData("Timer trap", "Trap-Timer", 302 + offset),
-    "Flood trap": TrapItemData("Flood trap", "Trap-Flood", 303 + offset),
-    "Rain trap": TrapItemData("Rain trap", "Trap-Rain", 304 + offset),
-    "Gravity trap": TrapItemData("Gravity trap", "Trap-Gravity", 305 + offset),
-    "Fog trap": TrapItemData("Fog trap", "Trap-Fog", 306 + offset),
-    "Killsquad trap": TrapItemData("Killsquad trap", "Trap-KillSquad", 307 + offset),
-    "Alarm trap": TrapItemData("Alarm trap", "Trap-Alarm", 308 + offset),
+    "Rain trap": TrapItemData("Rain trap", "Trap-Rain", 303 + offset),
+    "Gravity trap": TrapItemData("Gravity trap", "Trap-Gravity", 304 + offset),
+    "Fog trap": TrapItemData("Fog trap", "Trap-Fog", 305 + offset),
+    "Killsquad trap": TrapItemData("Killsquad trap", "Trap-KillSquad", 306 + offset),
+    "Alarm trap": TrapItemData("Alarm trap", "Trap-Alarm", 307 + offset),
 
     #################################################################
     # FILLER - CREATURE TRAPS
