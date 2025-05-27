@@ -686,35 +686,35 @@ class WtTrapStun(WtGeneric):
     """The relative weight of stun traps in the trap filler item pool."""
     display_name = "Stun trap"
     item_name = "Stun trap"
-    default = 100
+    default = 60
 
 
 class WtTrapZoomies(WtGeneric):
     """The relative weight of zoomies traps in the trap filler item pool."""
     display_name = "Zoomies trap"
     item_name = "Zoomies trap"
-    default = 70
+    default = 50
 
 
 class WtTrapTimer(WtGeneric):
     """The relative weight of timer traps in the trap filler item pool."""
     display_name = "Timer trap"
     item_name = "Timer trap"
-    default = 100
+    default = 50
 
 
 class WtTrapRedLizard(WtGeneric):
     """The relative weight of red lizard traps in the trap filler item pool."""
     display_name = "Red Lizard trap"
     item_name = "Red Lizard trap"
-    default = 40
+    default = 30
 
 
 class WtTrapRedCentipede(WtGeneric):
     """The relative weight of red centipede traps in the trap filler item pool."""
     display_name = "Red Centipede trap"
     item_name = "Red Centipede trap"
-    default = 25
+    default = 30
 
 
 class WtTrapSpitterSpider(WtGeneric):
@@ -728,7 +728,7 @@ class WtTrapBrotherLongLegs(WtGeneric):
     """The relative weight of brother long legs traps in the trap filler item pool."""
     display_name = "Brother Long Legs trap"
     item_name = "Brother Long Legs trap"
-    default = 15
+    default = 30
 
 
 class WtTrapDaddyLongLegs(WtGeneric):
@@ -772,7 +772,7 @@ class WtTrapAlarm(WtGeneric):
     """The relative weight of alarm traps in the trap filler item pool."""
     display_name = "Alarm trap"
     item_name = "Alarm trap"
-    default = 15
+    default = 30
 
 
 @dataclass
