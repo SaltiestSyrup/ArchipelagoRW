@@ -186,6 +186,26 @@ so they will never be required to reach the victory condition.
 - <sup>r</sup> Current Ripple must still satisfy the target's Ripple requirement
 unless `dynamic_warp_ripple_requirement` is `none`.
 
+| Dynamic warping from `A` to `B`...                             | `i.` | `v.`               | `p.` | `p.u.s.`     | `s.t.p.` | `u.t.p.`           |
+|----------------------------------------------------------------|------|--------------------|------|--------------|----------|--------------------|
+| ...could be required to reach the victory condition?           |      |                    | Yes  | Yes          | Yes      | Yes                |
+| ...is always possible once Ripple is at least 3?               | Yes  | Almost<sup>3</sup> | Yes  |              | Yes      | Almost<sup>4</sup> |
+| ...requires a `Dynamic` key?                                   |      |                    |      | Yes, for `A` |          | Yes, for `B`       |
+| ...requires meeting the Ripple requirement of `B`?<sup>1</sup> | Yes  | Yes                |      |              | Yes      |                    |
+| ...requires hoping that `B` gets picked as the target?         | Yes  | Yes                |      |              | Yes      | Yes                |
+| ...requires previously visiting `B`?                           |      | Yes                |      |              |          |                    |
+| ...requires that `B` is in the target pool?                    |      |                    |      |              | Yes      | Yes                |
+| ...requires that `B` is the predetermined target of `A`?       |      |                    | Yes  | Yes          |          |                    |
+
+- <sup>1</sup> Unless `dynamic_warp_ripple_requirement` is set to `none`.
+- <sup>2</sup> Except for Throne dynamic warps.
+- <sup>3</sup> Dynamic warping is impossible if no other regions have been visited.
+After at least a second region is visited, dynamic warping is always possible
+(provided that the Ripple requirement is either waived or satisfied for at least one target).
+- <sup>4</sup> Dynamic warping is impossible if no `Dynamic` keys have been collected,
+or if the only `Dynamic` key collected is for the current region.
+After two `Dynamic` keys are collected, dynamic warping is always possible.
+
 ### Dynamic warp ripple requirement
 (UNIMPLEMENTED) 
 `dynamic_warp_ripple_requirement` dictates how the Ripple requirements for dynamic warp targets are handled.
