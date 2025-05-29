@@ -2,7 +2,7 @@
 
 ## 1. Add the Rain World APWorld
 
-Add the APWorld to your AP installation by doing one of the following:
+To generate a multitworld with Rain World, add the Rain World `.apworld` to your AP installation by doing one of the following:
 - Grab an `.apworld` from [the releases page](https://github.com/alphappy/ArchipelagoRW/releases)
 and place it in the `worlds` folder of your AP installation.
 - Clone this repository and either use it directly or copy `worlds/rain_world`
@@ -12,12 +12,12 @@ to the `worlds` folder of your AP installation.
 
 Player YAML settings files are used to tweak logic, determine start state and victory condition, and more.
 You can see the [basic multiworld setup guide](/tutorial/Archipelago/setup/en)
-for a general overview of how Archipelago uses player YAML files,
+for a general overview of how Archipelago uses player YAML settings files,
 and [the settings subpage](/tutorial/Rain%20World/settings/en)
 for more on the specific settings that Rain World uses.
-You need a player YAML file even if you choose to leave all settings at their defaults.
+You need a player YAML settings file even if you choose to leave all settings at their defaults.
 
-You can get a player YAML file by doing one of the following:
+You can get a player YAML settings file by doing one of the following:
 - Download a template from a release page.
   1. If you downloaded an `.apworld` from [the releases page](https://github.com/alphappy/ArchipelagoRW/releases),
   that page will also contain template YAMLs that can be manually edited.
@@ -37,6 +37,7 @@ You can get a player YAML file by doing one of the following:
 
 Install the Randomizer mod by doing one of the following:
 - Download [from the Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3323349183).
+  1. By default, Steam will keep this updated to the most recent available version.
 - Download from GitHub.
   1. Download a release [from GitHub](https://github.com/SaltiestSyrup/RWRandomizer/releases).
      If you downloaded a specific release of the APWorld,
@@ -55,7 +56,7 @@ Configure Rain World and your mods by doing the following:
       2. Open the *Betas* tab.
       3. Select the desired version in the `Beta Participation` dropdown.
          Select `None` to use the most recent version.
-2. If you are running Linux (which includes Steam Deck):
+2. If you are running Linux (which includes Steam Deck) and have not used Remix mods before:
    1. Right-click on Rain World in the library and select *Properties...*
    2. Open the *General* tab.
    3. In the `LAUNCH OPTIONS` box, add `WINEDLLOVERRIDES="winhttp=n,b" %command%`.
@@ -69,22 +70,19 @@ Configure Rain World and your mods by doing the following:
 5. Restart Rain World.
 6. Go to the Remix menu and verify that the mod has loaded correctly
 by clicking on the `Check Randomizer` to open its Remix interface.
-You should an `Archipelago` tab in this interface.
+You should see an `Archipelago` tab in this interface.
 
 For recommended Rain World Remix settings, see [the Remix subpage](/tutorial/Rain%20World/remix/en).
 
 ## 5. Join an Archipelago room
 
-When the Archipelago room is open, the Randomizer mod Remix menu interface 
-may be used to connect to a room (under the `Archipelago` tab).
-The name entered here must exactly match the name specified in the YAML.
-
-A message should be returned indicating a successful connection
-and including key pieces of information from your player YAML file.
-
-The client will remain connected if you go back out to the main menu or any other menu.
-It may not remain connected if you close or hot-reload the game (e.g., via Rain Reloader),
-or if the host address or port number changes.
+Once the Archipelago room is open,
+connect to it by opening the `Archipelago` tab in Check Randomizer's Remix menu.
+Enter the host name, port number, room password (if there is one),
+and player name (which must exactly match the name specified in your player YAML settings),
+the click Connect.
+The Remix menu should print a message indicating a successful connections
+and including key pieces of information from your player YAML settings.
 
 ## 6. Start the game
 
