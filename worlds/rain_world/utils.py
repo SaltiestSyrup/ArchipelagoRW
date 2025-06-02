@@ -81,7 +81,7 @@ def necklace_derangement(pop: list[T], rng: Random, min_cycle_length: int = 3) -
         targets += shuffled[cursor + 1:cursor + size] + [shuffled[cursor]]
         cursor += size
 
-    return dict(zip(pop, shuffled))
+    return dict(zip(shuffled, targets))
 
 
 def placed_object_effective_whitelist(room_data: dict, shiny_data: dict, scuglist: set[str]) -> set[str]:
