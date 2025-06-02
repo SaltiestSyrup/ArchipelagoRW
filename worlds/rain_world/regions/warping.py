@@ -90,12 +90,14 @@ def generate(options: RainWorldOptions, rng: Random):
     ####################################################################################################################
     match options.normal_dynamic_warp_behavior:
         case "predetermined":
-            for source, target_region in necklace_derangement(normal_regions, rng).items():
+            n = options.predetermined_dynamic_warp_network_minimum_necklace_length.value
+            for source, target_region in necklace_derangement(normal_regions, rng, n).items():
                 target = rng.sample([t for t in targets if t.room.startswith(target_region)], 1)[0]
                 ret.append(PredeterminedNormalDynamic(source, target.room, target.ripple))
 
         case "predetermined_unlockable_source":
-            for source, target_region in necklace_derangement(normal_regions, rng).items():
+            n = options.predetermined_dynamic_warp_network_minimum_necklace_length.value
+            for source, target_region in necklace_derangement(normal_regions, rng, n).items():
                 target = rng.sample([t for t in targets if t.room.startswith(target_region)], 1)[0]
                 ret.append(PredeterminedNormalDynamic(source, target.room, target.ripple, True))
 

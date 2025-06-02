@@ -59,15 +59,16 @@ def random_bijective_endofunction(population: list[T], rng: Random, no_fixed_poi
     return ret
 
 
-def necklace_derangement(pop: list[T], rng: Random) -> dict[T, T]:
+def necklace_derangement(pop: list[T], rng: Random, min_cycle_length: int = 3) -> dict[T, T]:
     """Generates a derangement of `pop`."""
-    # Generate a random partition of `len(pop)` with no numbers smaller than 3.  These are the necklace lengths.
+    # Generate a random partition of `len(pop)` with no numbers smaller than MCL.  These are the necklace lengths.
     sizes = []
     remaining = len(pop)
-    while remaining > 2:
-        sizes.append(val := (3 if remaining == 3 else rng.randrange(3, remaining)))
+    mcl = min_cycle_length
+    while remaining >= mcl:
+        sizes.append(val := (mcl if remaining == mcl else rng.randrange(mcl, remaining)))
         remaining -= val
-    # If anything < 3 is left over, slap it onto a random necklace.
+    # If anything < MCL is left over, slap it onto a random necklace.
     sizes[rng.randrange(len(sizes))] += remaining
 
     # Shuffle the list.

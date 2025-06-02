@@ -186,6 +186,14 @@ class NormalDynamicWarpBehavior(Choice):
     visibility = Visibility.none
 
 
+class PredeterminedDynamicWarpNetworkMinimumNecklaceLength(Range):
+    display_name = "Warp network parameter"
+    range_start = 2
+    range_end = 18
+    default = 3
+    visibility = Visibility.spoiler
+
+
 class ThroneDynamicWarpBehavior(Choice):
     """How Throne dynamic warps behave.  See the Watcher documentation for explanation."""
     display_name = "Throne dynamic warp behavior"
@@ -844,6 +852,7 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     logic_ripplespace_min_req: LogicMinRippleTarget
     normal_dynamic_warp_behavior: NormalDynamicWarpBehavior
     throne_dynamic_warp_behavior: ThroneDynamicWarpBehavior
+    predetermined_dynamic_warp_network_minimum_necklace_length: PredeterminedDynamicWarpNetworkMinimumNecklaceLength
     dynamic_warp_pool_size: DynamicWarpPoolSize
     rotted_region_target: RottedRegionTarget
     checks_spread_rot: ChecksSpreadRot
