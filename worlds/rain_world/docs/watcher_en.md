@@ -4,20 +4,33 @@ Any documentation details that are specific to The Watcher are detailed here.
 
 ## This necessarily contains major spoilers!
 
-## Everything here is preliminary and subject to change!
+## Watcher worlds are not currently supported by the client.  Everything here is preliminary and subject to change!
 
 ## General
 ### Terminology
 A few pieces of terminology are used in this documentation for brevity:
-* **BWP region**:  A bad warp pool region - one of Corrupted Factories, Crumbling Fringes, Decaying Tunnels, or Infested Wastes.
-* **Permarotted region**: Any BWP region, plus Unfortunate Evolution and Outer Rim.
-* **Unrottable region**: Any of Shattered Terrace, Ancient Urban, or Daemon.
-* **Normal region**: Any region that isn't permarotted or unrottable.
+* **Watcherspace**: All regions added in The Watcher.  There are 27 Watcherspace regions.
+* **BWP region**:  A bad warp pool region - one of Corrupted Factories, Crumbling Fringes, Decaying Tunnels, or Infested Wastes.  There are 4 BWP regions.
+* **Permarotted region**: Any BWP region, plus Unfortunate Evolution and Outer Rim.  There are 6 permarotted regions.
+* **Unrottable region**: Any of Shattered Terrace, Ancient Urban, or Daemon.  There are 3 unrottable regions.
+* **Normal region**: Any Watcherspace region that isn't permarotted or unrottable.  There are 18 normal regions.
+
+### Ripple value
+As far as the in-game representation of Ripple is concerned, there are 9 Ripple "levels."
+When first entering Watcherspace, Ripple is set to level 1.
+Upon meeting the first Spinning Top, maximum Ripple is set to level 2.
+When stated this way, there are nine Ripple levels, numbered 1 through 9,
+and Ripple level 9 is required to enter Ripplespace.
+
+Internally, Ripple levels 1 through 9 actually correspond to the values 1.0 through 5.0,
+with each Ripple level a step of 0.5 above the previous level.
+This documentation will only refer to Ripple by the integer levels and not by the internal values. 
 
 ### Start in Watcherspace
 A Watcher world always starts in Watcherspace (that is, not on the Five Pebbles facility grounds).
-Max Ripple starts at 1, as if all three of the first Spinning Tops have already been encountered,
+Max Ripple starts at level 1, as if all three of the first Spinning Tops have already been encountered,
 which means the ability to camouflage is already unlocked.
+
 (UNIMPLEMENTED) 
 By default, the starting region is one of the three original starting regions -
 Coral Caves, Sunlit Port, or Torrential Railways -
@@ -41,17 +54,17 @@ The keys may make the corresponding region either a valid source or a valid targ
 
 ### Ripple
 Twelve progressive Ripple items are placed in the pool rather than being awarded by visiting Spinning Top.
-Initially, Ripple is restricted to 1 (as with Karma for unmodded Artificer).
-The first four Ripple items increase the maximum Ripple by one stage;
-after all four are collected, current Ripple may lie between 1 and 5.
-The next four Ripple items increase both the minimum and maximum by one stage;
-after eight total are collected, current Ripple may lie between 5 and 9.
+Initially, Ripple is restricted to level 1 (as with Karma for unmodded Artificer).
+The first four Ripple items increase the maximum Ripple by one level;
+after all four are collected, current Ripple may lie between level 1 and level 5.
+The next four Ripple items increase both the minimum and maximum by one level;
+after eight total are collected, current Ripple may lie between level 5 and level 9.
 At this point, it is possible to enter ripplespace (but see `logic_ripplespace_min_req`).
-The final four Ripple items increase the minimum by one stage,
-after which current Ripple is fixed at 9.
+The final four Ripple items increase the minimum by one level,
+after which current Ripple is fixed at level 9.
 
-Effects which are tied to current Ripple, such as the behavior of the camouflage ability
-and the creation of Ripple spawn, remain tied to current Ripple.
+Effects which are tied to current Ripple level, such as the behavior of the camouflage ability
+and the creation of Ripple spawn, remain tied to current Ripple level.
 
 ## Checks
 
@@ -71,7 +84,7 @@ See [the naming subpage](/tutorial/Rain%20World/naming/en) for naming of checks 
 Visting a warp point, which puts it on the map, is a check.
 A pair of two-way warp points is two separate checks.
 The check is earned even if the warp is not currently usable
-(e.g., cannot enter ripplespace or don't have the key).
+(e.g., cannot enter Ripplespace or don't have the key).
 
 ### Throne warp points
 (UNIMPLEMENTED) 
@@ -113,7 +126,7 @@ Its default setting, `alternate_only`, only generates the checks if `which_victo
 The `ascension` victory condition is the Toys/Driedel/Spinning Top ending.
 Logically, this just requires access to Ancient Urban.
 This in turn requires access to Shattered Terrace (possibly, but not necessarily, through Daemon)
-and the ability to shift into ripplespace,
+and the ability to shift into Ripplespace,
 which in turn requires at least 8 Ripple items (but see `logic_ripplespace_min_req` below).
 
 The `alternate` victory condition is the Sentient Rot ending.
@@ -126,16 +139,13 @@ will release all progressive Spinning Top checks immediately.
 
 ### Ripplespace minimum Ripple requirement
 `logic_ripplespace_min_req` controls the number of Ripple items required for Ripplespace to be logically accessible.
-The true access requirement for Ripplespace is having a *maximum* Ripple of 9.
-This requires 8 Ripple items, which would raise *minimum* Ripple to 5.
+The true access requirement for Ripplespace is having a *maximum* Ripple of level 9.
+This requires 8 Ripple items, which would raise *minimum* Ripple to level 5.
 This is the logical behavior if `logic_ripplespace_min_req` is set to `5` (its default).
 Setting it to anything higher ensures that more Ripple items are logically required to enter Ripplespace,
-reducing difficulty in maintaining the Ripple necessary to enter Ripplespace.
-If set to `9`, 12 Ripple items must be in logic so that minimum Ripple may be raised to 9
+reducing difficulty in maintaining the Ripple level necessary to enter Ripplespace.
+If set to `9`, 12 Ripple items must be in logic so that minimum Ripple may be raised to level 9
 before entering Ripplespace is required.
-
-This setting may affect logic even if `which_victory_condition` is `alternate`,
-since reaching the Spinning Top in Ancient Urban still releases all other Spinning Top checks.
 
 ### Rotted region target
 `rotted_region_target` controls the number of regions that must be rotted to trigger the Sentient Rot ending.
@@ -183,35 +193,35 @@ It has no effect on Throne dynamic warps.
 - <sup>o</sup> This value takes dynamic warps out of logic,
 so they will never be required to reach the victory condition.
 - <sup>p</sup> The number of regions in this pool is controlled by `dynamic_warp_pool_size`.
-- <sup>r</sup> Current Ripple must still satisfy the target's Ripple requirement
+- <sup>r</sup> Current Ripple level must still satisfy the target's Ripple level requirement
 unless `dynamic_warp_ripple_requirement` is `none`.
 
-| Dynamic warping from `A` to `B`...                             | `i.` | `v.`               | `p.` | `p.u.s.`     | `s.t.p.` | `u.t.p.`           |
-|----------------------------------------------------------------|------|--------------------|------|--------------|----------|--------------------|
-| ...could be required to reach the victory condition?           |      |                    | Yes  | Yes          | Yes      | Yes                |
-| ...is always possible once Ripple is at least 3?               | Yes  | Almost<sup>3</sup> | Yes  |              | Yes      | Almost<sup>4</sup> |
-| ...requires a `Dynamic` key?                                   |      |                    |      | Yes, for `A` |          | Yes, for `B`       |
-| ...requires meeting the Ripple requirement of `B`?<sup>1</sup> | Yes  | Yes                |      |              | Yes      |                    |
-| ...requires hoping that `B` gets picked as the target?         | Yes  | Yes                |      |              | Yes      | Yes                |
-| ...requires previously visiting `B`?                           |      | Yes                |      |              |          |                    |
-| ...requires that `B` is in the target pool?                    |      |                    |      |              | Yes      | Yes                |
-| ...requires that `B` is the predetermined target of `A`?       |      |                    | Yes  | Yes          |          |                    |
+| Dynamic warping from `A` to `B`...                                   | `i.` | `v.`               | `p.` | `p.u.s.`     | `s.t.p.` | `u.t.p.`           |
+|----------------------------------------------------------------------|------|--------------------|------|--------------|----------|--------------------|
+| ...could be required to reach the victory condition?                 |      |                    | Yes  | Yes          | Yes      | Yes                |
+| ...is always possible once Ripple is at least level 3?               | Yes  | Almost<sup>3</sup> | Yes  |              | Yes      | Almost<sup>4</sup> |
+| ...requires a `Dynamic` key?                                         |      |                    |      | Yes, for `A` |          | Yes, for `B`       |
+| ...requires meeting the Ripple level requirement of `B`?<sup>1</sup> | Yes  | Yes                |      |              | Yes      |                    |
+| ...requires hoping that `B` gets picked as the target?               | Yes  | Yes                |      |              | Yes      | Yes                |
+| ...requires previously visiting `B`?                                 |      | Yes                |      |              |          |                    |
+| ...requires that `B` is in the target pool?                          |      |                    |      |              | Yes      | Yes                |
+| ...requires that `B` is the predetermined target of `A`?             |      |                    | Yes  | Yes          |          |                    |
 
 - <sup>1</sup> Unless `dynamic_warp_ripple_requirement` is set to `none`.
 - <sup>2</sup> Except for Throne dynamic warps.
 - <sup>3</sup> Dynamic warping is impossible if no other regions have been visited.
 After at least a second region is visited, dynamic warping is always possible
-(provided that the Ripple requirement is either waived or satisfied for at least one target).
+(provided that the Ripple level requirement is either waived or satisfied for at least one target).
 - <sup>4</sup> Dynamic warping is impossible if no `Dynamic` keys have been collected,
 or if the only `Dynamic` key collected is for the current region.
 After two `Dynamic` keys are collected, dynamic warping is always possible.
 
-### Dynamic warp ripple requirement
+### Dynamic warp Ripple level requirement
 (UNIMPLEMENTED) 
-`dynamic_warp_ripple_requirement` dictates how the Ripple requirements for dynamic warp targets are handled.
+`dynamic_warp_ripple_requirement` dictates how the Ripple level requirements for dynamic warp targets are handled.
 This only affects normal dynamic warps.
 
-| Value       | Effect                                                                |
-|-------------|-----------------------------------------------------------------------|
-| `unaltered` | Unaltered.  Each target has some Ripple requirement that must be met. |
-| `none`      | Each target has no Ripple requirement.                                |
+| Value       | Effect                                                                      |
+|-------------|-----------------------------------------------------------------------------|
+| `unaltered` | Unaltered.  Each target has some Ripple level requirement that must be met. |
+| `none`      | Each target has no Ripple level requirement.                                |
