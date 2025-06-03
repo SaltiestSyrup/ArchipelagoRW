@@ -67,7 +67,7 @@ class RainWorldWorld(World):
         #################################################################
         # STARTING REGION
         self.starting_room = self.random.choice(get_starts(self.options))
-        self.start_is_default = self.options.random_starting_region == 0
+        self.start_is_default = (self.options.random_starting_region == 0) and self.options.starting_scug != "Watcher"
 
     def create_regions(self):
         for data in regions.generate(self.options, self.random):
