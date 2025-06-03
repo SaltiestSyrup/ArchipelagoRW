@@ -10,8 +10,11 @@ The icons are bright and colored once the check is collected.
 Food quest and passages are under their own nodes.
 
 ## PopTracker
-A PopTracker pack is maintained here:
-https://github.com/ThePirateJaz/Rain-World-PopTracker/releases
+A PopTracker pack is currently maintained by
+[ThePirateJaz](https://github.com/ThePirateJaz/Rain-World-PopTracker/releases).
+
+See [the PopTracker repository](https://github.com/black-sliver/PopTracker)
+for how to install and use PopTracker.
 
 ## Universal Tracker
 Rain World partially supports the Universal Tracker (UT).
@@ -28,4 +31,10 @@ To use it in a multiworld:
 
 ## Interactive map
 The [Downpour interactive map](https://rain-world-downpour-map.github.io/map.html?slugcat=white&region=SU)
-depicts all placed objects (including food, tokens, and pearls) and creature spawns.
+depicts all placed objects (including food, tokens, and pearls) and creature spawns for Downpour.
+
+The [Vanilla interactive map](https://henpemaz.github.io/Rain-World-Interactive-Map/)
+depicts creature spawns for Vanilla.
+
+The [Watcher interactive map](https://alduris.github.io/watcher-map/index.html)
+depicts placed objects, creature spawns, and warps for Watcherspace.

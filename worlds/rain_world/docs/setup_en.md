@@ -2,9 +2,10 @@
 
 ## 1. Add the Rain World APWorld
 
-To generate a multitworld with Rain World, add the Rain World `.apworld` to your AP installation by doing one of the following:
+To generate a multitworld with Rain World,
+add the Rain World `.apworld` to your AP installation by doing one of the following:
 - Grab an `.apworld` from [the releases page](https://github.com/alphappy/ArchipelagoRW/releases)
-and place it in the `worlds` folder of your AP installation.
+and place it in the `worlds` or `custom_worlds` folder of your AP installation.
 - Clone this repository and either use it directly or copy `worlds/rain_world`
 to the `worlds` folder of your AP installation.
 
@@ -15,7 +16,8 @@ You can see the [basic multiworld setup guide](/tutorial/Archipelago/setup/en)
 for a general overview of how Archipelago uses player YAML settings files,
 and [the settings subpage](/tutorial/Rain%20World/settings/en)
 for more on the specific settings that Rain World uses.
-You need a player YAML settings file even if you choose to leave all settings at their defaults.
+A player YAML settings file is required to generate a world,
+even if you choose to leave all settings at their defaults.
 
 You can get a player YAML settings file by doing one of the following:
 - Download a template from a release page.
@@ -31,7 +33,7 @@ You can get a player YAML settings file by doing one of the following:
   2. Once the WebHost is running, navigate to `localhost` in a browser.
   3. Select `Supported Games`, then find `Rain World` in the game list.
   4. Go to the game options page (or the weighted options page) and adjust settings as desired.
-  5. Click `Export Options` at the bottom.
+  5. Click `Export Options` at the bottom to download the file.
 
 ## 3. Install the Randomizer mod
 
@@ -41,7 +43,7 @@ Install the Randomizer mod by doing one of the following:
 - Download from GitHub.
   1. Download a release [from GitHub](https://github.com/SaltiestSyrup/RWRandomizer/releases).
      If you downloaded a specific release of the APWorld,
-     that release page should point to the version(s) of the Randomizer mod that it is designed for.
+     that release page should link to the version(s) of the Randomizer mod that it is designed for.
   2. Unzip it and place the `rwrandomizer` folder in your mods folder
      (`Rain World\RainWorld_Data\StreamingAssets\mods`).
 
@@ -80,8 +82,8 @@ Once the Archipelago room is open,
 connect to it by opening the `Archipelago` tab in Check Randomizer's Remix menu.
 Enter the host name, port number, room password (if there is one),
 and player name (which must exactly match the name specified in your player YAML settings),
-the click Connect.
-The Remix menu should print a message indicating a successful connections
+then click Connect.
+The Remix menu should print a message indicating a successful connection
 and including key pieces of information from your player YAML settings.
 
 ## 6. Start the game
@@ -91,6 +93,8 @@ as long as your version and enabled content mods match your player YAML settings
 A fresh campaign should be used when connecting to a new room.
 It does not necessarily need to be an entirely fresh save file,
 though using a seprate save file (or backup) is encoruaged.
+A Randomizer campaign should never be loaded without Randomizer enabled and connected - 
+doing so may irreversibly break the campaign's save data.
 
 For details on everything that gets randomized,
 see the [game description page](/games/Rain%20World/info/en).
