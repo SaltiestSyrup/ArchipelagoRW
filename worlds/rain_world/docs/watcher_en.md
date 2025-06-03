@@ -165,24 +165,18 @@ and of the semipermanent dynamic warps created in The Throne (`throne_dynamic_wa
 Both settings have similar possible values and similar effects.
 Their defaults are `visited` and `predetermined`, respectively.
 
-Some values for the `normal_dynamic_warp_behavior` setting
-can be further adjusted customized by adjusting `dynamic_warp_pool_size`.
-This defaults to 18 (all normal regions).
-It has no effect on Throne dynamic warps.
-
 | Setting                                        | Where can dynamic warps go?                                                                                                                                                                        |
 |------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `ignored` <sup>o</sup>                         | Anywhere.<sup>r</sup>  Logic pretends that dynamic warping is impossible.                                                                                                                          |
 | `visited` <sup>o</sup>                         | Anywhere in a region that has already been visited.                                                                                                                                                |
 | `predetermined`                                | Each normal region (or, for Throne warps, each of the four rooms) is tied to a randomly predetermined target in another region.  Warping from that region (or room) will always go to that target. |
 | `predetermined_unlockable_source` <sup>n</sup> | As above, but dynamic warping requires the _source_ region's dynamic key.  Without it, dynamic warping from that source is not possible.                                                           |
-| `static_target_pool` <sup>n</sup>              | A number of regions<sup>p</sup> are picked by the randomizer to be in the static pool.  Only regions in the static pool can be target of a dynamic warp. <sup>r</sup>                              |
-| `unlockable_target_pool` <sup>n</sup>          | As above, but dynamic warping additionally requires the _target_ region's dynamic key. <sup>p</sup> <sup>r</sup>                                                                                   |
+| `static_target_pool` <sup>n</sup>              | A number of regions are picked by the randomizer to be in the static pool.  Only regions in the static pool can be target of a dynamic warp. <sup>r</sup>                                          |
+| `unlockable_target_pool` <sup>n</sup>          | As above, but dynamic warping additionally requires the _target_ region's dynamic key. <sup>r</sup>                                                                                                |
 
 - <sup>n</sup> This value is only valid for `normal_dynamic_warp_behavior`.
 - <sup>o</sup> This value takes dynamic warps out of logic,
 so they will never be required to reach the victory condition.
-- <sup>p</sup> The number of regions in this pool is controlled by `dynamic_warp_pool_size`.
 - <sup>r</sup> Current Ripple must still satisfy the target's Ripple requirement
 unless `dynamic_warp_ripple_requirement` is `none`.
 
@@ -194,7 +188,7 @@ unless `dynamic_warp_ripple_requirement` is `none`.
 | ...requires meeting the Ripple requirement of `B`?<sup>1</sup> | Yes  | Yes                |      |              | Yes      |                    |
 | ...requires hoping that `B` gets picked as the target?         | Yes  | Yes                |      |              | Yes      | Yes                |
 | ...requires previously visiting `B`?                           |      | Yes                |      |              |          |                    |
-| ...requires that `B` is in the target pool?                    |      |                    |      |              | Yes      | Yes                |
+| ...requires that `B` is in the target pool?                    |      |                    | Yes  | Yes          | Yes      | Yes                |
 | ...requires that `B` is the predetermined target of `A`?       |      |                    | Yes  | Yes          |          |                    |
 
 - <sup>1</sup> Unless `dynamic_warp_ripple_requirement` is set to `none`.
@@ -205,6 +199,21 @@ After at least a second region is visited, dynamic warping is always possible
 - <sup>4</sup> Dynamic warping is impossible if no `Dynamic` keys have been collected,
 or if the only `Dynamic` key collected is for the current region.
 After two `Dynamic` keys are collected, dynamic warping is always possible.
+
+### Dynamic warp pool size
+`dynamic_warp_pool_size` controls the number of regions that can be the target of a normal dynamic warp.
+The default is `18`, which places all 18 normal regions in the pool.
+If `normal_dynamic_warp_behavior` is either `predetermined` setting,
+every normal region is a target from some other normal region.
+
+If set lower than `18`, some regions are selected at random to be excluded from the pool.
+These excluded regions can never be the target of a normal dynamic warp from another region.
+In a `predetermined` warp mode, some regions will be the target of multiple other normal regions.
+Regardless of warp mode, at least one region that has a dynamic warp target whose Ripple level requirement is 1
+(Sunlit Port, Coral Caves, Torrential Railways, and Aether Ridge) will be in the pool.
+
+This setting does not affect non-normal (Throne, Outer Rim, or bad) dynamic warping at all
+and is irrelevant if `normal_dynamic_warp_behavior` is `ignored` or `visited`.
 
 ### Dynamic warp ripple requirement
 (UNIMPLEMENTED) 

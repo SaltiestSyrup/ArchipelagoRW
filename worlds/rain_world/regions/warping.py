@@ -1,3 +1,4 @@
+from itertools import cycle
 from random import Random
 
 from BaseClasses import MultiWorld
@@ -14,7 +15,7 @@ class DynamicWarpConnection(ConnectionData):
                  source_room: bool = True, target_room: bool = True):
         self.ripple, self.source_room, self.target_room = ripple, source_room, target_room
         cond = Simple("Ripple", int((ripple - 1) * 2)) if ripple is not None else ConditionBlank
-        super().__init__(source, dest, f"{sort} dynamic warp to {dest} ({ripple})", cond)
+        super().__init__(source, dest, f"{sort} dynamic warp from {source} to {dest} ({ripple})", cond)
 
     def make(self, player: int, multiworld: MultiWorld, options: RainWorldOptions):
         self.source = room_to_region[self.source] if self.source_room else self.source
@@ -88,37 +89,27 @@ def generate(options: RainWorldOptions, rng: Random):
     ]
 
     ####################################################################################################################
-    match options.normal_dynamic_warp_behavior:
-        case "predetermined":
-            n = options.predetermined_dynamic_warp_network_minimum_necklace_length.value
-            for source, target_region in necklace_derangement(normal_regions, rng, n).items():
-                target = rng.sample([t for t in targets if t.room.startswith(target_region)], 1)[0]
-                ret.append(PredeterminedNormalDynamic(source, target.room, target.ripple))
+    pool_size = int(options.dynamic_warp_pool_size)
+    pool = normal_regions if pool_size == 18 else rng.sample(normal_regions, pool_size)
+    mnl = options.predetermined_dynamic_warp_network_minimum_necklace_length.value
 
-        case "predetermined_unlockable_source":
-            n = options.predetermined_dynamic_warp_network_minimum_necklace_length.value
-            for source, target_region in necklace_derangement(normal_regions, rng, n).items():
+    match bhv := options.normal_dynamic_warp_behavior:
+        case "predetermined" | "predetermined_unlockable_source":
+            mapping = necklace_derangement(normal_regions, rng, mnl)
+            mapping.update(zip(rng.sample(_r := list(set(normal_regions).difference(set(pool))), len(_r)), cycle(pool)))
+
+            for source, target_region in mapping.items():
                 target = rng.sample([t for t in targets if t.room.startswith(target_region)], 1)[0]
-                ret.append(PredeterminedNormalDynamic(source, target.room, target.ripple, True))
+                ret.append(PredeterminedNormalDynamic(source, target.room, target.ripple, bhv == 6))
 
         case "static_target_pool":
-            if (size := int(options.dynamic_warp_pool_size)) == 18:
-                pool = normal_regions
-            else:
-                pool = rng.sample(normal_regions, size)
-                # Ensure that at least one of the options has a target with a Ripple requirement of 1.0.
-                if len(set(pool).intersection(ripple_one_targets := ['WRFA', 'WSKB', 'WARF', 'WSKA'])) == 0:
-                    pool[0] = rng.choice(ripple_one_targets)
+            if len(set(pool).intersection(ripple_one_targets := ['WRFA', 'WSKB', 'WARF', 'WSKA'])) == 0:
+                pool[0] = rng.choice(ripple_one_targets)
 
             for target in [t for t in targets if any(t.room.startswith(r) for r in pool)]:
                 ret.append(StaticPoolNormalDynamic(target.room, target.ripple))
 
         case "unlockable_target_pool":
-            if (size := int(options.dynamic_warp_pool_size)) == 18:
-                pool = normal_regions
-            else:
-                pool = rng.sample(normal_regions, size)
-
             for target in [t for t in targets if any(t.room.startswith(r) for r in pool)]:
                 ret.append(UnlockablePoolNormalDynamic(target.room, target.ripple))
 
