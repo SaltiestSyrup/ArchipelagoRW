@@ -227,7 +227,7 @@ class RainWorldWorld(World):
             with open(f'{output_directory}/client_map.json', 'w') as f:
                 json.dump({"locations": locations.classes.location_client_map, "items": items.item_client_names}, f)
             with open(f'{output_directory}/player_{self.player}_debug.json', 'w') as f:
-                json.dump(fp=f, obj={
+                json.dump(fp=f, indent=2, obj={
                     "slot_data": self.fill_slot_data()
                 })
 
