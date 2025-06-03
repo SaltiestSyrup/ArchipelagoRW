@@ -62,15 +62,14 @@ These fields can only contain a string.
 These fields can only contain a list/array.
 The values contained within that list are decribed in the third column.
 
-| Field                  | Description                                                                  | Valid contained values             |
-|------------------------|------------------------------------------------------------------------------|------------------------------------|
-| `normal_warp_pool`     | Regions in the dynamic warp target pool.  May be empty or absent.            | Uppercase region codes as strings. |
-| `unlockable_warp_pool` | Regions in the unlockable dynamic warp target pool.  May be empty or absent. | Uppercase region codes as strings. |
+| Field       | Description                                      | Valid contained values             |
+|-------------|--------------------------------------------------|------------------------------------|
+| `warp_pool` | Regions in the dynamic warp pool.  May be empty. | Uppercase region codes as strings. |
 
 ## Dictionary
 These fields can only contain a dictionary/mapping.
 The keys and values within that dictionary are described in the third and fourth columns.
 
-| Field                  | Description                                                | Valid contained keys                          | Valid contained values              |
-|------------------------|------------------------------------------------------------|-----------------------------------------------|-------------------------------------|
-| `predetermined_warps`  | A mapping of predetermined warps.  May be empty or absent. | Region codes or Throne room names, uppercase. | The full name of a room, uppercase. |
+| Field                  | Description                                      | Valid contained keys                          | Valid contained values              |
+|------------------------|--------------------------------------------------|-----------------------------------------------|-------------------------------------|
+| `predetermined_warps`  | A mapping of predetermined warps.  May be empty. | Region codes or Throne room names, uppercase. | The full name of a room, uppercase. |

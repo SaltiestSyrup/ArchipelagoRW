@@ -185,6 +185,12 @@ class NormalDynamicWarpBehavior(Choice):
     default = 1
     visibility = Visibility.none
 
+    @property
+    def unlockable(self) -> bool: return self.value in (4, 6)
+
+    @property
+    def predetermined(self) -> bool: return self.value in (5, 6)
+
 
 class PredeterminedDynamicWarpNetworkMinimumNecklaceLength(Range):
     display_name = "Warp network parameter"

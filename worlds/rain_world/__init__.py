@@ -6,6 +6,7 @@ from Options import OptionError
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Tutorial, LocationProgressType
 from .game_data.shelters import get_starts, ingame_capitalization, get_default_start
+from .game_data.watcher import normal_regions
 from .options import RainWorldOptions
 from .conditions.classes import Simple
 from .game_data.general import region_code_to_name, story_regions, passage_proper_names
@@ -55,8 +56,7 @@ class RainWorldWorld(World):
     start_is_connected = False
     foodquest_accessibility_flag = 0
     predetermined_warps = {}
-    normal_pool = []
-    unlockable_pool = []
+    warp_pool = set()
 
     def generate_early(self) -> None:
         # This is the earliest that the options are available.  Player YAML failures should be tripped here.
@@ -136,8 +136,9 @@ class RainWorldWorld(World):
             pool = {
                 "Ripple": 12 + self.options.extra_karma_cap_increases.value,
                 **{k: 1 for k in portal_keys.keys()},
-                **{f"Dynamic: {k}": 1 for k in self.unlockable_pool},
             }
+            if (ndwb := self.options.normal_dynamic_warp_behavior).unlockable:
+                pool.update({f"Dynamic: {k}": 1 for k in (normal_regions if ndwb.predetermined else self.warp_pool)})
 
         precollect = {
             "MSC": 1 if self.options.msc_enabled else 0,
@@ -209,12 +210,8 @@ class RainWorldWorld(World):
         d["checks_foodquest_accessibility"] = (
             self.foodquest_accessibility_flag if self.options.checks_foodquest_expanded else 0)
 
-        if self.predetermined_warps:
-            d["predetermined_warps"] = self.predetermined_warps
-        if self.normal_pool:
-            d["normal_warp_pool"] = self.normal_pool
-        if self.unlockable_pool:
-            d["unlockable_warp_pool"] = self.unlockable_pool
+        d["predetermined_warps"] = self.predetermined_warps
+        d["warp_pool"] = list(self.warp_pool)
 
         # temp override
         d["which_campaign"] = self.options.starting_scug
