@@ -1,4 +1,4 @@
-from itertools import cycle
+from itertools import cycle, pairwise
 from random import Random
 
 from BaseClasses import MultiWorld
@@ -94,28 +94,36 @@ def generate(options: RainWorldOptions, rng: Random):
     mnl = options.predetermined_dynamic_warp_network_minimum_necklace_length.value
 
     match bhv := options.normal_dynamic_warp_behavior:
-        case "predetermined" | "predetermined_unlockable_source":
-            mapping = necklace_derangement(normal_regions, rng, mnl)
-            mapping.update(zip(rng.sample(_r := list(set(normal_regions).difference(set(pool))), len(_r)), cycle(pool)))
+        case "static_predetermined" | "unlockable_predetermined":
+            # Map targets not in the pool to targets in the pool for replacement.
+            # Cycle the pool to get an even distribution of replacements for small pools.
+            # Pairwise the pool so there is a second option if it would replace a region's target with itself.
+            replacing = dict(zip(list(set(normal_regions).difference(set(pool))), pairwise(cycle(pool))))
 
-            for source, target_region in mapping.items():
+            # Generate a derangement of the normal regions and iterate through it.
+            for source, target_region in necklace_derangement(normal_regions, rng, mnl).items():
+                # Get the potential replacements for this target if it is not in the pool.
+                rep1, rep2 = replacing.get(target_region, (target_region, target_region))
+                # Replace the target region, but not with the source region.
+                target_region = rep1 if rep1 != source else rep2
+                # Pick a random DynamicWarpTarget in the region and create the connection.
                 target = rng.sample([t for t in targets if t.room.startswith(target_region)], 1)[0]
                 ret.append(PredeterminedNormalDynamic(source, target.room, target.ripple, bhv == 6))
 
-        case "static_target_pool":
+        case "static_pool":
             if len(set(pool).intersection(ripple_one_targets := ['WRFA', 'WSKB', 'WARF', 'WSKA'])) == 0:
                 pool[0] = rng.choice(ripple_one_targets)
 
             for target in [t for t in targets if any(t.room.startswith(r) for r in pool)]:
                 ret.append(StaticPoolNormalDynamic(target.room, target.ripple))
 
-        case "unlockable_target_pool":
+        case "unlockable_pool":
             for target in [t for t in targets if any(t.room.startswith(r) for r in pool)]:
                 ret.append(UnlockablePoolNormalDynamic(target.room, target.ripple))
 
     ####################################################################################################################
     match options.throne_dynamic_warp_behavior:
-        case "predetermined":
+        case "static_predetermined":
             chosen = rng.sample(normal_regions, 4)
             chosen = [rng.choice([t for t in targets if t.room.startswith(reg)]) for reg in chosen]
             chosen = sorted([c for c in chosen], key=lambda x: x.ripple)
