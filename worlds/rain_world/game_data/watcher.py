@@ -40,8 +40,13 @@ class PortalData:
 
     @property
     def key_name(self):
-        a, b = sorted(region_code_to_name[x.split("_")[0].upper()] for x in (self.source_room, self.target_room))
+        a, b = [region_code_to_name[x.split("_")[0].upper()] for x in sorted([self.source_room, self.target_room])]
         return f"Warp: {a} / {b}"
+
+    @property
+    def client_name(self) -> str:
+        a, b = [x.split("_")[0].upper() for x in sorted([self.source_room, self.target_room])]
+        return f"Warp-{a}-{b}"
 
     @property
     def should_have_key(self) -> bool:
@@ -57,8 +62,8 @@ class PortalData:
 
 
 class PortalKeyData:
-    def __init__(self, source: str, dest: str, spinning_top: bool, name: str):
-        self.source, self.dest, self.spinning_top, self.name = source, dest, spinning_top, name
+    def __init__(self, source: str, dest: str, spinning_top: bool, name: str, client_name: str):
+        self.source, self.dest, self.spinning_top, self.name, self.client_name = source, dest, spinning_top, name, client_name
 
 
 class WarpTargetData:
@@ -77,7 +82,7 @@ def initialize() -> tuple[list[PortalData], dict[str, PortalKeyData], list[WarpT
         s, t = data.source_room.split("_")[0].upper(), data.target_room.split("_")[0].upper()
         n = "".join(sorted([s, t]))
 
-        ret2.setdefault(n, PortalKeyData(s, t, data.spinning_top, data.key_name))
+        ret2.setdefault(n, PortalKeyData(s, t, data.spinning_top, data.key_name, data.client_name))
 
     ret3 = []
     for room, warpdata in static_data['SPECIAL']['Watcher']['DynamicWarpTargets'].items():

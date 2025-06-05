@@ -196,6 +196,8 @@ class RainWorldWorld(World):
             "difficulty_echo_low_karma",  # ...how low-karma echo appearances should be handled.
             "rotted_region_target",  # ...how many regions must be rotted for Watcher's alt ending.
             "spinning_top_keys",  # ...whether Spinning Top should appear without a key.
+            "normal_dynamic_warp_behavior",
+            "throne_dynamic_warp_behavior",
 
             # External tracker needs to know...
             "difficulty_glow", "difficulty_monk", "difficulty_hunter", "difficulty_outlaw", "difficulty_chieftain",

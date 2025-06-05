@@ -8,17 +8,19 @@ INITIAL_OFFSET = 6000
 class FixedWarpPoint(RoomLocation):
     def __init__(self, data: PortalData, offset: int):
         room = data.source_room.upper()
-        super().__init__(f"Fixed Warp - {room}", "", [], offset, room)
+        super().__init__(f"Fixed Warp - {room}", f"Warp-{room}", [], offset, room)
 
 
 class SpinningTop(RoomLocation):
     def __init__(self, data: PortalData, offset: int):
-        super().__init__("Spinning Top", "", [], offset, data.source_room.upper())
+        room = data.source_room.upper()
+        super().__init__("Spinning Top", f"SpinningTop-{room.split('_')[0]}", [], offset, room)
 
 
 class Rottening(RoomLocation):
     def __init__(self, data: WarpTargetData, offset: int):
-        super().__init__("Spread the Rot", "", [], offset, data.room.upper())
+        room = data.room.upper()
+        super().__init__("Spread the Rot", f"SpreadRot-{room.split('_')[0]}", [], offset, room)
 
 
 def initialize() -> tuple[list[FixedWarpPoint], list[SpinningTop], list[Rottening]]:

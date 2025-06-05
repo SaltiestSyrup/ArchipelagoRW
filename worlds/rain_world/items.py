@@ -161,7 +161,7 @@ all_items.update(gate_keys)
 # PORTAL KEYS
 portal_keys: dict[str, RainWorldItemData] = {
     data.name: RainWorldItemData(
-        data.name, data.name,
+        data.name, data.client_name,
         offset + 600 + i, ItemClassification.progression
     )
     for i, data in enumerate(pkeys.values())
@@ -171,7 +171,7 @@ all_items.update(portal_keys)
 #################################################################
 # DYNAMIC WARP KEYS
 dynamic_warp_keys: dict[str, RainWorldItemData] = {
-    f"Dynamic: {r}": RainWorldItemData(f"Dynamic: {r}", f"Dynamic: {r}", offset + 700 + i, ItemClassification.progression)
+    f"Dynamic: {r}": RainWorldItemData(f"Dynamic: {r}", f"Dynamic-{r}", offset + 700 + i, ItemClassification.progression)
     for i, r in enumerate(normal_regions)
 }
 all_items.update(dynamic_warp_keys)
