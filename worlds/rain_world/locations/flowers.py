@@ -15,7 +15,7 @@ class FlowerLocation(RoomLocation):
         self.flag_map: dict[tuple[str, str], ScugFlag] = {}
 
     def pre_generate(self, player: int, multiworld: MultiWorld, options: RainWorldOptions) -> bool:
-        if options.starting_scug not in self.flag_map[options.worldstate]:
+        if options.starting_scug not in self.flag_map.get(options.worldstate, set()):
             return False
         return super().pre_generate(player, multiworld, options)
 
