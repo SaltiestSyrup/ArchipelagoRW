@@ -1,15 +1,23 @@
 # Rain World Setup Guide
 
-## 1. Add the Rain World APWorld
+## 1. Locate relevant directories
 
-To generate a multitworld with Rain World,
-add the Rain World `.apworld` to your AP installation by doing one of the following:
-- Grab an `.apworld` from [the releases page](https://github.com/alphappy/ArchipelagoRW/releases)
-and place it in the `worlds` or `custom_worlds` folder of your AP installation.
-- Clone this repository and either use it directly or copy `worlds/rain_world`
-to the `worlds` folder of your AP installation.
+There are two directories you may need to access during setup.
+- Find the location of your Archipelago (AP) installation by opening the AP launcher and clicking `Browse files`.
+This will be referred to as your **AP folder**.
+- Find the location of your Rain World (RW) installation.
+If installed through Steam, right click on Rain World in the Steam Library,
+hover `Manage`, then click `Browse local files`.
+This will be referred to as your **RW folder**.
 
-## 2. Create a player YAML settings file
+## 2. Add the Rain World APWorld
+
+To generate a multitworld with Rain World, the `.apworld` has to be installed.
+Download an `.apworld` from [a release page](https://github.com/alphappy/ArchipelagoRW/releases)
+and either place it in the `worlds` or `custom_worlds` folder of your AP folder (without unzipping it!),
+or use the `Install APWorld` button from the AP launcher.
+
+## 3. Create a player YAML settings file
 
 Player YAML settings files are used to tweak logic, determine start state and victory condition, and more.
 You can see the [basic multiworld setup guide](/tutorial/Archipelago/setup/en)
@@ -25,34 +33,45 @@ You can get a player YAML settings file by doing one of the following:
   that page will also contain template YAMLs that can be manually edited.
 - Generate the template file.
   1. Open the Archipelago Launcher and select `Generate Template Options`.
-  2. Find `Rain World.yaml` in `Players/Templates` of your AP installation.
-  3. Copy and edit this file to change settings.
+  2. Navigate to `Players/Templates` folder in your AP folder (which may open automatically).
+  3. Copy and edit `Rain World.yaml` to change settings.
 - Run the WebHost.
-  1. Run `WebHost.py` to start the WebHost locally.
+  1. Run `WebHost.py` in your AP folder to start the WebHost locally.
   If you haven't done this before, several Python packages will need to install first.
-  2. Once the WebHost is running, navigate to `localhost` in a browser.
+  2. Once the WebHost is running (which may take a minute), navigate to `localhost` in a browser.
   3. Select `Supported Games`, then find `Rain World` in the game list.
   4. Go to the game options page (or the weighted options page) and adjust settings as desired.
   5. Click `Export Options` at the bottom to download the file.
 
-## 3. Install the Randomizer mod
+Don't forget to set the player name at the top of the player YAML file;
+it may default to `Player{number}` which will become something like `Player1` when the multiworld is generated.
+You do not have to include the `{number}` in your name.
+
+## 4. Install the Randomizer mod
 
 Install the Randomizer mod by doing one of the following:
 - Download [from the Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3323349183).
-  1. By default, Steam will keep this updated to the most recent available version.
+  - Steam will automatically keep this updated to the version available on the Workshop by default.
+  However, this version may not necessarily be the newest available version of the mod.
+  The version here could lag behind the most recent release on GitHub
+  to avoid disrupting existing running multiworlds.
 - Download from GitHub.
   1. Download a release [from GitHub](https://github.com/SaltiestSyrup/RWRandomizer/releases).
-     If you downloaded a specific release of the APWorld,
+     If you downloaded a specific release of the APWorld in step 2,
      that release page should link to the version(s) of the Randomizer mod that it is designed for.
-  2. Unzip it and place the `rwrandomizer` folder in your mods folder
-     (`Rain World\RainWorld_Data\StreamingAssets\mods`).
+  2. Unzip it and place the `rwrandomizer` folder in your RW folder at
+     `Rain World\RainWorld_Data\StreamingAssets\mods`.
 
-## 4. Configure mods and game
+If you are subscribed to the mod on the Workshop and have a non-Workshop version in the `mods` folder,
+do not activate both versions at the same time.
+Note also that each version keeps its own save data.
+
+## 5. Configure mods and game
 
 Configure Rain World and your mods by doing the following:
 1. Make sure that your version of Rain World matches your player YAML settings.
    1. You can find the current version you are using on the Options menu in-game,
-      or by opening `Rain World\RainWorld_Data\StreamingAssets\GameVersion.txt`.
+      or by opening `Rain World\RainWorld_Data\StreamingAssets\GameVersion.txt` in your RW folder.
    2. To change game version on Steam:
       1. Right-click on Rain World in the library and select *Properties...*
       2. Open the *Betas* tab.
@@ -76,7 +95,7 @@ You should see an `Archipelago` tab in this interface.
 
 For recommended Rain World Remix settings, see [the Remix subpage](/tutorial/Rain%20World/remix/en).
 
-## 5. Join an Archipelago room
+## 6. Join an Archipelago room
 
 Once the Archipelago room is open,
 connect to it by opening the `Archipelago` tab in Check Randomizer's Remix menu.
@@ -86,7 +105,7 @@ then click Connect.
 The Remix menu should print a message indicating a successful connection
 and including key pieces of information from your player YAML settings.
 
-## 6. Start the game
+## 7. Start the game
 
 Once you are connected to a room, the matching Story campaign may be started
 as long as your version and enabled content mods match your player YAML settings.
