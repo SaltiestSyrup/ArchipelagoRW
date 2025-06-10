@@ -54,6 +54,8 @@ class PortalData:
         target_region = self.target_room.upper().split("_")[0]
         if source_region == "WORA":
             return target_region == "WRSA"
+        elif source_region == "WARA" and target_region in ["WAUA", "NULL"]:
+            return True
         elif any(x == source_region or x == target_region for x in ["WORA", "WAUA", "WSUR", "WHIR", "WGWR", "WDSR"]):
             return False
         elif source_region in ["WRSA", "CC", "SH", "LF"]:  # to RSA may have keys, but from RSA may not
