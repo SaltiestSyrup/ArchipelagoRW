@@ -24,7 +24,7 @@ class FoodQuestPip(AbstractLocation):
     @staticmethod
     def names(items: list[str]) -> list[str]:
         ret = []
-        re_items = set(items).difference({"DeadHazer", "DeadVultureGrub"})
+        re_items = sorted(list(set(items).difference({"DeadHazer", "DeadVultureGrub"})))
         for itemlist in [[wiki_names[item][0] for item in re_items], re_items]:
             ret += [f"Food Quest - {' or '.join(itemlist)}"]
             if len(itemlist) > 0:
