@@ -1,4 +1,4 @@
-from . import RainWorldTestBase
+from .bases import RainWorldTestBase
 
 
 class TestMonkVanilla(RainWorldTestBase):
