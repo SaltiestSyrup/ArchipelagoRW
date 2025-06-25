@@ -1,5 +1,9 @@
 from .bases import RainWorldTestBase
 
+if RUN_GENERAL_AP_UNITTESTS := False:
+    # Simply importing this runs the tests.
+    from .bases import RainWorldGeneralTestBase
+
 
 class TestMonkVanilla(RainWorldTestBase):
     options = {"which_campaign": "monk"}
