@@ -159,6 +159,7 @@ class WhichGateBehavior(Choice):
 
 
 class DebugOutput(Toggle):
+    """Whether to log extra information about the world and slot for debugging."""
     default = False
     visibility = Visibility.none
 
@@ -196,6 +197,7 @@ class NormalDynamicWarpBehavior(Choice):
 
 
 class PredeterminedDynamicWarpNetworkMinimumNecklaceLength(Range):
+    """The minimum length of a necklace in the derangement generator for the predetermined dynamic warp network."""
     display_name = "Warp network parameter"
     range_start = 2
     range_end = 18
@@ -295,6 +297,7 @@ class PriorityThrone(Choice):
 
 
 class SoPeeping(FreeText):
+    """Temporary setting for allowing Watcher generation."""
     visibility = Visibility.none
 
 
