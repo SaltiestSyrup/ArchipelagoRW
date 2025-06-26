@@ -1031,7 +1031,7 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
             elif start == "SB" and self.difficulty_glow:
                 sphere_1_too_small = True
                 solutions.append("Disable `difficulty_glow`.")
-            elif start == "SI" and not self.msc_enabled:
+            elif start == "SI" and not self.msc_enabled and self.starting_scug == "Yellow":
                 sphere_1_too_small = True
                 solutions[2] = "Enable MSC."
 
