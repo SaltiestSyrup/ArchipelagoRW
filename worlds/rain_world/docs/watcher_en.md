@@ -4,9 +4,20 @@ Any documentation details that are specific to The Watcher are detailed here.
 
 ## This necessarily contains major spoilers!
 
-## Watcher worlds are not currently supported by the client.  Everything here is preliminary and subject to change!
-
 ## General
+### Beta testing state
+Watcher worlds are currently in a beta testing state, both for the APWorld and the client.
+Everything here is preliminary and subject to change.
+
+To generate a Watcher world, set `is_watcher_enabled: 'true'`
+and add `so_peeping: OAOAOA!` to your player YAML settings file.
+The `which_campaign` setting is ignored when this is set.
+Other Watcher-specific player YAML settings are discussed on this page.
+Some non-Watcher-specific settings still apply to Watcher worlds;
+some, like `which_gate_behavior`, are ignored.
+
+To play a Watcher world, a v2.0 release candidate of the client must be installed.
+
 ### Terminology
 A few pieces of terminology are used in this documentation for brevity:
 * **Watcherspace**: All regions added in The Watcher.  There are 27 Watcherspace regions.
