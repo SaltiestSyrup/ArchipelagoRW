@@ -631,6 +631,13 @@ class WtLillyPuck(WtGeneric):
     default = 20
 
 
+class WtDandelionPeach(WtGeneric):
+    """The relative weight of dandelion peaches in the non-trap filler item pool."""
+    display_name = "Dandelion Peach (MSC)"
+    item_name = "Dandelion Peach"
+    default = 20
+
+
 class WtFruit(WtGeneric):
     """The relative weight of blue fruit in the non-trap filler item pool."""
     display_name = "Blue Fruit"
@@ -920,6 +927,7 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     wt_lanterns: WtLantern
     wt_vulture_masks: WtVultureMask
     wt_lilypucks: WtLillyPuck
+    wt_dandelion_peaches: WtDandelionPeach
     wt_electric_spears: WtElectricSpear
     wt_singularity_bombs: WtSingularityBomb
     wt_joke_rifles: WtJokeRifle
@@ -1055,13 +1063,13 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
         ret = {a.item_name: a.value for a in [
             self.wt_rocks, self.wt_spears, self.wt_explosive_spears, self.wt_grenades,
             self.wt_flashbangs, self.wt_sporepuffs, self.wt_cherrybombs, self.wt_lilypucks,
-            self.wt_fruit, self.wt_bubblefruit, self.wt_eggbugeggs, self.wt_jellyfish,
-            self.wt_mushrooms, self.wt_slimemold, self.wt_fireeggs, self.wt_glowweed,
-            self.wt_electric_spears, self.wt_singularity_bombs, self.wt_lanterns,
+            self.wt_dandelion_peaches, self.wt_fruit, self.wt_bubblefruit, self.wt_eggbugeggs,
+            self.wt_jellyfish, self.wt_mushrooms, self.wt_slimemold, self.wt_fireeggs,
+            self.wt_glowweed, self.wt_electric_spears, self.wt_singularity_bombs, self.wt_lanterns,
             self.wt_karma_flowers, self.wt_vulture_masks, self.wt_joke_rifles,
         ]}
         if not self.msc_enabled:
-            for key in ("Lilypuck", "Fire Egg", "Glow Weed", "Electric Spear", "Singularity Bomb", "Joke Rifle"):
+            for key in ("Lilypuck", "Dandelion Peach", "Fire Egg", "Glow Weed", "Electric Spear", "Singularity Bomb", "Joke Rifle"):
                 ret[f"{key}"] = 0
 
         return ret
