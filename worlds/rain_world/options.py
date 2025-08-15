@@ -624,6 +624,13 @@ class WtCherrybomb(WtGeneric):
     default = 30
 
 
+class WtBubbleWeed(WtGeneric):
+    """The relative weight of bubble weed in the non-trap filler item pool."""
+    display_name = "Bubble Weed"
+    item_name = "Bubble Weed"
+    default = 20
+
+
 class WtLillyPuck(WtGeneric):
     """The relative weight of lilypucks in the non-trap filler item pool."""
     display_name = "Lilypuck (MSC)"
@@ -924,6 +931,7 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     wt_flashbangs: WtFlashbang
     wt_sporepuffs: WtSporePuff
     wt_cherrybombs: WtCherrybomb
+    wt_bubble_weed: WtBubbleWeed
     wt_lanterns: WtLantern
     wt_vulture_masks: WtVultureMask
     wt_lilypucks: WtLillyPuck
@@ -1062,11 +1070,11 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     def get_nontrap_weight_dict(self) -> dict[str, float]:
         ret = {a.item_name: a.value for a in [
             self.wt_rocks, self.wt_spears, self.wt_explosive_spears, self.wt_grenades,
-            self.wt_flashbangs, self.wt_sporepuffs, self.wt_cherrybombs, self.wt_lilypucks,
-            self.wt_dandelion_peaches, self.wt_fruit, self.wt_bubblefruit, self.wt_eggbugeggs,
-            self.wt_jellyfish, self.wt_mushrooms, self.wt_slimemold, self.wt_fireeggs,
-            self.wt_glowweed, self.wt_electric_spears, self.wt_singularity_bombs, self.wt_lanterns,
-            self.wt_karma_flowers, self.wt_vulture_masks, self.wt_joke_rifles,
+            self.wt_flashbangs, self.wt_sporepuffs, self.wt_cherrybombs, self.wt_bubble_weed,
+            self.wt_lilypucks, self.wt_dandelion_peaches, self.wt_fruit, self.wt_bubblefruit,
+            self.wt_eggbugeggs, self.wt_jellyfish, self.wt_mushrooms, self.wt_slimemold,
+            self.wt_fireeggs, self.wt_glowweed, self.wt_electric_spears, self.wt_singularity_bombs,
+            self.wt_lanterns, self.wt_karma_flowers, self.wt_vulture_masks, self.wt_joke_rifles,
         ]}
         if not self.msc_enabled:
             for key in ("Lilypuck", "Dandelion Peach", "Fire Egg", "Glow Weed", "Electric Spear", "Singularity Bomb", "Joke Rifle"):
