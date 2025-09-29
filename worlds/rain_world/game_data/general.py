@@ -51,14 +51,17 @@ region_code_to_name = {
     'WRRA': 'Rusted Wrecks',
     'WRSA': 'Daemon',
     'WSKA': 'Torrential Railways',
-    'WSKB': 'Sunlit Port',
+    'WSKB': 'Sunbaked Alley',
     'WSKC': 'Stormy Coast',
-    'WSKD': 'Shrouded Coast',
+    'WSKD': 'Shrouded Stacks',
     'WSSR': 'Unfortunate Evolution',
     'WSUR': 'Crumbling Fringes',
     'WTDA': 'Torrid Desert',
     'WTDB': 'Desolate Tract',
     'WVWA': 'Verdant Waterways',
+    'WPGA': 'Pillar Grove',
+    'WMPA': 'Migration Path',
+    'WVWB': 'Fractured Gateways'
 }
 
 regions_all = list(region_code_to_name.keys())
