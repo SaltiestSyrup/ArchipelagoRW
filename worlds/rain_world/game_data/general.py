@@ -134,9 +134,11 @@ direct_alternate_regions = {"DS": ["UG"], "SH": ["CL"], "SL": ["LM"], "SS": ["RM
 
 #################################################################
 # SCUG DATA
-scugs_all = ['Yellow', 'White', 'Red', 'Gourmand', 'Artificer', 'Rivulet', 'Spear', 'Saint', 'Inv']
-scugs_msc_watcher = ['Yellow', 'White', 'Red', 'Gourmand', 'Artificer', 'Rivulet', 'Spear', 'Saint', 'Inv', 'Watcher']
 scugs_vanilla = ['Yellow', 'White', 'Red']
+scugs_msc = ['Yellow', 'White', 'Red', 'Gourmand', 'Artificer', 'Rivulet', 'Spear', 'Saint', 'Inv']
+scugs_watcher = {"Yellow", "White", "Red", "Watcher"}
+scugs_msc_watcher = ['Yellow', 'White', 'Red', 'Gourmand', 'Artificer', 'Rivulet', 'Spear', 'Saint', 'Inv', "Watcher"]
+scugs_all = ['Yellow', 'White', 'Red', 'Gourmand', 'Artificer', 'Rivulet', 'Spear', 'Saint', 'Inv', "Watcher"]
 
 #################################################################
 # PASSAGE DATA
