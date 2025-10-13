@@ -549,6 +549,24 @@ class DifficultyEchoLowKarma(Choice):
     option_unaltered = 3
     default = 3
 
+#################################################################
+# UPGRADE SETTINGS
+class UpgradesSpearDamage(Range):
+    """Add an amount of items to the pool that permanently increase the damage of thrown spears.
+    Each progressive upgrade adds 10% damage on top of the slugcat's base damage."""
+    display_name = "Spear damage increases"
+    range_start = 0
+    range_end = 10
+    default = 0
+
+class UpgradesMoveSpeed(Range):
+    """Add an amount of items to the pool that permanently increase movement speed.
+    Each progressive upgrade adds 10% move speed on top of the slugcat's base move speed.
+    (Adding these to the pool when playing Rivulet is ill-advised)"""
+    display_name = "Movement speed increases"
+    range_start = 0
+    range_end = 10
+    default = 0
 
 #################################################################
 # FILLER SETTINGS
@@ -865,9 +883,11 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     pct_traps: PctTraps
     weight_jitter: FillerJitter
     extra_karma_cap_increases: ExtraKarmaCapIncreases
+    damage_upgrades: UpgradesSpearDamage
+    movement_upgrades: UpgradesMoveSpeed
 
     group_itempool = [
-        ExtraKarmaCapIncreases, PctTraps, FillerJitter
+        ExtraKarmaCapIncreases, PctTraps, UpgradesSpearDamage, UpgradesMoveSpeed, FillerJitter
     ]
 
     #################################################################

@@ -140,6 +140,11 @@ class RainWorldWorld(World):
             if (ndwb := self.options.normal_dynamic_warp_behavior).unlockable:
                 pool.update({f"Dynamic: {k}": 1 for k in (normal_regions if ndwb.predetermined else self.warp_pool)})
 
+        if self.options.damage_upgrades > 0:
+            pool.update({"Spear Damage Increase" : self.options.damage_upgrades})
+        if self.options.movement_upgrades > 0:
+            pool.update({"Movement Speed Increase" : self.options.movement_upgrades})
+
         precollect = {
             "MSC": 1 if self.options.msc_enabled else 0,
             f"Scug-{self.options.starting_scug}": 1,

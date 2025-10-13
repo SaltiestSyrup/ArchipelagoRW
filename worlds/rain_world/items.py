@@ -50,6 +50,11 @@ class TrapItemData(RainWorldItemData):
         super().__init__(name, client_name, code, ItemClassification.trap)
         self.gamestate = gamestate or []
 
+class UsefulItemData(RainWorldItemData):
+    def __init__(self, name: str, client_name: str, code: Optional[int], gamestate: Optional[list[str]] = None):
+        super().__init__(name, client_name, code, ItemClassification.useful)
+        self.gamestate = gamestate or []
+
 
 offset: int = constants.FIRST_ID
 
@@ -147,6 +152,11 @@ all_items: Dict[str, RainWorldItemData] = {
     "Spitter Spider trap": TrapItemData("Spitter Spider trap", "Trap-SpitterSpider", 332 + offset),
     "Brother Long Legs trap": TrapItemData("Brother Long Legs trap", "Trap-BrotherLongLegs", 333 + offset),
     "Daddy Long Legs trap": TrapItemData("Daddy Long Legs trap", "Trap-DaddyLongLegs", 334 + offset),
+
+    #################################################################
+    # FILLER - UPGRADES
+    "Spear Damage Increase": UsefulItemData("Spear Damage Increase", "Upgrade-SpearDamage", 370 + offset),
+    "Movement Speed Increase": UsefulItemData("Movement Speed Increase", "Upgrade-MoveSpeed", 371 + offset)
 }
 
 #################################################################
