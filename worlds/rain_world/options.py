@@ -559,15 +559,6 @@ class UpgradesSpearDamage(Range):
     range_end = 10
     default = 0
 
-class UpgradesMoveSpeed(Range):
-    """Add an amount of items to the pool that permanently increase movement speed.
-    Each progressive upgrade adds 10% move speed on top of the slugcat's base move speed.
-    (Adding these to the pool when playing Rivulet is ill-advised)"""
-    display_name = "Movement speed increases"
-    range_start = 0
-    range_end = 10
-    default = 0
-
 #################################################################
 # FILLER SETTINGS
 class PctTraps(Range):
@@ -884,10 +875,9 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     weight_jitter: FillerJitter
     extra_karma_cap_increases: ExtraKarmaCapIncreases
     damage_upgrades: UpgradesSpearDamage
-    movement_upgrades: UpgradesMoveSpeed
 
     group_itempool = [
-        ExtraKarmaCapIncreases, PctTraps, UpgradesSpearDamage, UpgradesMoveSpeed, FillerJitter
+        ExtraKarmaCapIncreases, PctTraps, UpgradesSpearDamage, FillerJitter
     ]
 
     #################################################################

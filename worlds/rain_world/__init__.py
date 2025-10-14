@@ -142,8 +142,6 @@ class RainWorldWorld(World):
 
         if self.options.damage_upgrades > 0:
             pool.update({"Spear Damage Increase" : self.options.damage_upgrades})
-        if self.options.movement_upgrades > 0:
-            pool.update({"Movement Speed Increase" : self.options.movement_upgrades})
 
         precollect = {
             "MSC": 1 if self.options.msc_enabled else 0,
