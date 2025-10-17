@@ -555,7 +555,10 @@ class DifficultyEchoLowKarma(Choice):
 class PerksToAdd(OptionList):
     """Choose which Expedition perks will be added to the item pool.
     If an ability in this list is given to a slugcat that innately has it, there is no effect.
-    Requires MSC."""
+    Requires MSC.
+
+    Valid Perks: Back Spear Perk, Dual Wielding Perk, Blast Resistance Perk, Explosive Parry Perk,
+    Explosive Jump Perk, Crafting Perk, Aquatic Perk, Agility Perk"""
     display_name = "Expedition Perks"
     valid_keys = ["back spear perk", "dual wielding perk", "blast resistance perk", "explosive parry perk",
                   "explosive jump perk", "crafting perk", "aquatic perk", "agility perk"]
