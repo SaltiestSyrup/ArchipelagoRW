@@ -141,7 +141,7 @@ class RainWorldWorld(World):
                 pool.update({f"Dynamic: {k}": 1 for k in (normal_regions if ndwb.predetermined else self.warp_pool)})
 
         if self.options.msc_enabled:
-            pool.update(**{perk : 1 for perk in self.options.perks_to_add})
+            pool.update(**{perk : 1 for perk in self.options.expedition_perks})
 
         precollect = {
             "MSC": 1 if self.options.msc_enabled else 0,

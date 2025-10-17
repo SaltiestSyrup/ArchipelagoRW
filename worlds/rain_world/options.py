@@ -552,7 +552,7 @@ class DifficultyEchoLowKarma(Choice):
 
 #################################################################
 # FILLER SETTINGS
-class PerksToAdd(OptionList):
+class ExpeditionPerks(OptionList):
     """Choose which Expedition perks will be added to the item pool.
     If an ability in this list is given to a slugcat that innately has it, there is no effect.
     Requires MSC.
@@ -875,13 +875,13 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
 
     #################################################################
     # ITEM POOL SETTINGS
-    perks_to_add: PerksToAdd
+    expedition_perks: ExpeditionPerks
     pct_traps: PctTraps
     weight_jitter: FillerJitter
     extra_karma_cap_increases: ExtraKarmaCapIncreases
 
     group_itempool = [
-        ExtraKarmaCapIncreases, PerksToAdd, PctTraps, FillerJitter
+        ExtraKarmaCapIncreases, ExpeditionPerks, PctTraps, FillerJitter
     ]
 
     #################################################################
