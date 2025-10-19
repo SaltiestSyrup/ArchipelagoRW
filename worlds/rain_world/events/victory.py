@@ -5,10 +5,10 @@ from ..game_data.watcher import normal_regions
 
 
 def generate(options: RainWorldOptions) -> list[EventData]:
-    alt = options.which_victory_condition == "alternate"
+    story = options.which_victory_condition == 1
 
     if options.starting_scug == "Watcher":
-        if alt:
+        if story:
             cond = AllOf(
                 Simple("Ripple", 8),
                 # For now, I'm just assuming that if you can access a region, you can rot it.
@@ -25,12 +25,15 @@ def generate(options: RainWorldOptions) -> list[EventData]:
     if options.starting_scug == "Saint":
         return [VictoryEvent("Ascension", "Rubicon", Simple("Karma", 8))]
 
-    # Hunter and Sofanthiel have no alterante, and no alternate exists without MSC.
-    if not alt or not options.msc_enabled or options.starting_scug in ["Red", "Inv"]:
+    # Sofanthiel has no alternate, and no alternate exists without MSC.
+    if not story or not options.msc_enabled or options.starting_scug == "Inv":
         return [VictoryEvent("Ascension", "Subterranean Depths", Simple("Karma", 8))]
 
     if options.starting_scug in ["Yellow", "White"]:
         return [VictoryEvent("Journey's End", "Outer Expanse")]
+
+    if options.starting_scug == "Red":
+        return [VictoryEvent("A Helping Hand", "Shoreline", Simple("Slag Key"))]
 
     if options.starting_scug == "Rivulet":
         return [

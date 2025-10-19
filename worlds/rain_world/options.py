@@ -118,9 +118,11 @@ class WhichVictoryCondition(Choice):
     """Whether ascension or a gamestate-specific alternative is the victory condition.
     The alternative victory condition depends on the selected gamestate.
 
-    **Vanilla**, **Hunter**, **Saint**, or **Sofanthiel**: No alternate.
+    **Vanilla**, **Saint**, or **Sofanthiel**: No alternate.
 
     **Monk** and **Survivor**: Reach Journey's End in Outer Expanse.
+
+    **Hunter**: Use the green neuron on Looks to the Moon in Shoreline.
 
     **Gourmand**: Receive the Mark and reach Journey's End in Outer Expanse.
 
@@ -134,7 +136,14 @@ class WhichVictoryCondition(Choice):
     """
     display_name = "Victory condition"
     option_ascension = 0
-    option_alternate = 1
+    option_story = 1
+    option_all_echoes = 2
+    option_food_quest = 3
+
+    alias_spinning_top = 0
+    alias_sentient_rot = 1
+    alias_weaver = 2
+    option_daemon = 4
 
 
 class WhichGateBehavior(Choice):
