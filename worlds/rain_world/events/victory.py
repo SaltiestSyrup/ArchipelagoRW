@@ -2,6 +2,7 @@ from .classes import EventData, VictoryEvent
 from .. import RainWorldOptions
 from ..conditions.classes import Simple, AllOf
 from ..game_data.watcher import normal_regions
+from ..locations.passages import generate_cond_pilgrim
 
 
 def generate(options: RainWorldOptions) -> list[EventData]:
@@ -20,6 +21,11 @@ def generate(options: RainWorldOptions) -> list[EventData]:
             return [VictoryEvent("Purpose", "Outer Rim", cond)]
         else:
             return [VictoryEvent("Peace", "Ancient Urban")]
+
+    # For Saint, the MS echo can be substituted in place of a normal echo.
+    # For better or worse, this is not accounted for in logic.
+    if options.which_victory_condition == 2:
+        return [VictoryEvent("Pilgrimage", "Events", generate_cond_pilgrim(options))]
 
     # Saint's victory condition is different regardless of setting.
     if options.starting_scug == "Saint":
