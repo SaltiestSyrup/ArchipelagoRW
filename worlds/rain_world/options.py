@@ -115,8 +115,13 @@ class WhichCampaign(Choice):
 
 
 class WhichVictoryCondition(Choice):
-    """Whether ascension or a gamestate-specific alternative is the victory condition.
-    The alternative victory condition depends on the selected gamestate.
+    """What the victory condition should be.
+    **Ascension** is the default, and **Story** is the slugcat specific ending.
+    **All Echoes** requires meeting enough Echoes to satisfy the Pilgrim passage.
+    **Food Quest** requires eating every edible food in order to fill out the tracker.
+    This includes expanded food quest, if it is enabled.
+
+    The **Story** victory condition depends on the selected gamestate:
 
     **Vanilla**, **Saint**, or **Sofanthiel**: No alternate.
 
@@ -139,11 +144,6 @@ class WhichVictoryCondition(Choice):
     option_story = 1
     option_all_echoes = 2
     option_food_quest = 3
-
-    alias_spinning_top = 0
-    alias_sentient_rot = 1
-    alias_weaver = 2
-    option_daemon = 4
 
 
 class WhichGateBehavior(Choice):
