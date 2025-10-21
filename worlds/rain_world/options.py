@@ -1052,6 +1052,9 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
                 return ("Sphere 1 is too small with these settings.  "
                         f"Do at least one of the following: \n{solution_string}")
 
+        if self.which_victory_condition == 3 and (self.starting_scug == "Gourmand") + self.checks_foodquest.value < 2:
+            return "Food quest checks must be enabled to use food quest victory condition."
+
         return None
 
     @property
