@@ -375,12 +375,12 @@ class RandomStartingRegion(Choice):
 class PassagePriority(Range):
     """Number of Passages that are randomly marked as priority checks,
     increasing the chance that they will contain progression items.
-    These are in addition to any manually-prioiritized Passages,
+    These are in addition to any manually-prioritized Passages,
     and will not override any manually-excluded Passages."""
     display_name = "Priority Passages"
     range_start = 0
     range_end = 14
-    default = 5
+    default = 3
 
 
 class ExtraKarmaCapIncreases(Range):
@@ -388,7 +388,7 @@ class ExtraKarmaCapIncreases(Range):
     display_name = "Extra karma cap increases"
     range_start = 0
     range_end = 30
-    default = 1
+    default = 3
 
 
 #################################################################
@@ -422,7 +422,7 @@ class ChecksFoodQuestExpanded(Toggle):
     and some slugcats will not be required to kill and eat extreme threats if that setting is enabled.
     Requires MSC."""
     display_name = "Expanded food quest"
-    default = True
+    default = False
 
 
 class ChecksTokensPearls(Toggle):
