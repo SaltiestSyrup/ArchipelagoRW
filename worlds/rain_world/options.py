@@ -64,6 +64,8 @@ class WhichGameVersion(Choice):
     @classmethod
     def get_option_name(cls, value: int) -> str: return cls.displaying[value][0]
 
+    visibility = Visibility.none
+
 
 class WhichCampaign(Choice):
     """Which slugcat's campaign you will play."""
