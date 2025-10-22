@@ -117,7 +117,7 @@ class WhichCampaign(Choice):
 class WhichVictoryCondition(Choice):
     """What the victory condition should be.
     **Ascension** is the default, and **Story** is the slugcat specific ending.
-    **All Echoes** requires meeting enough Echoes to satisfy the Pilgrim passage.
+    **Echoes** requires meeting enough Echoes to satisfy the Pilgrim passage.
     **Food Quest** requires eating every edible food in order to fill out the tracker.
     This includes expanded food quest, if it is enabled.
 
@@ -142,7 +142,7 @@ class WhichVictoryCondition(Choice):
     display_name = "Victory condition"
     option_ascension = 0
     option_story = 1
-    option_all_echoes = 2
+    option_echoes = 2
     option_food_quest = 3
 
 
