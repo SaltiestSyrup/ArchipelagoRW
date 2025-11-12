@@ -1095,7 +1095,7 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     @property
     def should_have_rot_spread_checks(self):
         return (self.starting_scug == "Watcher" and
-                (self.checks_spread_rot + (self.which_victory_condition == "alternate")) > 1)
+                (self.checks_spread_rot + (self.which_victory_condition == "story")) > 1)
 
 
 option_groups = [

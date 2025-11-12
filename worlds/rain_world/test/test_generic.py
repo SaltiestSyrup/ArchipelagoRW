@@ -88,27 +88,27 @@ class TestSofanthiel(RainWorldTestBase):
 
 
 class TestMonkMSCAlternate(RainWorldTestBase):
-    options = {"which_campaign": "monk", "which_victory_condition": "alternate", "is_msc_enabled": True}
+    options = {"which_campaign": "monk", "which_victory_condition": "story", "is_msc_enabled": True}
 
 
 class TestSurvivorMSCAlternate(RainWorldTestBase):
-    options = {"which_campaign": "survivor", "which_victory_condition": "alternate", "is_msc_enabled": True}
+    options = {"which_campaign": "survivor", "which_victory_condition": "story", "is_msc_enabled": True}
 
 
 class TestGourmandAlternate(RainWorldTestBase):
-    options = {"which_campaign": "gourmand", "which_victory_condition": "alternate", "is_msc_enabled": True}
+    options = {"which_campaign": "gourmand", "which_victory_condition": "story", "is_msc_enabled": True}
 
 
 class TestArtificerAlternate(RainWorldTestBase):
-    options = {"which_campaign": "artificer", "which_victory_condition": "alternate", "is_msc_enabled": True}
+    options = {"which_campaign": "artificer", "which_victory_condition": "story", "is_msc_enabled": True}
 
 
 class TestRivuletAlternate(RainWorldTestBase):
-    options = {"which_campaign": "rivulet", "which_victory_condition": "alternate", "is_msc_enabled": True}
+    options = {"which_campaign": "rivulet", "which_victory_condition": "story", "is_msc_enabled": True}
 
 
 class TestSpearAlternate(RainWorldTestBase):
-    options = {"which_campaign": "spearmaster", "which_victory_condition": "alternate", "is_msc_enabled": True}
+    options = {"which_campaign": "spearmaster", "which_victory_condition": "story", "is_msc_enabled": True}
 
 
 class TestWatcher(RainWorldTestBase):
