@@ -67,6 +67,8 @@ class RoomLocation(LocationData):
         super().__init__(f'{region_name} - {description}',
                          client_name, alt_names + [region_name, full_with_code], offset)
         self.room = room
+        location_hints.setdefault(region_name, set()).update({f'{region_name} - {description}'})
+
 
     def pre_generate(self, player: int, multiworld: MultiWorld, options: RainWorldOptions) -> bool:
         self.region = room_to_region[self.room]
