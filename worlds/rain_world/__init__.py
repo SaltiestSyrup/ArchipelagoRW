@@ -142,6 +142,8 @@ class RainWorldWorld(World):
 
         if self.options.damage_upgrades > 0:
             pool.update({"Spear Damage Increase" : self.options.damage_upgrades})
+        if self.options.msc_enabled:
+            pool.update(**{perk : 1 for perk in self.options.expedition_perks})
 
         precollect = {
             "MSC": 1 if self.options.msc_enabled else 0,
