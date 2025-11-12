@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from Options import PerGameCommonOptions, Toggle, Range, OptionGroup, Choice, ProgressionBalancing, Accessibility, \
-    Visibility, DeathLinkMixin, DeathLink, FreeText
+    Visibility, DeathLinkMixin, DeathLink, FreeText, OptionList
 from .conditions import GameStateFlag
 from .game_data import static_data
 from .game_data.bitflag import ScugFlagMap
@@ -561,6 +561,19 @@ class DifficultyEchoLowKarma(Choice):
 
 #################################################################
 # FILLER SETTINGS
+class ExpeditionPerks(OptionList):
+    """Choose which Expedition perks will be added to the item pool.
+    If an ability in this list is given to a slugcat that innately has it, there is no effect.
+    Requires MSC.
+
+    Valid Perks: Back Spear Perk, Dual Wielding Perk, Blast Resistance Perk, Explosive Parry Perk,
+    Explosive Jump Perk, Crafting Perk, Aquatic Perk, Agility Perk"""
+    display_name = "Expedition Perks"
+    valid_keys = ["back spear perk", "dual wielding perk", "blast resistance perk", "explosive parry perk",
+                  "explosive jump perk", "crafting perk", "aquatic perk", "agility perk"]
+    valid_keys_casefold = True
+
+
 class PctTraps(Range):
     """The percentage of filler items that will be traps.  Set to 0 to remove traps entirely."""
     display_name = "Trap percentage"
@@ -885,12 +898,13 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
 
     #################################################################
     # ITEM POOL SETTINGS
+    expedition_perks: ExpeditionPerks
     pct_traps: PctTraps
     weight_jitter: FillerJitter
     extra_karma_cap_increases: ExtraKarmaCapIncreases
 
     group_itempool = [
-        ExtraKarmaCapIncreases, PctTraps, FillerJitter
+        ExtraKarmaCapIncreases, ExpeditionPerks, PctTraps, FillerJitter
     ]
 
     #################################################################

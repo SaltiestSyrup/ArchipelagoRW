@@ -140,6 +140,9 @@ class RainWorldWorld(World):
             if (ndwb := self.options.normal_dynamic_warp_behavior).unlockable:
                 pool.update({f"Dynamic: {k}": 1 for k in (normal_regions if ndwb.predetermined else self.warp_pool)})
 
+        if self.options.msc_enabled:
+            pool.update(**{perk : 1 for perk in self.options.expedition_perks})
+
         precollect = {
             "MSC": 1 if self.options.msc_enabled else 0,
             f"Scug-{self.options.starting_scug}": 1,
