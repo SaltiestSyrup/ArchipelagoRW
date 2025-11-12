@@ -115,12 +115,19 @@ class WhichCampaign(Choice):
 
 
 class WhichVictoryCondition(Choice):
-    """Whether ascension or a gamestate-specific alternative is the victory condition.
-    The alternative victory condition depends on the selected gamestate.
+    """What the victory condition should be.
+    **Ascension** is the default, and **Story** is the slugcat specific ending.
+    **Echoes** requires meeting enough Echoes to satisfy the Pilgrim passage.
+    **Food Quest** requires eating every edible food in order to fill out the tracker.
+    This includes expanded food quest, if it is enabled.
 
-    **Vanilla**, **Hunter**, **Saint**, or **Sofanthiel**: No alternate.
+    The **Story** victory condition depends on the selected gamestate:
+
+    **Vanilla**, **Saint**, or **Sofanthiel**: No alternate.
 
     **Monk** and **Survivor**: Reach Journey's End in Outer Expanse.
+
+    **Hunter**: Use the green neuron on Looks to the Moon in Shoreline.
 
     **Gourmand**: Receive the Mark and reach Journey's End in Outer Expanse.
 
@@ -134,7 +141,9 @@ class WhichVictoryCondition(Choice):
     """
     display_name = "Victory condition"
     option_ascension = 0
-    option_alternate = 1
+    option_story = 1
+    option_echoes = 2
+    option_food_quest = 3
 
 
 class WhichGateBehavior(Choice):
@@ -1059,6 +1068,9 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
                 return ("Sphere 1 is too small with these settings.  "
                         f"Do at least one of the following: \n{solution_string}")
 
+        if self.which_victory_condition == 3 and (self.starting_scug == "Gourmand") + self.checks_foodquest.value < 2:
+            return "Food quest checks must be enabled to use food quest victory condition."
+
         return None
 
     @property
@@ -1099,7 +1111,7 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     @property
     def should_have_rot_spread_checks(self):
         return (self.starting_scug == "Watcher" and
-                (self.checks_spread_rot + (self.which_victory_condition == "alternate")) > 1)
+                (self.checks_spread_rot + (self.which_victory_condition == "story")) > 1)
 
 
 option_groups = [
