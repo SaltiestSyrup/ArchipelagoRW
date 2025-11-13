@@ -1,6 +1,9 @@
 __all__ = ["RainWorldWorld", "RainWorldWebWorld"]
 
+import pkgutil
 from typing import Mapping, Any
+
+from orjson import orjson
 
 from Options import OptionError
 from worlds.AutoWorld import World, WebWorld
@@ -222,6 +225,10 @@ class RainWorldWorld(World):
 
         # temp override
         d["which_campaign"] = self.options.starting_scug
+
+        # TODO: Change this when an official way to fetch world version from manifest exists
+        apworld_manifest = orjson.loads(pkgutil.get_data(__name__, "archipelago.json").decode("utf-8"))
+        d["apworld_version"] = apworld_manifest["world_version"]
 
         return d
 
