@@ -150,7 +150,7 @@ all_items: Dict[str, RainWorldItemData] = {
 
     #################################################################
     # FILLER - UPGRADES
-    "Spear Damage Increase": RainWorldItemData("Spear Damage Increase", "Upgrade-SpearDamage", 370 + offset, ItemClassification.useful)
+    "Spear Damage Increase": RainWorldItemData("Spear Damage Increase", "Upgrade-SpearDamage", 370 + offset, ItemClassification.useful),
     # FILLER - EXPEDITION PERKS
     "Back Spear Perk": RainWorldItemData("Back Spear Perk", "Exp-BackSpear", 380 + offset, ItemClassification.useful),
     "Dual Wielding Perk": RainWorldItemData("Dual Wielding Perk", "Exp-DualWielding", 381 + offset, ItemClassification.useful),

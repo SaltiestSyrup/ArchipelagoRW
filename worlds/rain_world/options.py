@@ -568,7 +568,7 @@ class UpgradesSpearDamage(Range):
     display_name = "Spear damage increases"
     range_start = 0
     range_end = 10
-    default = 0
+    default = 6
 
 #################################################################
 # FILLER SETTINGS
@@ -986,10 +986,10 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     wt_glowweed: WtGlowWeed
 
     group_filler = [
-        WtRock, WtSpear, WtExplosiveSpear, WtGrenade, WtFlashbang, WtSporePuff, WtCherrybomb, WtLantern, WtVultureMask,
-        WtFruit, WtBubbleFruit, WtEggbugEgg, WtJellyfish, WtMushroom, WtSlimeMold, WtKarmaFlower,
+        WtRock, WtSpear, WtExplosiveSpear, WtGrenade, WtFlashbang, WtSporePuff, WtCherrybomb, WtBubbleWeed, WtLantern,
+        WtVultureMask, WtFruit, WtBubbleFruit, WtEggbugEgg, WtJellyfish, WtMushroom, WtSlimeMold, WtKarmaFlower,
 
-        WtLillyPuck, WtElectricSpear, WtSingularityBomb, WtJokeRifle,
+        WtLillyPuck, WtDandelionPeach, WtElectricSpear, WtSingularityBomb, WtJokeRifle,
         WtFireEgg, WtGlowWeed
     ]
 
