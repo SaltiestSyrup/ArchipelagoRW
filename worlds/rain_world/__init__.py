@@ -176,6 +176,18 @@ class RainWorldWorld(World):
     def jitter(self, d: dict[Any, float]) -> dict[Any, float]:
         return {k: 0 if v == 0 else (v + self.random.random() * self.options.weight_jitter) for k, v in d.items()}
 
+    def get_filler_item_name(self) -> str:
+        # Get a single random filler item, weighted by options
+        weights = normalize(self.jitter(self.options.get_nontrap_weight_dict()))
+        r = self.random.random()
+        count = 0.0
+        for k, v in weights.items():
+            count += v
+            if r <= count:
+                return k
+
+        return "Rock"
+
     def set_rules(self) -> None:
         # ascension_item = Item("Ascension", ItemClassification.progression, None, self.player)
         # self.multiworld.get_location("Ascension", self.player).place_locked_item(ascension_item)
