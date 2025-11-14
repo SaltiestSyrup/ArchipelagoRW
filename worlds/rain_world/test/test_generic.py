@@ -124,7 +124,7 @@ class TestSaintEchoes(RainWorldTestBase):
 
 
 class TestFoodQuest(RainWorldTestBase):
-    options = {"which_campaign": "survivor", "which_victory_condition": "food_quest"}
+    options = {"which_campaign": "survivor", "which_victory_condition": "food_quest", "is_msc_enabled": True}
 
 
 class TestMSCFoodQuest(RainWorldTestBase):
@@ -132,7 +132,7 @@ class TestMSCFoodQuest(RainWorldTestBase):
 
 
 class TestHunterFoodQuest(RainWorldTestBase):
-    options = {"which_campaign": "hunter", "which_victory_condition": "food_quest"}
+    options = {"which_campaign": "hunter", "which_victory_condition": "food_quest", "is_msc_enabled": True}
 
 
 class TestGourmandFoodQuest(RainWorldTestBase):
