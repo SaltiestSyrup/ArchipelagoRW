@@ -1,7 +1,10 @@
-from ..game_data.general import region_code_to_name, scugs_all
+from rule_builder.options import OptionFilter
+from rule_builder.rules import Has, True_
+from ..conditions import rule_helper
+from ..game_data.general import region_code_to_name
 from ..game_data import static_data
-from ..conditions.classes import Simple, AnyOf, AllOf, ConditionBlank
-from ..options import RainWorldOptions
+from ..conditions.classes import Simple, Direct
+from ..options import RainWorldOptions, WhichCampaign, DifficultySubmerged, ExpeditionPerks
 from .classes import ConnectionData, PhysicalRegion
 
 
@@ -18,6 +21,8 @@ def _generate(options: RainWorldOptions) -> list[PhysicalRegion | ConnectionData
                 filt = {r for r in rooms if "CAVE" in r or "PUMP" in r or r in ("SU_VR1", "SU_PS1", "SU_S05", "SU_PMPSTATION01")}
                 remainder = rooms.difference(filt).difference(tutorial).difference(spearspawn)
 
+                filtration_cond = Direct(rule_helper.can_explosive_jump | rule_helper.saint)
+
                 ret += [
                     PhysicalRegion("Outskirts", "SU", remainder),
                     PhysicalRegion("Outskirts filtration", "SU^", filt),
@@ -25,18 +30,12 @@ def _generate(options: RainWorldOptions) -> list[PhysicalRegion | ConnectionData
                     PhysicalRegion("Spearmaster spawn area", "SU^3", spearspawn),
 
                     ConnectionData("Survivor tutorial area", "Outskirts", "Eastward from SU_A43 to SU_A22"),
-
                     ConnectionData("Outskirts filtration", "Survivor tutorial area", "Eastward from SU_CAVE01 to SU_C04"),
-
                     ConnectionData("Spearmaster spawn area", "Outskirts filtration", "Upward from SU_INTRO01 to SU_PMPSTATION01"),
+                    ConnectionData("Outskirts", "Survivor tutorial area", "Westward from SU_A22 to SU_A43", filtration_cond),
+                    ConnectionData("Survivor tutorial area", "Outskirts filtration",
+                                   "Westward from SU_C04 to SU_CAVE01", filtration_cond),
                 ]
-
-                if options.starting_scug in ("Saint", "Artificer") or "Explosive Jump Perk" in options.expedition_perks.value:
-                    cond = Simple("Explosive Jump Perk") if "Explosive Jump Perk" in options.expedition_perks.value else ConditionBlank
-                    ret += [
-                        ConnectionData("Outskirts", "Survivor tutorial area", "Westward from SU_A22 to SU_A43", cond),
-                        ConnectionData("Survivor tutorial area", "Outskirts filtration", "Westward from SU_C04 to SU_CAVE01", cond),
-                    ]
 
             case "OE":
                 filt = {r for r in rooms if "PUMP" in r or r in ("OE_S03", "GATE_OE_SU[OE]")}
@@ -56,15 +55,15 @@ def _generate(options: RainWorldOptions) -> list[PhysicalRegion | ConnectionData
                 ret += [
                     PhysicalRegion("Submerged Superstructure", "MS", rooms.difference(bitter)),
                     PhysicalRegion("Bitter Aerie", "MS^", bitter),
+
+                    ConnectionData("Submerged Superstructure", "Bitter Aerie",
+                                   "Rarefaction cell deposit cutscene",
+                                   Direct(Has("Rarefaction Cell") & rule_helper.rivulet)),
+                    ConnectionData("Submerged Superstructure", "Bitter Aerie", "Enter Bitter Aerie",
+                                   Direct(rule_helper.saint)),
+                    ConnectionData("Bitter Aerie", "Submerged Superstructure", "Leave Bitter Aerie",
+                                   Direct(rule_helper.saint))
                 ]
-
-                if options.starting_scug == "Rivulet":
-                    ret.append(ConnectionData("Submerged Superstructure", "Bitter Aerie",
-                                              "Rarefaction cell deposit cutscene", Simple(["Rarefaction Cell"])))
-                elif options.starting_scug == "Saint":
-                    ret += [ConnectionData("Submerged Superstructure", "Bitter Aerie", "Enter Bitter Aerie"),
-                            ConnectionData("Bitter Aerie", "Submerged Superstructure", "Leave Bitter Aerie")]
-
 
             case "SB":
                 # Not in logic (except for Saint) to go back up the SB ravine.
@@ -81,15 +80,14 @@ def _generate(options: RainWorldOptions) -> list[PhysicalRegion | ConnectionData
 
                     PhysicalRegion("Filtration System", "SB^2", filt),
                     ConnectionData("Subterranean", "Filtration System", "Enter Filtration System",
-                                   Simple("The Glow") if options.difficulty_glow else ConditionBlank),
+                                   Direct(Has("The Glow", options=rule_helper.glow_logic, filtered_resolution=True))),
                     ConnectionData("Filtration System", "Subterranean", "Exit Filtration System"),
 
                     PhysicalRegion("Subterranean Depths", "SB^3", depths),
-                    ConnectionData("Filtration System", "Subterranean Depths", "Enter Depths")
+                    ConnectionData("Filtration System", "Subterranean Depths", "Enter Depths"),
+                    ConnectionData("Subterranean", "Subterranean ravine", "Up the ravine",
+                                   Direct(True_() & rule_helper.saint))
                 ]
-
-                if options.starting_scug == "Saint":
-                    ret.append(ConnectionData("Subterranean", "Subterranean ravine", "Up the ravine"))
 
 
             case "SS":
@@ -108,7 +106,9 @@ def _generate(options: RainWorldOptions) -> list[PhysicalRegion | ConnectionData
                 filt = {"VS_C10", "VS_C12", "VS_C11", "VS_E02", "VS_B06", "BS_S03", "VS_H01", "GATE_SB_VS[VS]",
                         "VS_S03"}
 
-                sump_cond = Simple("Aquatic Perk") if options.starting_scug == "Artificer" else ConditionBlank
+                sump_cond = Direct(Has("Aquatic Perk",
+                                       options=[OptionFilter(WhichCampaign, WhichCampaign.option_artificer)],
+                                       filtered_resolution=True))
 
                 ret += [
                     PhysicalRegion("Pipeyard", "VS", rooms.difference(sump.union(filt))),
@@ -117,7 +117,7 @@ def _generate(options: RainWorldOptions) -> list[PhysicalRegion | ConnectionData
                     ConnectionData("Sump Tunnel", "Pipeyard", "Exit Sump Tunnel", sump_cond),
                     PhysicalRegion("Pipeyard filtration", "VS^2", filt),
                     ConnectionData("Pipeyard", "Pipeyard filtration", "Enter dark filtration area",
-                                   Simple("The Glow") if options.difficulty_glow else ConditionBlank),
+                                   Direct(Has("The Glow", options=rule_helper.glow_logic, filtered_resolution=True))),
                     ConnectionData("Pipeyard filtration", "Pipeyard", "Exit dark filtration area"),
                 ]
 
@@ -142,11 +142,11 @@ def _generate(options: RainWorldOptions) -> list[PhysicalRegion | ConnectionData
                     ConnectionData("The Exterior", "Western Underhang", "UW_D06 to UW_C04", Simple("TubeWorm")),
                     ConnectionData("Western Underhang", "The Exterior", "UW_C04 to UW_D06"),
                     ConnectionData("Western Underhang", "Eastern Underhang + The Leg", "UW_C02 to UW_A05"),
-                ]
 
-                # Westward through Underhang is not terribly reasonable for Rivulet.
-                if options.starting_scug != "Rivulet":
-                    ret += [ConnectionData("Eastern Underhang + The Leg", "Western Underhang", "UW_A05 to UW_C02")]
+                    # Westward through Underhang is not terribly reasonable for Rivulet.
+                    ConnectionData("Eastern Underhang + The Leg", "Western Underhang", "UW_A05 to UW_C02",
+                                   Direct(True_() & OptionFilter(WhichCampaign, WhichCampaign.option_rivulet, operator="ne"))),
+                ]
 
             case "SL":
                 broken_precipice = {"GATE_UW_SL[SL]", "SL_BRIDGEEND", "SL_S13", "SL_EDGE01", "SL_EDGE02", "SL_BRIDGE01"}
@@ -157,6 +157,13 @@ def _generate(options: RainWorldOptions) -> list[PhysicalRegion | ConnectionData
                 near_submerged_gate = {"SL_C15", "SL_WALL02", "SL_WALL05", "SL_S15", "GATE_MS_SL[SL]"}
                 remainder = rooms.difference(broken_precipice).difference(above_moon).difference(near_submerged_gate)
 
+                submerged_cond = (rule_helper.submerged_should_populate
+                        & (Has("Aquatic Perk",
+                               options=[OptionFilter(ExpeditionPerks, "Aquatic Perk", operator="contains")],
+                               filtered_resolution=True)
+                           | rule_helper.rivulet
+                           | OptionFilter(DifficultySubmerged, DifficultySubmerged.option_off)))
+
                 ret += [
                     PhysicalRegion("Shoreline", "SL", remainder),
                     PhysicalRegion("Broken Precipice", "SL^", broken_precipice),
@@ -164,20 +171,14 @@ def _generate(options: RainWorldOptions) -> list[PhysicalRegion | ConnectionData
                     PhysicalRegion("Shoreline near gate to Submerged", "SL^3", near_submerged_gate),
 
                     ConnectionData("Shoreline above puppet", "Shoreline", "Enter puppet room"),
-                    ConnectionData("Shoreline near gate to Submerged", "Shoreline", "Leaving Submerged")
+                    ConnectionData("Shoreline near gate to Submerged", "Shoreline", "Leaving Submerged"),
+
+                    ConnectionData("Shoreline", "Shoreline above puppet", "Exit top of puppet room",
+                                   Direct(rule_helper.saint)),
+                    # If Submerged has no checks, swimming down towards the gate is not in logic.
+                    ConnectionData("Shoreline", "Shoreline near gate to Submerged",
+                                   "Entering towards Submerged", Direct(submerged_cond))
                 ]
-
-                if options.starting_scug == "Saint":
-                    ret += [ConnectionData("Shoreline", "Shoreline above puppet", "Exit top of puppet room")]
-
-                # If Submerged has no checks, swimming down towards the gate is not in logic.
-                if options.submerged_should_populate:
-                    if options.difficulty_submerged >= 1 and options.starting_scug != "Rivulet" and "Aquatic Perk" in options.expedition_perks.value:
-                        ret += [ConnectionData("Shoreline", "Shoreline near gate to Submerged",
-                                               "Entering towards Submerged", Simple("Aquatic Perk"))]
-                    else:
-                        ret += [ConnectionData("Shoreline", "Shoreline near gate to Submerged",
-                                               "Entering towards Submerged")]
 
             case "WARA":
                 western = {f"WARA_{r}" for r in {"E08", "P04", "P03", "P08", "P05", "P02", "S23", "P19"}}
@@ -259,8 +260,8 @@ def _generate(options: RainWorldOptions) -> list[PhysicalRegion | ConnectionData
             case _:
                 ret.append(PhysicalRegion(region_code_to_name[region], region, rooms))
 
-    if options.starting_scug == "Saint":
-        ret.append(ConnectionData("Subterranean", "Rubicon", "Enter Rubicon", Simple("Karma", 8)))
+    ret.append(ConnectionData("Subterranean", "Rubicon", "Enter Rubicon",
+                              Direct(Has("Karma", 8, options=[OptionFilter(WhichCampaign, WhichCampaign.option_saint)]))))
 
     return ret
 

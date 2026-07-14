@@ -95,6 +95,10 @@ class RainWorldWorld(World):
         for data in regions.generate(self.options, self.random):
             data.make(self, self.options)
 
+        # for rule in self.multiworld.get_entrances(self.player):
+        #     print(rule.name)
+        #     print(rule.access_rule)
+
         # Create locations
         locs = [data for data in locations.generate(self.options)
                 if data.pre_generate(self.player, self.multiworld, self.options)]
