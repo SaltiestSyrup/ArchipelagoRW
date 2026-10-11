@@ -6,22 +6,22 @@ if RUN_GENERAL_AP_UNITTESTS := False:
 
 # Test every combination of victory condition, rot spreading checks, and randomized weaver options to ensure they are behaving correctly
 class RotWeaverTestBase(RainWorldTestBase):
-    def assert_rot_checks(self):
+    def assertRotChecks(self):
         self.assertIn("Spread the Rot - Region #1", [loc.name for loc in self.multiworld.get_locations(self.player)])
 
-    def assert_no_rot_checks(self):
+    def assertNoRotChecks(self):
         self.assertNotIn("Spread the Rot - Region #1", [loc.name for loc in self.multiworld.get_locations(self.player)])
 
-    def assert_weaver_checks(self):
+    def assertWeaverChecks(self):
         self.assertIn("Weaver Encounter #1", [loc.name for loc in self.multiworld.get_locations(self.player)])
 
-    def assert_no_weaver_checks(self):
+    def assertNoWeaverChecks(self):
         self.assertNotIn("Weaver Encounter #1", [loc.name for loc in self.multiworld.get_locations(self.player)])
 
-    def assert_weaver_items(self):
+    def assertWeaverItems(self):
         self.assertIn("Progressive Weaver", [item.name for item in self.multiworld.get_items()])
 
-    def assert_no_weaver_items(self):
+    def assertNoWeaverItems(self):
         self.assertNotIn("Progressive Weaver", [item.name for item in self.multiworld.get_items()])
 
 
@@ -36,9 +36,9 @@ class TestRotEndingRotChecksWeaverOn(RotWeaverTestBase):
     }
 
     def test_logic(self):
-        self.assert_rot_checks()
-        self.assert_no_weaver_items()
-        self.assert_no_weaver_checks()
+        self.assertRotChecks()
+        self.assertNoWeaverItems()
+        self.assertNoWeaverChecks()
 
 
 class TestRotEndingRotChecksWeaverOff(RotWeaverTestBase):
@@ -52,9 +52,9 @@ class TestRotEndingRotChecksWeaverOff(RotWeaverTestBase):
     }
 
     def test_logic(self):
-        self.assert_rot_checks()
-        self.assert_no_weaver_items()
-        self.assert_no_weaver_checks()
+        self.assertRotChecks()
+        self.assertNoWeaverItems()
+        self.assertNoWeaverChecks()
 
 
 class TestRotEndingNoRotChecksWeaverOn(RotWeaverTestBase):
@@ -68,9 +68,9 @@ class TestRotEndingNoRotChecksWeaverOn(RotWeaverTestBase):
     }
 
     def test_logic(self):
-        self.assert_no_rot_checks()
-        self.assert_no_weaver_items()
-        self.assert_no_weaver_checks()
+        self.assertNoRotChecks()
+        self.assertNoWeaverItems()
+        self.assertNoWeaverChecks()
 
 
 class TestRotEndingNoRotChecksWeaverOff(RotWeaverTestBase):
@@ -84,9 +84,9 @@ class TestRotEndingNoRotChecksWeaverOff(RotWeaverTestBase):
     }
 
     def test_logic(self):
-        self.assert_no_rot_checks()
-        self.assert_no_weaver_items()
-        self.assert_no_weaver_checks()
+        self.assertNoRotChecks()
+        self.assertNoWeaverItems()
+        self.assertNoWeaverChecks()
 
 
 class TestWeaverEndingRotChecksWeaverOn(RotWeaverTestBase):
@@ -100,9 +100,9 @@ class TestWeaverEndingRotChecksWeaverOn(RotWeaverTestBase):
     }
 
     def test_logic(self):
-        self.assert_no_rot_checks()
-        self.assert_weaver_items()
-        self.assert_weaver_checks()
+        self.assertNoRotChecks()
+        self.assertWeaverItems()
+        self.assertWeaverChecks()
 
 
 class TestWeaverEndingRotChecksWeaverOff(RotWeaverTestBase):
@@ -116,9 +116,9 @@ class TestWeaverEndingRotChecksWeaverOff(RotWeaverTestBase):
     }
 
     def test_logic(self):
-        self.assert_no_rot_checks()
-        self.assert_no_weaver_items()
-        self.assert_weaver_checks()
+        self.assertNoRotChecks()
+        self.assertNoWeaverItems()
+        self.assertWeaverChecks()
 
 
 class TestWeaverEndingNoRotChecksWeaverOn(RotWeaverTestBase):
@@ -132,9 +132,9 @@ class TestWeaverEndingNoRotChecksWeaverOn(RotWeaverTestBase):
     }
 
     def test_logic(self):
-        self.assert_no_rot_checks()
-        self.assert_weaver_items()
-        self.assert_weaver_checks()
+        self.assertNoRotChecks()
+        self.assertWeaverItems()
+        self.assertWeaverChecks()
 
 
 class TestWeaverEndingNoRotChecksWeaverOff(RotWeaverTestBase):
@@ -148,9 +148,9 @@ class TestWeaverEndingNoRotChecksWeaverOff(RotWeaverTestBase):
     }
 
     def test_logic(self):
-        self.assert_no_rot_checks()
-        self.assert_no_weaver_items()
-        self.assert_weaver_checks()
+        self.assertNoRotChecks()
+        self.assertNoWeaverItems()
+        self.assertWeaverChecks()
 
 
 class TestTopEndingRotChecksWeaverOn(RotWeaverTestBase):
@@ -164,9 +164,9 @@ class TestTopEndingRotChecksWeaverOn(RotWeaverTestBase):
     }
 
     def test_logic(self):
-        self.assert_no_rot_checks()
-        self.assert_weaver_items()
-        self.assert_no_weaver_checks()
+        self.assertNoRotChecks()
+        self.assertWeaverItems()
+        self.assertNoWeaverChecks()
 
 
 class TestTopEndingRotChecksWeaverOff(RotWeaverTestBase):
@@ -180,9 +180,9 @@ class TestTopEndingRotChecksWeaverOff(RotWeaverTestBase):
     }
 
     def test_logic(self):
-        self.assert_rot_checks()
-        self.assert_no_weaver_items()
-        self.assert_no_weaver_checks()
+        self.assertRotChecks()
+        self.assertNoWeaverItems()
+        self.assertNoWeaverChecks()
 
 
 class TestTopEndingNoRotChecksWeaverOn(RotWeaverTestBase):
@@ -196,9 +196,9 @@ class TestTopEndingNoRotChecksWeaverOn(RotWeaverTestBase):
     }
 
     def test_logic(self):
-        self.assert_no_rot_checks()
-        self.assert_weaver_items()
-        self.assert_no_weaver_checks()
+        self.assertNoRotChecks()
+        self.assertWeaverItems()
+        self.assertNoWeaverChecks()
 
 
 class TestTopEndingNoRotChecksWeaverOff(RotWeaverTestBase):
@@ -212,6 +212,6 @@ class TestTopEndingNoRotChecksWeaverOff(RotWeaverTestBase):
     }
 
     def test_logic(self):
-        self.assert_no_rot_checks()
-        self.assert_no_weaver_items()
-        self.assert_no_weaver_checks()
+        self.assertNoRotChecks()
+        self.assertNoWeaverItems()
+        self.assertNoWeaverChecks()

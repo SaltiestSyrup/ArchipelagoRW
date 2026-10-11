@@ -4,15 +4,15 @@ from typing import Mapping, Any, TextIO
 
 from Options import OptionError
 from worlds.AutoWorld import World, WebWorld
-from BaseClasses import Tutorial, LocationProgressType
+from BaseClasses import Tutorial, LocationProgressType, Region
 from .game_data.shelters import get_starts, ingame_capitalization, get_default_start
 from .game_data.watcher import normal_regions
 from .options import RainWorldOptions
 from .conditions.classes import Simple
 from .game_data.general import region_code_to_name, all_regions, passage_proper_names
 from .events import get_events
-from .regions.classes import room_to_region
-from .regions.gates import gates
+from .regions.classes import room_to_region, RainWorldRegion, RegionData, ConnectionData
+from .regions.gates import gates, GateData
 from .utils import normalize, flounder2
 from .items import RainWorldItem, portal_keys, PortalKeyItemData
 from . import regions, locations, options, items
@@ -92,8 +92,37 @@ class RainWorldWorld(World):
 
     def create_regions(self):
         # Create and resolve regions and entrances
-        for data in regions.generate(self.options, self.random):
-            data.make(self, self.options)
+
+        genned_regions : dict[str, Region] = {}
+        genned_connections = set()
+        for data in regions.generate(self.options):
+            if isinstance(data, RegionData):
+                genned_regions[data.name] = data.make(self, self.options)
+            if isinstance(data, ConnectionData) or isinstance(data, GateData):
+                genned_connections.add(data)
+
+        for data in genned_connections:
+            data.make(self, self.options, genned_regions)
+
+        start = genned_regions[room_to_region[self.starting_room]]
+        self.create_entrance(genned_regions["Menu"], start, None, "Starting Region")
+
+        new_regions = { genned_regions["Menu"], start }
+        connected_regions = { genned_regions["Menu"], start }
+
+        while any(new_regions):
+            self.multiworld.regions.extend(new_regions)
+            new_regions = {e.connected_region for r in new_regions for e in r.exits
+                           if e.connected_region not in connected_regions}
+            connected_regions.update(new_regions)
+
+        # for data in genned_regions.values():
+        #     if any(data.entrances) or any(data.exits):
+        #         self.multiworld.regions.append(data)
+
+        # for rule in self.multiworld.get_entrances(self.player):
+        #     print(rule.name)
+        #     print(rule.access_rule)
 
         # Create locations
         locs = [data for data in locations.generate(self.options)
@@ -112,10 +141,6 @@ class RainWorldWorld(World):
         # Create and resolve events
         for data in get_events(self.options, self.multiworld.get_regions(self.player)):
             data.make(self, self.options)
-
-        #################################################################
-        # STARTING REGION
-        self.connect_starting_region(self.starting_room)
 
     def generate_basic(self) -> None:
         #################################################################

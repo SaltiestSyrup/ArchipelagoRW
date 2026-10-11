@@ -1,7 +1,7 @@
 from BaseClasses import Region, MultiWorld
+from rule_builder.rules import Rule, True_
 from ..options import RainWorldOptions
-from ..conditions.classes import Condition, ConditionBlank, Simple, AnyOf, AllOf
-from ..utils_ap import try_get_region
+from ..conditions.classes import Condition
 from ...AutoWorld import World
 
 
@@ -18,56 +18,23 @@ class RegionData:
     def __init__(self, name: str, populate: bool = True):
         self.name, self.populate = name, populate
 
-    def make(self, world: World, _: RainWorldOptions):
-        world.multiworld.regions.append(RainWorldRegion(self.name, world.player, world.multiworld, self.populate))
+    def make(self, world: World, _: RainWorldOptions) -> Region:
+        return RainWorldRegion(self.name, world.player, world.multiworld, self.populate)
 
 
 class ConnectionData:
     """
     Represents a connection between Archi regions.
     """
-    def __init__(self, source: str, dest: str, name: str, condition: Condition = ConditionBlank):
-        self.source, self.dest, self.name, self.condition = source, dest, name, condition
+    def __init__(self, source: str, dest: str, name: str, condition: Condition | Rule = True_()):
+        self.source, self.dest, self.name = source, dest, name
+        self.condition = condition if isinstance(condition, Rule) else condition.get_rule()
 
-    def make(self, world: World, options: RainWorldOptions):
-        source = try_get_region(world.multiworld, self.source, world.player)
-        dest = try_get_region(world.multiworld, self.dest, world.player)
-        if source and dest:
-            world.create_entrance(source, dest, self.condition.get_rule(), self.name)
-            # source.connect(dest, self.name, rule=self.condition.check(player))
-
-
-class Gate(ConnectionData):
-    """
-    Represents a karma gate connection between actual regions.
-    """
-    def __init__(self, source: str, dest: str, cost: int, gate_name: str, condition: Condition = ConditionBlank):
-        super().__init__(source, dest, "")
-        self.cost = cost
-        self.gate_name = gate_name
-        self.condition = condition
-
-    def make(self, world: World, options: RainWorldOptions):
-        source = world.multiworld.get_region(self.source, world.player)
-        dest = world.multiworld.get_region(self.dest, world.player)
-
-        karma_items = self.cost - (1 if self.cost < 6 else 2)
-
-        match options.which_gate_behavior:
-            case "key_only":
-                rule = Simple(f"GATE_{self.gate_name}")
-            case "karma_only":
-                rule = Simple("Karma", karma_items)
-            case "key_and_karma":
-                rule = AllOf(Simple(f"GATE_{self.gate_name}"), Simple("Karma", karma_items))
-            case "key_or_karma":
-                rule = AnyOf(Simple(f"GATE_{self.gate_name}"), Simple("Karma", karma_items))
-            case _:
-                raise ValueError(f"{options.which_gate_behavior} is not a valid value for `which_gate_behavior`")
-
-        rule = AllOf(rule, self.condition)
-        world.create_entrance(source, dest, rule.get_rule(), f'GATE_{self.gate_name} ({self.source} to {dest.name})')
-        # source.connect(dest, name=f'GATE_{self.gate_name} ({self.source} to {dest.name})', rule=rule.check(player))
+    def make(self, world: World, options: RainWorldOptions, regions: dict[str, Region]):
+        if self.source in regions and self.dest in regions:
+            source = regions[self.source]
+            dest = regions[self.dest]
+            world.create_entrance(source, dest, self.condition, self.name)
 
 
 room_to_region: dict[str, str] = dict()
@@ -78,77 +45,6 @@ class PhysicalRegion(RegionData):
         super().__init__(name, True)
         self.prefix, self.rooms = prefix, rooms
 
-    def make(self, world: World, options: RainWorldOptions):
-        self.populate = self._gen(options)
+    def make(self, world: World, options: RainWorldOptions) -> Region | None:
         room_to_region.update({room: self.name for room in self.rooms})
-        if self.populate:
-            region = RainWorldRegion(self.name, world.player, world.multiworld, self.populate, self.rooms, self.prefix)
-            world.multiworld.regions.append(region)
-
-    def _gen(self, options: RainWorldOptions) -> bool:
-        rcode, scug = self.prefix.split("^")[0], options.starting_scug
-
-        if scug == "Watcher":
-            if len(rcode) == 4 and rcode[0] == "W":
-                if options.logic_rotted_generation != 2 and rcode in ["WSUR", "WHIR", "WDSR", "WGWR"]:
-                    return False
-                return True
-            return False
-
-        match rcode:
-            case "SU":
-                # HARDCODE
-                from_oe = options.msc_enabled and scug in ("Yellow", "White", "Gourmand")
-                if self.name == "Spearmaster spawn area":
-                    return from_oe or (scug == "Spear" and options.randomize_starting_region == 0)
-                if self.name == "Outskirts filtration":
-                    # Can reach filtration area if we're coming from OE, we're Spearmaster with default start,
-                    # or we are able to travel backwards.
-                    return (from_oe or scug in ("Saint", "Artificer")
-                            or "Explosive Jump Perk" in options.expedition_perks.value
-                            or (scug == "Spear" and options.randomize_starting_region == 0))
-                if self.name not in ("Outskirts", "Survivor tutorial area"):
-                    return from_oe
-                return True
-            case "HI" | "GW" | "CC" | "SI" | "LF" | "SB":
-                return True
-            case "DS" | "SH" | "UW":
-                return scug != "Saint"
-            case "SS":
-                return scug not in ("Saint", "Rivulet")
-            case "SL":
-                # HARDCODE
-                if self.name == "Shoreline above puppet":
-                    if options.submerged_should_populate:
-                        return scug in ("Rivulet", "Saint")
-                    else:
-                        return scug == "Saint"
-                if self.name == "Broken Precipice":
-                    return options.msc_enabled and scug not in ("Artificer", "Spear", "Saint")
-                if self.name == "Shoreline near gate to Submerged":
-                    return options.submerged_should_populate and scug not in ("Artificer", "Spear")
-                return scug not in ("Artificer", "Spear")
-
-        if not options.msc_enabled:
-            return False
-
-        match rcode:
-            case "VS":
-                return True
-            case "OE":
-                return scug in ("Yellow", "White", "Gourmand")
-            case "LC":
-                return scug == "Artificer"
-            case "LM":
-                return scug in ("Artificer", "Spear")
-            case "RM":
-                return scug == "Rivulet"
-            case "DM":
-                return scug == "Spear"
-            case "UG" | "HR" | "CL":
-                return scug == "Saint"
-            case "MS":
-                # HARDCODE
-                if self.name == "Bitter Aerie":
-                    return options.submerged_should_populate and scug in ("Rivulet", "Saint")
-                return options.submerged_should_populate and scug not in ("Artificer", "Spear")
+        return RainWorldRegion(self.name, world.player, world.multiworld, self.populate, self.rooms, self.prefix)

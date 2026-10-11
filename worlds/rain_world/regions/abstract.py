@@ -3,7 +3,7 @@ from ..locations.passages import generate_cond_survivor
 from ..options import RainWorldOptions
 
 
-def generate(options: RainWorldOptions):
+def generate(options: RainWorldOptions) -> list[RegionData | ConnectionData]:
     ret = [
         RegionData("Menu"),
         RegionData("Events"),
