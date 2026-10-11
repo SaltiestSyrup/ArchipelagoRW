@@ -1,9 +1,8 @@
-from BaseClasses import MultiWorld
+from BaseClasses import Region
+from rule_builder.rules import True_, Has, False_, HasAll, Rule
 from .classes import room_to_region
 from ..options import RainWorldOptions
-from ..conditions.classes import Condition, ConditionBlank, Simple, AllOf, AnyOf
 from ..game_data.general import scugs_all, accessible_gates, region_code_to_name, direct_alternate_regions
-from ..utils_ap import try_get_region
 from ...AutoWorld import World
 
 
@@ -14,54 +13,59 @@ class GateData:
         self.right = right
         self.was_swapped = was_swapped
 
-    def make(self, world: World, options: RainWorldOptions):
+    def make(self, world: World, options: RainWorldOptions, regions: dict[str, Region]):
         dlcstate = "MSC" if options.msc_enabled else "Vanilla"
         if self.name[5:] not in accessible_gates[dlcstate][options.starting_scug]:
             return
 
         for effective_name, scugs in self.effective_names(options).items():
             _, left_name, right_name = effective_name.split("_")
+            key_rule = True_() if self.item_name is None else Has(self.item_name)
+            karma_rule_left = Has("Karma", self.left - 1 if self.left < 6 else 2)
+            karma_rule_right = Has("Karma", self.right - 1 if self.right < 6 else 2)
 
-            left = try_get_region(world.multiworld, room_to_region[f'{self.name}[{left_name}]'], world.player)
-            right = try_get_region(world.multiworld, room_to_region[f'{self.name}[{right_name}]'], world.player)
+            left_reg = regions[room_to_region[f'{self.name}[{left_name}]']]
+            right_reg = regions[room_to_region[f'{self.name}[{right_name}]']]
 
-            if not left or not right:
+            if not left_reg or not right_reg:
                 continue
 
             match options.which_gate_behavior:
                 case "karma_only":
-                    left_cost = Simple("Karma", self.left - (1 if self.left < 6 else 2))
-                    right_cost = Simple("Karma", self.right - (1 if self.right < 6 else 2))
+                    left_cost = karma_rule_left
+                    right_cost = karma_rule_right
                 case "key_only":
-                    left_cost = Simple(self.item_name)
-                    right_cost = Simple(self.item_name)
+                    left_cost = key_rule
+                    right_cost = key_rule
                 case "key_and_karma":
-                    left_cost = AllOf(Simple(self.item_name), Simple("Karma", self.left - (1 if self.left < 6 else 2)))
-                    right_cost = AllOf(Simple(self.item_name), Simple("Karma", self.right - (1 if self.right < 6 else 2)))
+                    left_cost = key_rule & karma_rule_left
+                    right_cost = key_rule & karma_rule_right
                 case "key_or_karma":
-                    left_cost = AnyOf(Simple(self.item_name), Simple("Karma", self.left - (1 if self.left < 6 else 2)))
-                    right_cost = AnyOf(Simple(self.item_name), Simple("Karma", self.right - (1 if self.right < 6 else 2)))
+                    left_cost = key_rule | karma_rule_left
+                    right_cost = key_rule | karma_rule_right
                 case _:
                     raise ValueError(f"invalid setting: {options.which_gate_behavior=}")
 
             # Some gates are always open to prevent softlocks
             if self.left < 0:
-                left_cost = ConditionBlank
+                left_cost = True_()
             if self.right < 0:
-                right_cost = ConditionBlank
+                right_cost = True_()
 
             _l, _r = self.additional_conditions(options)
-            left_condition = AllOf(_l, left_cost)
-            right_condition = AllOf(_r, right_cost)
+            left_condition = _l & left_cost
+            right_condition = _r & right_cost
 
-            if left.populate and right.populate and options.starting_scug in scugs:
-                world.create_entrance(left, right, left_condition.get_rule(),
+            if left_reg.populate and right_reg.populate and options.starting_scug in scugs:
+                world.create_entrance(left_reg, right_reg, left_condition,
                                       f"{'west' if self.was_swapped else 'east'} through {self.name}")
-                world.create_entrance(right, left, right_condition.get_rule(),
+                world.create_entrance(right_reg, left_reg, right_condition,
                                       f"{'east' if self.was_swapped else 'west'} through {self.name}")
 
     @property
-    def item_name(self) -> str:
+    def item_name(self) -> str | None:
+        if self in gates_no_item:
+            return None
         return self.names[0]
 
     @property
@@ -94,30 +98,39 @@ class GateData:
     def is_accessible(self, options: RainWorldOptions):
         return self.name[5:] in accessible_gates[options.dlcstate][options.starting_scug]
 
-    def additional_conditions(self, options: RainWorldOptions) -> tuple[Condition, Condition]:
-        left, right, gg = [], [], self.name[5:]
+    def additional_conditions(self, options: RainWorldOptions) -> tuple[Rule, Rule]:
+        left, right, gg = True_(), True_(), self.name[5:]
 
         if options.difficulty_glow:
             if gg in ("HI_SH", "GW_SH", "DS_SB"):
-                left.append("The Glow")
+                left = Has("The Glow")
             elif gg in ("SH_UW", "SH_SL", "SB_VS"):
-                right.append("The Glow")
+                right = Has("The Glow")
 
         if gg == "SB_OE":
             if not options.msc_enabled or options.starting_scug not in ("White", "Yellow", "Gourmand"):
-                left = ["Impossible"]
+                left = False_()
             if options.starting_scug == "Gourmand":
-                left.append("The Mark")
+                left = Has("The Mark")
 
         if gg == "UW_LC":
             if not (options.msc_enabled and options.starting_scug == "Artificer"):
-                left = ["Impossible"]
-            left += ["The Mark", "Citizen ID Drone"]
+                left = False_()
+            else:
+                left = HasAll("The Mark", "Citizen ID Drone")
 
-        if gg == "MS_SL" and options.starting_scug == "Rivulet" and options.difficulty_submerged == 2:
-            left.append("Disconnect_FP")
+        if gg == "MS_SL":
+            if not options.submerged_should_populate:
+                left = False_()
+                right = False_()
+            elif options.starting_scug == "Rivulet" and options.difficulty_submerged == 2:
+                left = Has("Disconnect_FP")
 
-        return Simple(left), Simple(right)
+        if gg == "SL_MS":
+            left = False_()
+            right = True_()
+
+        return left, right
 
     def effective_names(self, options: RainWorldOptions) -> dict[str, set[str]]:
         ret = {self.name: set(scugs_all)}

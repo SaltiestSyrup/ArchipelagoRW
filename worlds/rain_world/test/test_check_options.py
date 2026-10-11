@@ -12,6 +12,7 @@ class TestChecksSubmergedAquatic(RainWorldTestBase):
         self.assertIn("Submerged Superstructure", regions)
         self.assertIn("Shoreline near gate to Submerged", regions)
 
+
 class TestChecksSubmergedAquaticFail(RainWorldTestBase):
     options = {"checks_submerged": "only_aquatic", "is_msc_enabled": True}
 
@@ -19,6 +20,7 @@ class TestChecksSubmergedAquaticFail(RainWorldTestBase):
         regions = [region.name for region in self.multiworld.get_regions(self.player)]
         self.assertNotIn("Submerged Superstructure", regions)
         self.assertNotIn("Shoreline near gate to Submerged", regions)
+
 
 class TestChecksSubmergedOff(RainWorldTestBase):
     options = {"checks_submerged": "off", "is_msc_enabled": True, "which_campaign": "Rivulet"}
