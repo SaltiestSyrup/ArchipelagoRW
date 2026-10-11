@@ -116,14 +116,6 @@ class RainWorldWorld(World):
                            if e.connected_region not in connected_regions}
             connected_regions.update(new_regions)
 
-        # for data in genned_regions.values():
-        #     if any(data.entrances) or any(data.exits):
-        #         self.multiworld.regions.append(data)
-
-        # for rule in self.multiworld.get_entrances(self.player):
-        #     print(rule.name)
-        #     print(rule.access_rule)
-
         # Create locations
         locs = [data for data in locations.generate(self.options)
                 if data.pre_generate(self.player, self.multiworld, self.options)]

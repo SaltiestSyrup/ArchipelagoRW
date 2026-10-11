@@ -1,21 +1,28 @@
 from rule_builder.options import OptionFilter
-from rule_builder.rules import Has, True_, False_
+from rule_builder.rules import Has, True_, False_, Filtered, Rule
 from worlds.rain_world.options import WhichCampaign, DifficultyGlow, ChecksSubmerged, ExpeditionPerks
 
-survivor = True_() & OptionFilter(WhichCampaign, WhichCampaign.option_survivor)
-monk = True_() & OptionFilter(WhichCampaign, WhichCampaign.option_monk)
-hunter = True_() & OptionFilter(WhichCampaign, WhichCampaign.option_hunter)
-gourmand = True_() & OptionFilter(WhichCampaign, WhichCampaign.option_gourmand)
-artificer = True_() & OptionFilter(WhichCampaign, WhichCampaign.option_artificer)
-rivulet = True_() & OptionFilter(WhichCampaign, WhichCampaign.option_rivulet)
-spearmaster = True_() & OptionFilter(WhichCampaign, WhichCampaign.option_spearmaster)
-saint = True_() & OptionFilter(WhichCampaign, WhichCampaign.option_saint)
 
-can_explosive_jump = Has("Explosive Jump Perk") | artificer
+def perk_in_pool(perk: str) -> OptionFilter:
+    return OptionFilter(ExpeditionPerks, perk, operator="contains")
+
+def has_perk(perk: str) -> Rule:
+    return Has(perk, options=[perk_in_pool(perk)])
+
+survivor = Filtered(True_(), options=[OptionFilter(WhichCampaign, WhichCampaign.option_survivor)])
+monk = Filtered(True_(), options=[OptionFilter(WhichCampaign, WhichCampaign.option_monk)])
+hunter = Filtered(True_(), options=[OptionFilter(WhichCampaign, WhichCampaign.option_hunter)])
+gourmand = Filtered(True_(), options=[OptionFilter(WhichCampaign, WhichCampaign.option_gourmand)])
+artificer = Filtered(True_(), options=[OptionFilter(WhichCampaign, WhichCampaign.option_artificer)])
+rivulet = Filtered(True_(), options=[OptionFilter(WhichCampaign, WhichCampaign.option_rivulet)])
+spearmaster = Filtered(True_(), options=[OptionFilter(WhichCampaign, WhichCampaign.option_spearmaster)])
+saint = Filtered(True_(), options=[OptionFilter(WhichCampaign, WhichCampaign.option_saint)])
+
+can_explosive_jump = has_perk("Explosive Jump Perk") | artificer
 is_aquatic = Has("Aquatic Perk") | rivulet
 glow_logic = [OptionFilter(DifficultyGlow, DifficultyGlow.option_true)]
-submerged_should_populate = ((True_() & OptionFilter(ChecksSubmerged, 2))
+submerged_should_populate = ((OptionFilter(ChecksSubmerged, 2))
                              | ((False_()
                                  | OptionFilter(WhichCampaign, WhichCampaign.option_rivulet)
-                                 | OptionFilter(ExpeditionPerks, "Aquatic Perk", operator="contains"))
+                                 | perk_in_pool("Aquatic Perk"))
                                 & OptionFilter(ChecksSubmerged, 1)))

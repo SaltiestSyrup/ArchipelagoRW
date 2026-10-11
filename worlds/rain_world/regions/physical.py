@@ -21,7 +21,7 @@ def _generate(options: RainWorldOptions) -> list[PhysicalRegion | ConnectionData
                 filt = {r for r in rooms if "CAVE" in r or "PUMP" in r or r in ("SU_VR1", "SU_PS1", "SU_S05", "SU_PMPSTATION01")}
                 remainder = rooms.difference(filt).difference(tutorial).difference(spearspawn)
 
-                filtration_cond = Direct(rule_helper.can_explosive_jump | rule_helper.saint)
+                filtration_cond = rule_helper.can_explosive_jump | rule_helper.saint
 
                 ret += [
                     PhysicalRegion("Outskirts", "SU", remainder),
@@ -32,7 +32,8 @@ def _generate(options: RainWorldOptions) -> list[PhysicalRegion | ConnectionData
                     ConnectionData("Survivor tutorial area", "Outskirts", "Eastward from SU_A43 to SU_A22"),
                     ConnectionData("Outskirts filtration", "Survivor tutorial area", "Eastward from SU_CAVE01 to SU_C04"),
                     ConnectionData("Spearmaster spawn area", "Outskirts filtration", "Upward from SU_INTRO01 to SU_PMPSTATION01"),
-                    ConnectionData("Outskirts", "Survivor tutorial area", "Westward from SU_A22 to SU_A43", filtration_cond),
+                    ConnectionData("Outskirts", "Survivor tutorial area", "Westward from SU_A22 to SU_A43",
+                                   filtration_cond),
                     ConnectionData("Survivor tutorial area", "Outskirts filtration",
                                    "Westward from SU_C04 to SU_CAVE01", filtration_cond),
                 ]
