@@ -3,7 +3,6 @@ from rule_builder.rules import Has, True_
 from ..conditions import rule_helper
 from ..game_data.general import region_code_to_name
 from ..game_data import static_data
-from ..conditions.classes import Simple, Direct
 from ..options import RainWorldOptions, WhichCampaign, DifficultySubmerged, ExpeditionPerks
 from .classes import ConnectionData, PhysicalRegion
 
@@ -59,11 +58,11 @@ def _generate(options: RainWorldOptions) -> list[PhysicalRegion | ConnectionData
 
                     ConnectionData("Submerged Superstructure", "Bitter Aerie",
                                    "Rarefaction cell deposit cutscene",
-                                   Direct(Has("Rarefaction Cell") & rule_helper.rivulet)),
+                                   Has("Rarefaction Cell") & rule_helper.rivulet),
                     ConnectionData("Submerged Superstructure", "Bitter Aerie", "Enter Bitter Aerie",
-                                   Direct(rule_helper.saint)),
+                                   rule_helper.saint),
                     ConnectionData("Bitter Aerie", "Submerged Superstructure", "Leave Bitter Aerie",
-                                   Direct(rule_helper.saint))
+                                   rule_helper.saint)
                 ]
 
             case "SB":
@@ -81,13 +80,13 @@ def _generate(options: RainWorldOptions) -> list[PhysicalRegion | ConnectionData
 
                     PhysicalRegion("Filtration System", "SB^2", filt),
                     ConnectionData("Subterranean", "Filtration System", "Enter Filtration System",
-                                   Direct(Has("The Glow", options=rule_helper.glow_logic, filtered_resolution=True))),
+                                   Has("The Glow", options=rule_helper.glow_logic, filtered_resolution=True)),
                     ConnectionData("Filtration System", "Subterranean", "Exit Filtration System"),
 
                     PhysicalRegion("Subterranean Depths", "SB^3", depths),
                     ConnectionData("Filtration System", "Subterranean Depths", "Enter Depths"),
                     ConnectionData("Subterranean", "Subterranean ravine", "Up the ravine",
-                                   Direct(True_() & rule_helper.saint))
+                                   rule_helper.saint)
                 ]
 
 
@@ -107,9 +106,9 @@ def _generate(options: RainWorldOptions) -> list[PhysicalRegion | ConnectionData
                 filt = {"VS_C10", "VS_C12", "VS_C11", "VS_E02", "VS_B06", "BS_S03", "VS_H01", "GATE_SB_VS[VS]",
                         "VS_S03"}
 
-                sump_cond = Direct(Has("Aquatic Perk",
-                                       options=[OptionFilter(WhichCampaign, WhichCampaign.option_artificer)],
-                                       filtered_resolution=True))
+                sump_cond = Has("Aquatic Perk",
+                                options=[OptionFilter(WhichCampaign, WhichCampaign.option_artificer)],
+                                filtered_resolution=True)
 
                 ret += [
                     PhysicalRegion("Pipeyard", "VS", rooms.difference(sump.union(filt))),
@@ -118,7 +117,7 @@ def _generate(options: RainWorldOptions) -> list[PhysicalRegion | ConnectionData
                     ConnectionData("Sump Tunnel", "Pipeyard", "Exit Sump Tunnel", sump_cond),
                     PhysicalRegion("Pipeyard filtration", "VS^2", filt),
                     ConnectionData("Pipeyard", "Pipeyard filtration", "Enter dark filtration area",
-                                   Direct(Has("The Glow", options=rule_helper.glow_logic, filtered_resolution=True))),
+                                   Has("The Glow", options=rule_helper.glow_logic, filtered_resolution=True)),
                     ConnectionData("Pipeyard filtration", "Pipeyard", "Exit dark filtration area"),
                 ]
 
@@ -140,13 +139,13 @@ def _generate(options: RainWorldOptions) -> list[PhysicalRegion | ConnectionData
 
                     # Going into Underhang from the west requires a grapple worm.
                     # In Vanilla Survivor and Monk worldstates, there isn't one in D06 (but there is in CC).
-                    ConnectionData("The Exterior", "Western Underhang", "UW_D06 to UW_C04", Simple("TubeWorm")),
+                    ConnectionData("The Exterior", "Western Underhang", "UW_D06 to UW_C04", Has("TubeWorm")),
                     ConnectionData("Western Underhang", "The Exterior", "UW_C04 to UW_D06"),
                     ConnectionData("Western Underhang", "Eastern Underhang + The Leg", "UW_C02 to UW_A05"),
 
                     # Westward through Underhang is not terribly reasonable for Rivulet.
                     ConnectionData("Eastern Underhang + The Leg", "Western Underhang", "UW_A05 to UW_C02",
-                                   Direct(True_() & OptionFilter(WhichCampaign, WhichCampaign.option_rivulet, operator="ne"))),
+                                   True_() & OptionFilter(WhichCampaign, WhichCampaign.option_rivulet, operator="ne")),
                 ]
 
             case "SL":
@@ -175,10 +174,10 @@ def _generate(options: RainWorldOptions) -> list[PhysicalRegion | ConnectionData
                     ConnectionData("Shoreline near gate to Submerged", "Shoreline", "Leaving Submerged"),
 
                     ConnectionData("Shoreline", "Shoreline above puppet", "Exit top of puppet room",
-                                   Direct(rule_helper.saint)),
+                                   rule_helper.saint),
                     # If Submerged has no checks, swimming down towards the gate is not in logic.
                     ConnectionData("Shoreline", "Shoreline near gate to Submerged",
-                                   "Entering towards Submerged", Direct(submerged_cond))
+                                   "Entering towards Submerged", submerged_cond)
                 ]
 
             case "WARA":
@@ -190,7 +189,7 @@ def _generate(options: RainWorldOptions) -> list[PhysicalRegion | ConnectionData
                     PhysicalRegion("Western Shattered Terrace", "WARA^1", western),
                     # Rightwards through WARA_P20 just needs the minimum amount of float
                     ConnectionData("Western Shattered Terrace", "Shattered Terrace", "WARA_P20 to WARA_P01",
-                                   Simple("Ripple", 4)),
+                                   Has("Ripple", 4)),
                     # Leftwards can be jumped easily
                     ConnectionData("Shattered Terrace", "Western Shattered Terrace", "WARA_P20 to WARA_P19"),
                 ]
@@ -204,7 +203,7 @@ def _generate(options: RainWorldOptions) -> list[PhysicalRegion | ConnectionData
                     PhysicalRegion("Western Migration Path", "WMPA^1", western),
                     # Leftwards through the top of WMPA_B01 needs maximum float ability to cross
                     ConnectionData("Migration Path", "Western Migration Path", "WMPA_B01 to WMPA_A08",
-                                   Simple("Ripple", 8)),
+                                   Has("Ripple", 8)),
                     # Rightwards is just a drop-down
                     ConnectionData("Western Migration Path", "Migration Path", "WMPA_A08 to WMPA_B01"),
                 ]
@@ -240,29 +239,29 @@ def _generate(options: RainWorldOptions) -> list[PhysicalRegion | ConnectionData
                     # Second encounter requires Ripple 5, at which point warps will go to central WORA
                     # TODO: If warps are changed to be able to send player to WORA more often, this will only need first encounter
                     ConnectionData("Western Outer Rim", "Outer Rim", "Prince encounter opens middle WORA",
-                                   Simple("Ripple", 4)),
+                                   Has("Ripple", 4)),
                     # Crossing the bridge doesn't technically require float, but reaching WORA_EGG does
                     # Simpler and more convenient to just gate all the nearby checks
                     ConnectionData("Outer Rim", "Eastern Outer Rim", "WORA_COLBRIDGE to WORA_STARCATCHER08",
-                                   Simple("Ripple", 4)),
+                                   Has("Ripple", 4)),
                     ConnectionData("Eastern Outer Rim", "Outer Rim", "WORA_COLBRIDGE to WORA_STARCATCHER09",
-                                   Simple("Ripple", 4)),
+                                   Has("Ripple", 4)),
                     # Ripple requirements to enter throne rooms
                     ConnectionData("Western Outer Rim", "The Throne 1", "Throne to WORA_THRONE10",
-                                   Simple("Ripple", 2)),
+                                   Has("Ripple", 2)),
                     ConnectionData("Western Outer Rim", "The Throne 2", "Throne to WORA_THRONE05",
-                                   Simple("Ripple", 4)),
+                                   Has("Ripple", 4)),
                     ConnectionData("Western Outer Rim", "The Throne 3", "Throne to WORA_THRONE07",
-                                   Simple("Ripple", 6)),
+                                   Has("Ripple", 6)),
                     ConnectionData("Western Outer Rim", "The Throne 4", "Throne to WORA_THRONE09",
-                                   Simple("Ripple", 8)),
+                                   Has("Ripple", 8)),
                 ]
 
             case _:
                 ret.append(PhysicalRegion(region_code_to_name[region], region, rooms))
 
     ret.append(ConnectionData("Subterranean", "Rubicon", "Enter Rubicon",
-                              Direct(Has("Karma", 8, options=[OptionFilter(WhichCampaign, WhichCampaign.option_saint)]))))
+                              Has("Karma", 8) & rule_helper.saint))
 
     return ret
 
