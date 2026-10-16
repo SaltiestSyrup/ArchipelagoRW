@@ -10,8 +10,16 @@ from ...AutoWorld import World
 class PortalConnection(ConnectionData):
     def __init__(self, data: PortalData):
         self.data = data
-        s = "Spinning Top" if data.spinning_top else "Fixed warp"
-        super().__init__(data.source_room, data.target_room, f"{s} in {data.source_room}")
+        super().__init__(data.source_room, data.target_room, self.entrance_name)
+
+    @property
+    def entrance_name(self) -> str:
+        s = "Spinning Top" if self.data.spinning_top else "Fixed Warp"
+        return f"{s} in {self.data.source_room}"
+
+    @property
+    def key_name(self) -> str:
+        return self.data.key_name
 
     def make(self, world: World, options: RainWorldOptions, regions: dict[str, Region]):
         self.source, self.dest = room_to_region[self.data.source_room], room_to_region[self.data.target_room]

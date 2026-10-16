@@ -153,6 +153,14 @@ class WhichGateBehavior(Choice):
     option_karma_only = 3
     default = 0
 
+class SparseGates(Toggle):
+    """
+    When enabled, the world will only generate exactly as many gates / warps needed to reach every region.
+    Only applies when Gate Behavior is set to require keys.
+    """
+    display_name = "Sparse Gates"
+    default = False
+
 
 class DebugOutput(Toggle):
     """Whether to log extra information about the world and slot for debugging."""
@@ -973,13 +981,15 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     passage_progress_without_survivor: PassageProgressWithoutSurvivor
     which_victory_condition: WhichVictoryCondition
     which_gate_behavior: WhichGateBehavior
+    sparse_gates : SparseGates
     randomize_starting_region: RandomStartingRegion
     possible_starting_regions: PossibleStartingRegions
     debug_output: DebugOutput
 
     group_important = [
         IsMSCEnabled, IsWatcherEnabled, WhichCampaign, PassageProgressWithoutSurvivor,
-        WhichVictoryCondition, WhichGateBehavior, DeathLink, RandomStartingRegion, PossibleStartingRegions, DebugOutput
+        WhichVictoryCondition, WhichGateBehavior, SparseGates, DeathLink, RandomStartingRegion,
+        PossibleStartingRegions, DebugOutput,
     ]
 
     #################################################################
@@ -1008,7 +1018,7 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     damage_upgrades: UpgradesSpearDamage
 
     group_itempool = [
-        ExtraKarmaCapIncreases, UpgradesSpearDamage, ExpeditionPerks, PctTraps, FillerJitter
+        ExtraKarmaCapIncreases, UpgradesSpearDamage, ExpeditionPerks, PctTraps, FillerJitter,
     ]
 
     #################################################################
@@ -1091,7 +1101,7 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
         WtLillyPuck, WtDandelionPeach, WtGooieduck, WtElectricSpear, WtSingularityBomb, WtJokeRifle,
         WtFireEgg, WtHellSpear, WtGlowWeed,
 
-        WtBoomerang, WtPoisonSpear, WtGraffitiBomb, WtRotFruit, WtFireSpriteLarva
+        WtBoomerang, WtPoisonSpear, WtGraffitiBomb, WtRotFruit, WtFireSpriteLarva,
     ]
 
     #################################################################
@@ -1121,7 +1131,7 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
 
         WtTrapRedLizard, WtTrapRedCentipede, WtTrapSpitterSpider,
         WtTrapBrotherLongLegs, WtTrapDaddyLongLegs, WtTrapResponsibility,
-        WtTrapRippleSpawn, WtTrapBlizzardLizard
+        WtTrapRippleSpawn, WtTrapBlizzardLizard,
     ]
 
     @property

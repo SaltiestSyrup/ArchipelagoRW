@@ -13,6 +13,7 @@ from .game_data.general import region_code_to_name, all_regions, passage_proper_
 from .events import get_events
 from .regions.classes import room_to_region, RainWorldRegion, RegionData, ConnectionData
 from .regions.gates import gates, GateData
+from .regions.portals import PortalConnection
 from .utils import normalize, flounder2
 from .items import RainWorldItem, portal_keys, PortalKeyItemData
 from . import regions, locations, options, items
@@ -55,6 +56,7 @@ class RainWorldWorld(World):
     start_is_default = True
     start_is_connected = False
     foodquest_accessibility_flag = 0
+    selected_sparse_gates = set() # Populated in generate_regions only if Sparse Gates is enabled.
 
     ut_can_gen_without_yaml = True
 
@@ -92,28 +94,47 @@ class RainWorldWorld(World):
 
     def create_regions(self):
         # Create and resolve regions and entrances
-
         genned_regions : dict[str, Region] = {}
         genned_connections = set()
         for data in regions.generate(self.options):
+            # Get Region objects from all possible regions
             if isinstance(data, RegionData):
                 genned_regions[data.name] = data.make(self, self.options)
+            # Get all possible connections
             if isinstance(data, ConnectionData) or isinstance(data, GateData):
                 genned_connections.add(data)
 
+        # Connect all regions together. Rule Builder prunes impossible connections for us
+        entrance_name_to_gate = {}
         for data in genned_connections:
             data.make(self, self.options, genned_regions)
+            # If the Sparse Gates option is enabled, keep a dict mapping entrance names to item names
+            if self.options.sparse_gates:
+                if isinstance(data, GateData):
+                    entrance_name_to_gate.update({n: data.item_name for n in data.entrance_names})
+                elif isinstance(data, PortalConnection):
+                    entrance_name_to_gate[data.entrance_name] = data.key_name
 
+        # Assign starting region
         start = genned_regions[room_to_region[self.starting_room]]
         self.create_entrance(genned_regions["Menu"], start, None, "Starting Region")
 
+        # Walk from start through each connection to find all the regions that should be populated
         new_regions = { genned_regions["Menu"], start }
         connected_regions = { genned_regions["Menu"], start }
-
         while any(new_regions):
             self.multiworld.regions.extend(new_regions)
-            new_regions = {e.connected_region for r in new_regions for e in r.exits
-                           if e.connected_region not in connected_regions}
+            new_connections = {e for r in new_regions for e in r.exits
+                               if e.connected_region not in connected_regions}
+            new_regions = {e.connected_region for e in new_connections}
+            # If the Sparse Gates option is enabled, choose only one of the gate connections to keep for each region.
+            if self.options.sparse_gates:
+                for r in new_regions:
+                    c = [g for g in new_connections
+                         if g.connected_region == r
+                         and ("GATE" in g.name or "Fixed Warp" in g.name or "Spinning Top" in g.name)]
+                    if any(c):
+                        self.selected_sparse_gates.add(entrance_name_to_gate[self.random.choice(c).name])
             connected_regions.update(new_regions)
 
         # Create locations
@@ -123,7 +144,7 @@ class RainWorldWorld(World):
         foodquest_locs = [(data, data.pre_generate(self.player, self.multiworld, self.options))
                           for data in locations.generate_foodquest(self.options)]
 
-        # Resolve locations
+        # Resolve location rules
         genned_locs = locs + [l for l, v in foodquest_locs if v]
         for loc in genned_locs: loc.make(self, self.options)
 
@@ -164,7 +185,8 @@ class RainWorldWorld(World):
             pool = {
                 "Karma": 8 + self.options.extra_karma_cap_increases.value,
                 **{gate.names[0]: 1 for gate in (
-                    [g for g in gates if g.is_accessible(self.options)]
+                    [g for g in gates if g.is_accessible(self.options)
+                     and (not self.options.sparse_gates or g.item_name in self.selected_sparse_gates)]
                     if self.options.which_gate_behavior != "karma_only" else []
                 )},
                 **{f"Passage Token - {passage_proper_names[p]}": 1
@@ -183,7 +205,8 @@ class RainWorldWorld(World):
             pool = {
                 "Ripple": 12 + self.options.extra_karma_cap_increases.value,
                 **{k: 1 for k, v in portal_keys.items() if (not v.spinning_top or self.options.spinning_top_keys)
-                   and ("Daemon" not in v.name or self.options.daemon_keys)},
+                   and ("Daemon" not in v.name or self.options.daemon_keys)
+                   and (not self.options.sparse_gates or v.name in self.selected_sparse_gates)},
                 "Progressive Weaver": 4 if self.options.weaver_randomized else 0,
                 "Dial Warp Ability": 1,
                 "The Mark": 1,

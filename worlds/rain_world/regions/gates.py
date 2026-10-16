@@ -57,16 +57,20 @@ class GateData:
             right_condition = _r & right_cost
 
             if left_reg.populate and right_reg.populate and options.starting_scug in scugs:
-                world.create_entrance(left_reg, right_reg, left_condition,
-                                      f"{'west' if self.was_swapped else 'east'} through {self.name}")
-                world.create_entrance(right_reg, left_reg, right_condition,
-                                      f"{'east' if self.was_swapped else 'west'} through {self.name}")
+                world.create_entrance(left_reg, right_reg, left_condition, self.entrance_names[0])
+                world.create_entrance(right_reg, left_reg, right_condition, self.entrance_names[1])
 
     @property
     def item_name(self) -> str | None:
         if self in gates_no_item:
             return None
         return self.names[0]
+
+    @property
+    def entrance_names(self) -> tuple[str, str]:
+        return (f"{'West' if self.was_swapped else 'East'} through {self.name}",
+                f"{'East' if self.was_swapped else 'West'} through {self.name}")
+
 
     @property
     def names(self) -> list[str]:
