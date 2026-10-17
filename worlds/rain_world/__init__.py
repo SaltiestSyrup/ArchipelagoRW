@@ -3,12 +3,12 @@ __all__ = ["RainWorldWorld", "RainWorldWebWorld"]
 from typing import Mapping, Any, TextIO
 
 from Options import OptionError
+from rule_builder.rules import Has
 from worlds.AutoWorld import World, WebWorld
 from BaseClasses import Tutorial, LocationProgressType, Region
 from .game_data.shelters import get_starts, ingame_capitalization, get_default_start
 from .game_data.watcher import normal_regions
 from .options import RainWorldOptions
-from .conditions.classes import Simple
 from .game_data.general import region_code_to_name, all_regions, passage_proper_names
 from .events import get_events
 from .regions.classes import room_to_region, RainWorldRegion, RegionData, ConnectionData
@@ -130,11 +130,11 @@ class RainWorldWorld(World):
             # If the Sparse Gates option is enabled, choose only one of the gate connections to keep for each region.
             if self.options.sparse_gates:
                 for r in new_regions:
-                    c = [g for g in new_connections
-                         if g.connected_region == r
-                         and ("GATE" in g.name or "Fixed Warp" in g.name or "Spinning Top" in g.name)]
-                    if any(c):
-                        self.selected_sparse_gates.add(entrance_name_to_gate[self.random.choice(c).name])
+                    con = [g for g in new_connections
+                         if g.connected_region == r]
+                    if not any([c for c in con if (c.name not in entrance_name_to_gate)]):
+                        self.selected_sparse_gates.add(
+                            entrance_name_to_gate[self.random.choice(con).name])
             connected_regions.update(new_regions)
 
         # Create locations
@@ -266,10 +266,7 @@ class RainWorldWorld(World):
         return "Rock"
 
     def set_rules(self) -> None:
-        # ascension_item = Item("Ascension", ItemClassification.progression, None, self.player)
-        # self.multiworld.get_location("Ascension", self.player).place_locked_item(ascension_item)
-        self.set_completion_rule(Simple("Victory").get_rule())
-        # self.multiworld.completion_condition[self.player] = Simple("Victory").check(self.player)
+        self.set_completion_rule(Has("Victory"))
 
     def fill_slot_data(self) -> Mapping[str, Any]:
         d = self.options.as_dict(

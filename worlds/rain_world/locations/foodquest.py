@@ -1,6 +1,6 @@
 from BaseClasses import MultiWorld
+from rule_builder.rules import HasAny
 from .classes import LocationData, AbstractLocation
-from ..conditions.classes import Simple
 from ..game_data.general import extreme_threat_creatures, wiki_names
 from ..game_data.bitflag import ScugFlag
 from ..options import RainWorldOptions
@@ -19,7 +19,7 @@ class FoodQuestPip(AbstractLocation):
         _offset += 1
         self.scugflag = ScugFlag(gamestates)
         self.expanded = False
-        self.access_condition = Simple(items, 1)
+        self.access_condition = HasAny(*self.items)
 
     @staticmethod
     def names(items: list[str]) -> list[str]:

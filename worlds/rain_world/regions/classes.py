@@ -1,7 +1,6 @@
 from BaseClasses import Region, MultiWorld
 from rule_builder.rules import Rule, True_
 from ..options import RainWorldOptions
-from ..conditions.classes import Condition
 from ...AutoWorld import World
 
 
@@ -26,9 +25,9 @@ class ConnectionData:
     """
     Represents a connection between Archi regions.
     """
-    def __init__(self, source: str, dest: str, name: str, condition: Condition | Rule = True_()):
+    def __init__(self, source: str, dest: str, name: str, condition: Rule = True_()):
         self.source, self.dest, self.name = source, dest, name
-        self.condition = condition if isinstance(condition, Rule) else condition.get_rule()
+        self.condition = condition
 
     def make(self, world: World, options: RainWorldOptions, regions: dict[str, Region]):
         if self.source in regions and self.dest in regions:

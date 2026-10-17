@@ -1,10 +1,10 @@
 from typing import Optional, Callable
 
 from BaseClasses import MultiWorld, Location, LocationProgressType
+from rule_builder.rules import Rule, Has, True_
 from ..game_data.bitflag import ScugFlagMap
 from ..game_data.watcher import watcher_high_up_shinies
 from ..options import RainWorldOptions
-from ..conditions.classes import ConditionBlank, Condition, AnyOf, Simple
 from ..constants import FIRST_ID
 from ..regions.classes import room_to_region
 from ..game_data.general import region_code_to_name
@@ -18,14 +18,14 @@ location_client_map: dict[str, str] = {}
 
 class LocationData:
     def __init__(self, full_name: str, client_name: str, alt_names: list[str] | None, offset: int,
-                 region: str = "Menu", access_condition: Condition = ConditionBlank):
+                 region: str = "Menu", access_condition: Rule = True_()):
         """Represents a location of any type."""
         self.full_name = full_name
         self.client_name = client_name
         self.alt_names = alt_names or []
         self.loc = None
         self.region = region
-        self.access_condition: Condition = access_condition
+        self.access_condition: Rule = access_condition
         self.progress_type: LocationProgressType = LocationProgressType.DEFAULT
         self.whitelist: ScugFlagMap | None = None
 
@@ -38,10 +38,7 @@ class LocationData:
 
     def make(self, world: World, options: RainWorldOptions):
         """Resolve the rules on the location"""
-        # self.loc is not None and
-        if self.access_condition is not ConditionBlank:
-            world.set_rule(self.loc, self.access_condition.get_rule())
-            # add_rule(loc, self.access_condition.check(player))
+        world.set_rule(self.loc, self.access_condition)
         self.loc = None # Clear reference to location to avoid memory leak
 
     def pre_generate(self, player: int, multiworld: MultiWorld, options: RainWorldOptions) -> bool:
@@ -81,15 +78,15 @@ class RoomLocation(LocationData):
                                "Shoreline near gate to Submerged"):
                 return False
         if options.starting_scug == "Watcher" and self.client_name in watcher_high_up_shinies:
-            self.access_condition = AnyOf(Simple("Ripple", 4), Simple("Explosive Jump Perk"))
+            self.access_condition = Has("Ripple", 4) | Has("Explosive Jump Perk")
 
         return super().pre_generate(player, multiworld, options)
 
 
 class AbstractLocation(LocationData):
     def __init__(self, name: str, client_name: str, alt_names: list[str], offset: int, region: str,
-                 access_condition: Condition = ConditionBlank,
-                 access_condition_generator:  Optional[Callable[[RainWorldOptions], Condition]] = None):
+                 access_condition: Rule = True_(),
+                 access_condition_generator:  Optional[Callable[[RainWorldOptions], Rule]] = None):
         super().__init__(name, client_name, alt_names, offset, region, access_condition)
         self.acc_gen = access_condition_generator
 
@@ -101,8 +98,8 @@ class AbstractLocation(LocationData):
 
 class Passage(AbstractLocation):
     def __init__(self, name: str, region: str, offset: int,
-                 access_condition: Condition = ConditionBlank,
-                 access_condition_generator:  Optional[Callable[[RainWorldOptions], Condition]] = None):
+                 access_condition: Rule = True_(),
+                 access_condition_generator:  Optional[Callable[[RainWorldOptions], Rule]] = None):
         super().__init__(f"Passage - {self.proper_name(name)}", f"Passage-{name}", ["Passage"],
                          offset, region, access_condition, access_condition_generator)
 

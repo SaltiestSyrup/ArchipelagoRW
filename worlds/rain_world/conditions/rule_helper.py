@@ -17,6 +17,7 @@ artificer = Filtered(True_(), options=[OptionFilter(WhichCampaign, WhichCampaign
 rivulet = Filtered(True_(), options=[OptionFilter(WhichCampaign, WhichCampaign.option_rivulet)])
 spearmaster = Filtered(True_(), options=[OptionFilter(WhichCampaign, WhichCampaign.option_spearmaster)])
 saint = Filtered(True_(), options=[OptionFilter(WhichCampaign, WhichCampaign.option_saint)])
+watcher = Filtered(True_(), options=[OptionFilter(WhichCampaign, WhichCampaign.option_watcher)])
 
 can_explosive_jump = has_perk("Explosive Jump Perk") | artificer
 is_aquatic = Has("Aquatic Perk") | rivulet

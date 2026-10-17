@@ -1,8 +1,7 @@
 from BaseClasses import ItemClassification, Item, Location
-from rule_builder.rules import True_
+from rule_builder.rules import True_, Rule
 from ..options import RainWorldOptions
 from ..game_data.general import scugs_all
-from ..conditions.classes import Condition, ConditionBlank
 from ..regions.classes import room_to_region, RainWorldRegion
 from ..utils_ap import try_get_region
 from ...AutoWorld import World
@@ -11,7 +10,7 @@ from ...AutoWorld import World
 class EventData:
     def __init__(self, item_name: str, location_name: str, region: str,
                  classification: ItemClassification = ItemClassification.progression,
-                 condition: Condition = None):
+                 condition: Rule = True_()):
         self.item_name = item_name
         self.location_item = location_name
         self.region = region
@@ -26,18 +25,17 @@ class EventData:
             region.locations.append(location)
             location.place_locked_item(item)
             if self.condition is not None:
-                world.set_rule(location, self.condition.get_rule())
-                # add_rule(location, self.condition.check(player))
+                world.set_rule(location, self.condition)
 
 
 class VictoryEvent(EventData):
-    def __init__(self, location_name: str, region: str, condition: Condition = None):
+    def __init__(self, location_name: str, region: str, condition: Rule = True_()):
         # Note: events have to be progression even if they're not used in the condition for another conn/loc
         super().__init__("Victory", location_name, region, condition=condition)
 
 
 class StaticWorldEvent:
-    def __init__(self, item_name: str, location_name: str, region: str, condition: Condition = ConditionBlank,
+    def __init__(self, item_name: str, location_name: str, region: str, condition: Rule = True_(),
                  scugs: set[str] = scugs_all):
         self.item_name = item_name
         self.location_item = location_name
@@ -60,7 +58,7 @@ class StaticWorldEvent:
             location.show_in_spoiler = False
             region.locations.append(location)
             location.place_locked_item(item)
-            world.set_rule(location, self.condition.get_rule())
+            world.set_rule(location, self.condition)
             # add_rule(location, self.condition.check(player))
 
 

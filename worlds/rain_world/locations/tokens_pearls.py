@@ -1,7 +1,7 @@
 from BaseClasses import MultiWorld
+from rule_builder.rules import Has
 from .classes import RoomLocation
 from ..conditions import GameStateFlag
-from ..conditions.classes import Simple
 from ..game_data.general import scugs_vanilla, scugs_msc, scugs_watcher, scugs_msc_watcher
 from ..options import RainWorldOptions
 from ..game_data import static_data
@@ -43,7 +43,7 @@ class TokenOrPearl(RoomLocation):
             return False
         # HARDCODE: This token is far underwater and GW doesn't have Bubble Weed.
         if self.client_name == "Token-RedLizard-GW":
-            self.access_condition = Simple("BubbleGrass")
+            self.access_condition = Has("BubbleGrass")
 
         self.region = room_to_region[self.room]
         return super().pre_generate(player, multiworld, options)

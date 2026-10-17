@@ -1,93 +1,98 @@
 from typing import Callable
 
+from rule_builder.field_resolvers import FromOption
+from rule_builder.options import OptionFilter
+from rule_builder.rules import Rule, Has, HasAny, HasAll, HasFromList, CanReachLocation, And
 from .classes import Passage, LocationData, AbstractLocation
 from .. import game_data
-from ..game_data.general import regions_all, watcher_pearls
-from ..options import RainWorldOptions
-from ..conditions.classes import Condition, Simple, AnyOf, AllOf, ConditionBlank
+from ..conditions import rule_helper
+from ..game_data.general import watcher_pearls
+from ..options import RainWorldOptions, DifficultyChieftain, DifficultyHunter, \
+    DifficultyMonk, DifficultyNomad, DifficultyOutlaw
 
 
 #################################################################
 # SURVIVOR
-def generate_cond_survivor(options: RainWorldOptions) -> Condition:
-    if options.starting_scug == "Watcher":
-        return ConditionBlank
-    return Simple("Karma", 4)
+def generate_cond_survivor(options: RainWorldOptions) -> Rule:
+    return Has("Karma", 4) | rule_helper.watcher
 
 
 #################################################################
 # CHIEFTAIN
-def generate_cond_chieftain(options: RainWorldOptions) -> Condition:
-    return Simple("Toll") if options.difficulty_chieftain else Simple(["Scavenger", "ScavengerElite"], 1)
+def generate_cond_chieftain(options: RainWorldOptions) -> Rule:
+    return (Has("Toll", options=[OptionFilter(DifficultyChieftain, DifficultyChieftain.option_true)],
+                filtered_resolution=True)
+            & HasAny("Scavenger", "ScavengerElite"))
 
 
 #################################################################
 # DRAGON SLAYER
-def generate_cond_dragonslayer(options: RainWorldOptions) -> Condition:
+def generate_cond_dragonslayer(options: RainWorldOptions) -> Rule:
     if not options.msc_enabled:
-        return Simple(game_data.general.dragonslayer_vanilla)
+        return HasFromList(*game_data.general.dragonslayer_vanilla, count=6)
     if options.difficulty_extreme_threats:
-        return Simple(game_data.general.dragonslayer_msc, 6)
+        return HasFromList(*game_data.general.dragonslayer_msc, count=6)
     else:
-        return Simple(game_data.general.dragonslayer_msc.difference({"RedLizard"}), 6)
+        return HasFromList(*game_data.general.dragonslayer_msc.difference({"RedLizard"}), count=6)
 
 
 #################################################################
 # FRIEND
-cond_friend = Simple(game_data.general.lizards_any, 1)
+cond_friend = HasAny(*game_data.general.lizards_any)
 
 
 #################################################################
 # HUNTER
-def generate_cond_hunter(options: RainWorldOptions) -> Condition:
+def generate_cond_hunter(options: RainWorldOptions) -> Rule:
     # Carnivorous slugcats use simple region check
     if options.starting_scug in ["Red", "Artificer", "Spear", "Gourmand", "Inv"]:
-        return Simple([f"Access-{region}" for region in set(game_data.general.regions_all).difference({"SS", "MS"})], 1)
-    return Simple(
-            ["Fly", "SmallNeedleWorm", "SmallCentipede", "Centipede",
-             "EggBug", "JellyFish", "Hazer", "VultureGrub", "Frog", "Tardigrade",
-             "SandGrubNetwork", "PlacedRats", "Barnacle"],
-            options.difficulty_hunter.value
-        )
+        return HasAny(*[f"Access-{region}" for region in set(game_data.general.regions_all).difference({"SS", "MS"})])
+    return HasFromList(
+        *["Fly", "SmallNeedleWorm", "SmallCentipede", "Centipede",
+          "EggBug", "JellyFish", "Hazer", "VultureGrub", "Frog", "Tardigrade",
+          "SandGrubNetwork", "PlacedRats", "Barnacle"],
+        count=FromOption(DifficultyHunter)
+    )
 
 
 #################################################################
 # MONK
-def generate_cond_monk(options: RainWorldOptions) -> Condition:
+def generate_cond_monk(options: RainWorldOptions) -> Rule:
     if options.starting_scug in ["Spear", "Artificer", "Red"]:
-        return Simple(["Access-SI", "Access-LF", "Access-SS", "Access-DM"], 1)
+        return HasAny("Access-SI", "Access-LF", "Access-SS", "Access-DM")
     foods = [
         *game_data.general.monk_foods_vanilla,
         *(game_data.general.monk_foods_msc if options.msc_enabled else []),
         *(game_data.general.monk_foods_watcher if options.is_watcher_enabled else []),
      ]
-    return Simple(foods, options.difficulty_monk.value)
+    return HasFromList(*foods, count=FromOption(DifficultyMonk))
 
 
 #################################################################
 # MOTHER
-cond_mother = Simple([f"Access-{region}" for region in game_data.general.slugpup_normal_regions], 1)
+cond_mother = HasAny(*[f"Access-{region}" for region in game_data.general.slugpup_normal_regions])
 
 
 #################################################################
 # NOMAD
-def generate_cond_nomad(options: RainWorldOptions) -> Condition:
-    return Simple([f"Access-{region}" for region in game_data.general.regions_all], options.difficulty_nomad.value)
+def generate_cond_nomad(options: RainWorldOptions) -> Rule:
+    return HasFromList(*[f"Access-{region}" for region in game_data.general.regions_all],
+                       count=FromOption(DifficultyNomad))
 
 
 #################################################################
 # OUTLAW
-def generate_cond_outlaw(options: RainWorldOptions) -> Condition:
-    return Simple(
-        list(game_data.general.outlaw_whitelist if options.difficulty_extreme_threats else
+def generate_cond_outlaw(options: RainWorldOptions) -> Rule:
+    return HasFromList(
+        *list(game_data.general.outlaw_whitelist if options.difficulty_extreme_threats else
              game_data.general.outlaw_whitelist.difference(game_data.general.extreme_threat_creatures)),
-        options.difficulty_outlaw.value
+        count=FromOption(DifficultyOutlaw)
     )
 
 
 #################################################################
 # PILGRIM
-def generate_cond_pilgrim(options: RainWorldOptions) -> Condition:
+def generate_cond_pilgrim(options: RainWorldOptions) -> Rule:
     if options.starting_scug == "Saint":
         echoes = ["CC", "SI", "LF", "SB", "UG", "SL", "CL"]
     elif options.starting_scug == "Artificer":
@@ -95,17 +100,17 @@ def generate_cond_pilgrim(options: RainWorldOptions) -> Condition:
     else:
         echoes = ["CC", "SI", "LF", "SB", "UW", "SH"]
 
-    return Simple([f"{game_data.general.region_code_to_name[e]} - Echo" for e in echoes], locations=True)
+    return And(*[CanReachLocation(f"{game_data.general.region_code_to_name[e]} - Echo") for e in echoes])
 
 
 #################################################################
 # SCHOLAR
-def generate_cond_scholar(options: RainWorldOptions) -> Condition:
+def generate_cond_scholar(options: RainWorldOptions) -> Rule:
     if options.starting_scug in ["Yellow", "White", "Gourmand"]:
-        return Simple(["Access-SL", "The Mark"])
+        return HasAll("Access-SL", "The Mark")
     if options.starting_scug == "Watcher":
-        return AllOf(Simple("The Mark"), Simple([f"Access-{r}" for r in watcher_pearls], 3))
-    return AllOf(Simple("The Mark"), wanderer_pip_factory_factory(3)(options))
+        return Has("The Mark") & HasFromList(*[f"Access-{r}" for r in watcher_pearls], count=3)
+    return Has("The Mark") & wanderer_pip_factory_factory(3)(options)
 
 
 #################################################################
@@ -120,8 +125,8 @@ regions_spearmaster = game_data.general.story_regions_spearmaster
 regions_saint = game_data.general.story_regions_saint
 
 
-def generate_cond_wanderer(options: RainWorldOptions) -> Condition:
-    return Simple([f"Access-{r}" for r in wanderer_regions(options.starting_scug, options.msc_enabled)])
+def generate_cond_wanderer(options: RainWorldOptions) -> Rule:
+    return HasAll(*[f"Access-{r}" for r in wanderer_regions(options.starting_scug, options.msc_enabled)])
 
 
 def wanderer_regions(scug: str, msc: bool) -> set[str]:
@@ -136,9 +141,12 @@ def wanderer_regions(scug: str, msc: bool) -> set[str]:
         }[scug]
 
 
-def wanderer_pip_factory_factory(count: int) -> Callable[[RainWorldOptions], Condition]:
-    def wanderer_pip_factory(options: RainWorldOptions) -> Condition:
-        return Simple([f"Access-{r}" for r in wanderer_regions(options.starting_scug, options.msc_enabled)], count)
+def wanderer_pip_factory_factory(count: int) -> Callable[[RainWorldOptions], Rule]:
+    def wanderer_pip_factory(options: RainWorldOptions) -> Rule:
+        return HasFromList(
+            *[f"Access-{r}" for r in wanderer_regions(options.starting_scug, options.msc_enabled)],
+            count=count
+        )
     return wanderer_pip_factory
 
 

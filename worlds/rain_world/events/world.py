@@ -1,7 +1,7 @@
+from rule_builder.rules import Has
 from .classes import StaticWorldEvent, StaticWorldEventDetached
 from ..options import RainWorldOptions
 
-from ..conditions.classes import Simple
 from ..game_data.general import scugs_msc_watcher
 from ..regions.classes import RainWorldRegion, room_to_region
 from ..utils import (placed_object_effective_whitelist as POEW, creature_den_effective_whitelist as CDEW,
@@ -45,6 +45,6 @@ def generate_events_for_one_gamestate(options: RainWorldOptions, regions: list[R
         ret.append(StaticWorldEventDetached(event_type, event_rooms))
 
     if options.starting_scug in {"Yellow", "White", "Red", "Gourmand", "Rivulet", "Saint"}:
-        ret.append(StaticWorldEvent("Meet LttM", f'Meet LttM', room_to_region["SL_AI"], Simple("The Mark")))
+        ret.append(StaticWorldEvent("Meet LttM", f'Meet LttM', room_to_region["SL_AI"], Has("The Mark")))
 
     return ret

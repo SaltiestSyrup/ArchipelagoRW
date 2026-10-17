@@ -1,6 +1,6 @@
 from BaseClasses import MultiWorld
+from rule_builder.rules import Has, HasFromList
 from .classes import LocationData, RoomLocation
-from ..conditions.classes import Simple, AllOf
 from ..options import RainWorldOptions
 from ..game_data.watcher import portals, PortalData, normal_regions
 from ..regions.warping import cond_can_dynamic_warp
@@ -15,7 +15,7 @@ class FixedWarpPoint(RoomLocation):
 
     def pre_generate(self, player: int, multiworld: MultiWorld, options: RainWorldOptions) -> bool:
         if self.room == "WARA_P09":
-            self.access_condition = Simple("Ripple", 3 + options.logic_ripplespace_min_req)
+            self.access_condition = Has("Ripple", 3 + options.logic_ripplespace_min_req)
         return super().pre_generate(player, multiworld, options)
 
 
@@ -26,26 +26,26 @@ class SpinningTop(RoomLocation):
 
     def pre_generate(self, player: int, multiworld: MultiWorld, options: RainWorldOptions) -> bool:
         if self.room == "WARA_P09":
-            self.access_condition = Simple("Ripple", 3 + options.logic_ripplespace_min_req)
+            self.access_condition = Has("Ripple", 3 + options.logic_ripplespace_min_req)
         return super().pre_generate(player, multiworld, options)
 
 
 class Rottening(LocationData):
     def __init__(self, num: int, offset: int):
-        cond = AllOf(Simple([f"Access-{r}" for r in normal_regions], num), Simple("Access-WORA"))
+        cond = HasFromList(*[f"Access-{r}" for r in normal_regions], count=num) & Has("Access-WORA")
         super().__init__(f"Spread the Rot - Region #{num}", f"SpreadRot-{num}", ["Spread the Rot"], offset, "Menu", cond)
 
 
 class WeaverEncounter(LocationData):
     def __init__(self, num: int, offset: int):
-        cond = AllOf(Simple([f"Access-{r}" for r in normal_regions], 2), cond_can_dynamic_warp)
+        cond = HasFromList(*[f"Access-{r}" for r in normal_regions], count=2) & cond_can_dynamic_warp
         super().__init__(f"Weaver Encounter #{num}", f"Weaver-{num}", ["Weaver", "Weaver Encounter"], offset, "Menu", cond)
 
 
 class PrinceEncounter(RoomLocation):
     def __init__(self, offset: int, num: int):
         super().__init__(f"Prince Encounter #{num}", f"Prince-{num}", ["Prince", "The Prince", "Prince Encounter"], offset, "WORA_AI")
-        self.access_condition = Simple("Ripple", 2 * num)
+        self.access_condition = Has("Ripple", 2 * num)
 
     def pre_generate(self, player: int, multiworld: MultiWorld, options: RainWorldOptions) -> bool:
         self.progress_type = options.priority_throne.value

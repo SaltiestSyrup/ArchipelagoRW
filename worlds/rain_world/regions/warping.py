@@ -1,17 +1,15 @@
 from rule_builder.options import OptionFilter
-from rule_builder.rules import Filtered
+from rule_builder.rules import Filtered, Has
 from .classes import RegionData, ConnectionData
 from ..options import RainWorldOptions, LogicRottedGeneration
-from ..conditions.classes import Simple, AnyOf
 
-cond_can_dynamic_warp = AnyOf(Simple("Ripple", 2), Simple("Dial Warp Ability"), Simple("Progressive Weaver", 4))
+cond_can_dynamic_warp = Has("Ripple", 2) | Has("Dial Warp Ability") | Has("Progressive Weaver", 4)
 
 def generate(options: RainWorldOptions):
     if options.starting_scug != "Watcher":
         return []
 
-    cond_can_rotted_warp = Filtered(cond_can_dynamic_warp.get_rule(),
-                                    options=[OptionFilter(LogicRottedGeneration, 2)])
+    cond_can_rotted_warp = Filtered(cond_can_dynamic_warp, options=[OptionFilter(LogicRottedGeneration, 2)])
 
     ret = [
         RegionData("From any normal region"),
@@ -28,7 +26,7 @@ def generate(options: RainWorldOptions):
                        cond_can_rotted_warp),
         # Logical connection is directly to Outer Rim if rotted regions are passthrough
         ConnectionData("From any normal region", "Western Outer Rim", "Bad dynamic warp to Outer Rim",
-                       Filtered(cond_can_dynamic_warp.get_rule(), options=[OptionFilter(LogicRottedGeneration, 1)]))
+                       Filtered(cond_can_dynamic_warp, options=[OptionFilter(LogicRottedGeneration, 1)]))
     ]
 
     return ret

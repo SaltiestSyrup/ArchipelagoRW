@@ -69,7 +69,6 @@ class Simple(Condition):
             # Due to RuleBuilder restriction, you can only check for any or all locations.
             # No defined rules currently try to do any more than that,
             # so this simplification works until this is no longer the case.
-            # TODO Allow checking for k of n locations satisfied
             if self.count == 1:
                 return Or(*(CanReachLocation(item) for item in self.items))
             else:
@@ -118,7 +117,6 @@ class Compound(Condition):
         # No defined rules currently try to do any more than that,
         # so this simplification works until this is no longer the case.
         # else:
-        #     pass TODO Allow checking for k of n rules satisfied
 
 
 class AnyOf(Compound):

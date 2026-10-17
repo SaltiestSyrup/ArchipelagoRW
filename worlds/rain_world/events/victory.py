@@ -1,9 +1,12 @@
+from rule_builder.field_resolvers import FromOption
+from rule_builder.rules import Has, HasFromList, HasAll, And, CanReachLocation
 from .classes import EventData, VictoryEvent
 from .. import RainWorldOptions
-from ..conditions.classes import Simple, AllOf
 from ..game_data.watcher import normal_regions
 from ..locations.passages import generate_cond_pilgrim
 from ..locations.foodquest import pips as fq_items
+from ..options import RottedRegionTarget
+
 
 def generate(options: RainWorldOptions) -> list[EventData]:
     ascension = options.which_victory_condition == 0
@@ -16,18 +19,16 @@ def generate(options: RainWorldOptions) -> list[EventData]:
         if ascension: # Spinning Top
             return [VictoryEvent("Spinning Top", "Ancient Urban")]
         if story: # Rot
-            cond = AllOf(
-                Simple("Ripple", 3 + options.logic_ripplespace_min_req),
-                Simple([f"Access-{r}" for r in normal_regions], options.rotted_region_target.value)
-            )
+            cond = (Has("Ripple", 3 + options.logic_ripplespace_min_req)
+                    & HasFromList(*[f"Access-{r}" for r in normal_regions], count=FromOption(RottedRegionTarget)))
             return [VictoryEvent("The Prince", "Outer Rim", cond)]
         if echoes: # Weaver
-            cond = Simple([f"Access-{r}" for r in [*normal_regions, "WARA"]])
+            cond = HasAll(*[f"Access-{r}" for r in [*normal_regions, "WARA"]])
             if options.weaver_randomized:
-                cond = AllOf(cond, Simple("Progressive Weaver", 4))
+                cond = cond & Has("Progressive Weaver", 4)
             else:
                 # Ripple 9 not technically required, but is needed to find Weaver spots "naturally" rather than looking at a map
-                cond = AllOf(cond, Simple("Ripple", 3 + options.logic_ripplespace_min_req))
+                cond = cond & Has("Ripple", 3 + options.logic_ripplespace_min_req)
 
             return [VictoryEvent("An Understanding", "Events", cond)]
         if true_ending: # True Ending
@@ -36,9 +37,9 @@ def generate(options: RainWorldOptions) -> list[EventData]:
             # Weaver ability if it was randomized,
             # And every normal region for warp sealing.
             # Ripple requirement handled by Daemon access
-            cond = Simple([f"Access-{r}" for r in [*normal_regions, "WARA", "WAUA", "WORA"]])
+            cond = HasAll(*[f"Access-{r}" for r in [*normal_regions, "WARA", "WAUA", "WORA"]])
             if options.weaver_randomized:
-                cond = AllOf(cond, Simple("Progressive Weaver", 4))
+                cond = cond & Has("Progressive Weaver", 4)
 
             return [VictoryEvent("The Choice", "Daemon", cond)]
 
@@ -47,7 +48,7 @@ def generate(options: RainWorldOptions) -> list[EventData]:
     if options.which_victory_condition == 3:
         foods = [item.full_name for item in fq_items if item.should_generate(options)]
         # I sincerely apologize, the achievement based naming convention has been broken.
-        return [VictoryEvent("Glutton", "Events", Simple(foods, locations=True))]
+        return [VictoryEvent("Glutton", "Events", And(*[CanReachLocation(f) for f in foods]))]
 
     # For Saint, the MS echo can be substituted in place of a normal echo.
     # For better or worse, this is not accounted for in logic.
@@ -56,23 +57,23 @@ def generate(options: RainWorldOptions) -> list[EventData]:
 
     # Saint's victory condition is different regardless of setting.
     if options.starting_scug == "Saint":
-        return [VictoryEvent("Ascension", "Rubicon", Simple("Karma", 8))]
+        return [VictoryEvent("Ascension", "Rubicon", Has("Karma", 8))]
 
     # Sofanthiel has no alternate, and no alternate exists without MSC.
     if not story or not options.msc_enabled or options.starting_scug == "Inv":
-        return [VictoryEvent("Ascension", "Subterranean Depths", Simple("Karma", 8))]
+        return [VictoryEvent("Ascension", "Subterranean Depths", Has("Karma", 8))]
 
     if options.starting_scug in ["Yellow", "White"]:
         return [VictoryEvent("Journey's End", "Outer Expanse")]
 
     if options.starting_scug == "Red":
-        return [VictoryEvent("A Helping Hand", "Shoreline", Simple("Slag Key"))]
+        return [VictoryEvent("A Helping Hand", "Shoreline", Has("Slag Key"))]
 
     if options.starting_scug == "Rivulet":
         return [
             EventData("Install rarefaction cell", "Submerged Superstucture Heart", "Submerged Superstructure",
-                      condition=Simple("Rarefaction Cell")),
-            VictoryEvent("Old Friend", "Shoreline", Simple("Install rarefaction cell"))
+                      condition=Has("Rarefaction Cell")),
+            VictoryEvent("Old Friend", "Shoreline", Has("Install rarefaction cell"))
         ]
 
     if options.starting_scug == "Gourmand":
@@ -82,7 +83,7 @@ def generate(options: RainWorldOptions) -> list[EventData]:
         return [VictoryEvent("Closure", "Metropolis")]
 
     if options.starting_scug == "Spear":
-        return [VictoryEvent("Messenger", "Sky Islands", Simple(["Moon's Final Message", "Spearmaster's Pearl"]))]
+        return [VictoryEvent("Messenger", "Sky Islands", HasAll("Moon's Final Message", "Spearmaster's Pearl"))]
 
     return []
 

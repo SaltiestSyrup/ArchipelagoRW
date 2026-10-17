@@ -1,6 +1,6 @@
 from BaseClasses import MultiWorld
+from rule_builder.rules import Has
 from .classes import LocationData, RoomLocation
-from ..conditions.classes import Simple, AnyOf
 from ..options import RainWorldOptions
 
 
@@ -13,12 +13,12 @@ class Echo(RoomLocation):
         if not self.free:
             match options.difficulty_echo_low_karma:
                 case "never":
-                    self.access_condition = Simple("Karma", 4)
+                    self.access_condition = Has("Karma", 4)
                 case "with_karma_flower":
-                    self.access_condition = AnyOf(Simple("KarmaFlower"), Simple("Karma", 4))
+                    self.access_condition = Has("KarmaFlower") | Has("Karma", 4)
                 case "unaltered":
                     if options.starting_scug == "Artificer":
-                        self.access_condition = AnyOf(Simple("KarmaFlower"), Simple("Karma", 4))
+                        self.access_condition = Has("KarmaFlower") | Has("Karma", 4)
 
         return super().pre_generate(player, multiworld, options)
 
