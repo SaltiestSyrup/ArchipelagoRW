@@ -190,7 +190,8 @@ class RainWorldWorld(World):
                     if self.options.which_gate_behavior != "karma_only" else []
                 )},
                 **{f"Passage Token - {passage_proper_names[p]}": 1
-                   for p in (passages_all if self.options.msc_enabled else passages_vanilla)},
+                   for p in ([] if not self.options.randomize_passage_tokens
+                             else passages_all if self.options.msc_enabled else passages_vanilla)},
                 "The Mark": 1,
                 "The Glow": 1,
                 "Slag Key": 1 if self.options.starting_scug == "Red" else 0,
@@ -211,14 +212,12 @@ class RainWorldWorld(World):
                 "Dial Warp Ability": 1,
                 "The Mark": 1,
             }
-            if self.options.watcher_passages:
+            if self.options.randomize_passage_tokens:
                 pool.update({f"Passage Token - {passage_proper_names[p]}": 1
                              for p in (passages_all if self.options.msc_enabled else passages_vanilla)})
-            # if (ndwb := self.options.normal_dynamic_warp_behavior).unlockable:
-            #     pool.update({f"Dynamic: {k}": 1 for k in (normal_regions if ndwb.predetermined else self.warp_pool)})
 
         if self.options.damage_upgrades > 0:
-            pool.update({"Spear Damage Increase" : self.options.damage_upgrades})
+            pool["Spear Damage Increase"] = self.options.damage_upgrades.value
         if self.options.msc_enabled:
             pool.update(**{perk : 1 for perk in self.options.expedition_perks})
 
@@ -276,6 +275,7 @@ class RainWorldWorld(World):
             "which_campaign",  # ...which campaign should be selected.
             "passage_progress_without_survivor",  # ...if this setting doesn't match Remix.
             "death_link",  # ...whether to listen for death link notifications.
+            "checks_passages",  # ...whether passages are randomized.
             "checks_foodquest",  # ...whether the food quest should be available.
             "checks_broadcasts",  # ...whether broadcasts should be available.
             "checks_tokens_pearls",  # ...whether all tokens should be available.
@@ -290,6 +290,7 @@ class RainWorldWorld(World):
             "checks_spread_rot", # ...whether spreading rot should be checks.
             "checks_weaver_encounters", # ...whether encountering the Weaver should be checks.
             "randomize_weaver", # ...whether the Weaver ability is randomized.
+            "randomize_passage_tokens", #...whether passage tokens are included in the item pool.
 
             # External tracker needs to know...
             "difficulty_glow", "difficulty_monk", "difficulty_hunter", "difficulty_outlaw", "difficulty_chieftain",

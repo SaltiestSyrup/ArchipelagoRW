@@ -1,6 +1,8 @@
+from rule_builder.options import OptionFilter
 from .classes import RegionData, ConnectionData
-from ..locations.passages import generate_cond_survivor
-from ..options import RainWorldOptions
+from ..locations.passages import cond_survivor
+from ..options import RainWorldOptions, PassageProgressWithoutSurvivor as PPwS
+
 
 
 def generate(options: RainWorldOptions) -> list[RegionData | ConnectionData]:
@@ -14,17 +16,17 @@ def generate(options: RainWorldOptions) -> list[RegionData | ConnectionData]:
                    options.msc_enabled and (options.checks_foodquest.value > 0 or options.starting_scug == "Gourmand")),
 
         ConnectionData("Menu", "Events", "Unique event checks"),
-        ConnectionData("Menu", "Early Passages", "Early Passages"),
-        ConnectionData("Early Passages", "Late Passages", "Late Passages",
-                       generate_cond_survivor(options)),
-        ConnectionData("Late Passages", "PPwS Passages", "PPwS Passages"),
+        # Require Survivor for early passages if PPwS is nothing
+        ConnectionData("Menu", "Early Passages", "Early Passages",
+                       cond_survivor | [OptionFilter(PPwS, PPwS.option_disabled, operator="ge")]),
+        # Require Survivor for PPwS passages if PPwS is < enabled
+        ConnectionData("Menu", "PPwS Passages", "Passage progress without Survivor",
+                       cond_survivor | [OptionFilter(PPwS, PPwS.option_enabled, operator="ge")]),
+        # Require Survivor for Late passages if PPwS is < bypassed
+        ConnectionData("Menu", "Late Passages", "Bypass Survivor requirement",
+                       cond_survivor | [OptionFilter(PPwS, PPwS.option_bypassed)]),
         ConnectionData("Menu", "Food Quest", "Food Quest"),
     ]
-
-    if options.passage_progress_without_survivor in ("enabled", "bypassed"):
-        ret.append(ConnectionData("Menu", "PPwS Passages", "Passage progress without Survivor"))
-    if options.passage_progress_without_survivor == "bypassed":
-        ret.append(ConnectionData("Menu", "Late Passages", "Bypass Survivor requirement"))
 
     return ret
 

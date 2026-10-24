@@ -13,8 +13,7 @@ from ..options import RainWorldOptions, DifficultyChieftain, DifficultyHunter, \
 
 #################################################################
 # SURVIVOR
-def generate_cond_survivor(options: RainWorldOptions) -> Rule:
-    return Has("Karma", 4) | rule_helper.watcher
+cond_survivor = Has("Karma", 4) | rule_helper.watcher
 
 
 #################################################################
@@ -156,7 +155,7 @@ locations: dict[str, LocationData] = {
     "Martyr": Passage("Martyr", "Early Passages", 5000),
     "Mother": Passage("Mother", "Early Passages", 5001, cond_mother),
     "Pilgrim": Passage("Pilgrim", "Early Passages", 5002, access_condition_generator=generate_cond_pilgrim),
-    "Survivor": Passage("Survivor", "Early Passages", 5003, access_condition_generator=generate_cond_survivor),
+    "Survivor": Passage("Survivor", "Early Passages", 5003, cond_survivor),
 
     "DragonSlayer": Passage("DragonSlayer", "PPwS Passages", 5020,
                             access_condition_generator=generate_cond_dragonslayer),
@@ -180,6 +179,9 @@ locations: dict[str, LocationData] = {
 
 
 def generate(options: RainWorldOptions) -> list[LocationData]:
+    if not options.checks_passages:
+        return []
+
     keys = ["Survivor", "Friend", "Monk", "Saint"]
 
     if options.starting_scug != "Artificer":

@@ -12,24 +12,6 @@ from .game_data.general import story_regions_watcher, story_regions_vanilla, all
 
 #################################################################
 # IMPORTANT SETTINGS
-class PassageProgressWithoutSurvivor(Choice):
-    """How The Survivor affects earning other passages.
-
-    **Disabled**: Only The Martyr, The Mother, and The Pilgrim can be earned before The Survivor.
-
-    **Enabled**: The Dragon Slayer, The Friend, and The Wanderer can additionally be earned before The Survivor.
-
-    **Bypassed**: Every passage can be earned before The Survivor.
-
-    This will override the actual value of the corresponding setting in the Rain World Remix menu."""
-    display_name = "Passage progress without Survivor"
-    option_disabled = 0
-    option_enabled = 1
-    option_bypassed = 2
-
-    default = 2
-
-
 class IsMSCEnabled(Toggle):
     """Whether More Slugcats Expansion (Downpour) is enabled, regardless of which campaign you plan to play."""
     display_name = "More Slugcats Expansion?"
@@ -168,116 +150,6 @@ class DebugOutput(Toggle):
     visibility = Visibility.none
 
 
-class LogicRottedGeneration(Choice):
-    """Controls the generation of Crumbling Fringes, Corrupted Factories, Decaying Tunnels, and Infested Wastes.
-
-    **None**: There will be no checks in rotted vanilla regions, and bad warping will not be required to reach Outer Rim.
-
-    **Passthrough**: There will be no checks in rotted vanilla regions, but you may still have to bad warp to reach Outer Rim.
-
-    **Full**: Checks will be present in rotted vanilla regions
-    """
-    display_name = "Permarotted accessibility"
-    option_none = 0
-    option_passthrough = 1
-    option_full = 2
-    alias_true = 2
-    alias_false = 0
-    default = 1
-
-
-class LogicMinRippleTarget(Range):
-    """The lowest that your *minimum* Ripple can be before Ripplespace is logically accessible.
-    The default, 5, matches the actual game behavior."""
-    display_name = "Min Ripple target"
-    range_start = 5
-    range_end = 9
-    default = 5
-
-
-class RottedRegionTarget(Range):
-    """The number of regions that must be rotted for the Rot ending.
-    The default, 21, matches the unaltered game behavior."""
-    display_name = "Rotted region target"
-    range_start = 2
-    range_end = 21
-    default = 21
-
-
-class RandomizeWeaverAbility(Choice):
-    """Adds 4 progressive Weaver ability items to the item pool instead of gaining the ability naturally through Weaver encounters.
-    For related ending only, the endings in question are Weaver or True Ending.
-    The Weaver cannot be randomized if the Prince ending is chosen."""
-    display_name = "Randomize Weaver ability"
-    option_false = 0
-    option_related_ending_only = 1
-    option_true = 2
-
-    alias_off = 0
-    alias_on = 2
-    default = 0
-
-
-class ChecksSpreadRot(Choice):
-    """Whether spreading the Rot to new regions are checks.
-    This option will be force-disabled if "Randomize Weaver Ability" is set to true, or Weaver / True Ending is chosen.
-    For related ending only, the ending in question is the Prince ending."""
-    display_name = "Rot spread checks"
-    option_false = 0
-    option_related_ending_only = 1
-    option_true = 2
-
-    alias_off = 0
-    alias_prince_ending_only = 1
-    alias_on = 2
-    default = 1
-
-
-class ChecksWeaverEncounters(Choice):
-    """Whether each of the 4 Weaver encounters are checks.
-    This is separate from whether the ability itself is randomized.
-    For related ending only, the endings in question are Weaver or True Ending."""
-    display_name = "Weaver encounter checks"
-    option_false = 0
-    option_related_ending_only = 1
-    option_true = 2
-
-    alias_off = 0
-    alias_on = 2
-    default = 1
-
-
-class SpinningTopKeys(Toggle):
-    """Whether keys are required to travel through Spinning Top warps."""
-    display_name = "Spinning Top keys"
-    default = True
-
-
-class DaemonKeys(Toggle):
-    """Whether keys are required to travel through Daemon warps."""
-    display_name = "Daemon keys"
-    default = False
-
-
-class PriorityThrone(Choice):
-    """Whether Prince checks should be normal, priority, or excluded locations."""
-    display_name = "Priority Throne"
-    option_normal = 1
-    option_priority = 2
-    option_excluded = 3
-    default = 1
-    # visibility = Visibility.none
-
-
-class UseWatcherPassages(Toggle):
-    """Whether passage tokens will be added to the item pool when playing as Watcher.
-    You will need the mod "Watcher Region Art" enabled in order to use passage tokens in-game.
-    The mod can be found on the Steam workshop: https://steamcommunity.com/sharedfiles/filedetails/?id=3660768308
-    """
-    display_name = "Use Watcher Passages"
-    default = False
-
-
 #################################################################
 # GENERAL SETTINGS
 class RandomStartingRegion(Choice):
@@ -375,8 +247,106 @@ class ExtraKarmaCapIncreases(Range):
     default = 3
 
 
+class PassageProgressWithoutSurvivor(Choice):
+    """How The Survivor affects earning other passages.
+
+    **None**: No other passages can be earned before The Survivor.
+
+    **Disabled**: Only The Martyr, The Mother, and The Pilgrim can be earned before The Survivor.
+
+    **Enabled**: The Dragon Slayer, The Friend, and The Wanderer can additionally be earned before The Survivor.
+
+    **Bypassed**: Every passage can be earned before The Survivor.
+
+    This will override the actual value of the corresponding setting in the Rain World Remix menu."""
+    display_name = "Passage progress without Survivor"
+    option_none = 0
+    option_disabled = 1
+    option_enabled = 2
+    option_bypassed = 3
+
+    default = 3
+
+
+class LogicRottedGeneration(Choice):
+    """Controls the generation of Crumbling Fringes, Corrupted Factories, Decaying Tunnels, and Infested Wastes.
+
+    **None**: There will be no checks in rotted vanilla regions, and bad warping will not be required to reach Outer Rim.
+
+    **Passthrough**: There will be no checks in rotted vanilla regions, but you may still have to bad warp to reach Outer Rim.
+
+    **Full**: Checks will be present in rotted vanilla regions
+    """
+    display_name = "Permarotted accessibility"
+    option_none = 0
+    option_passthrough = 1
+    option_full = 2
+    alias_true = 2
+    alias_false = 0
+    default = 1
+
+
+class LogicMinRippleTarget(Range):
+    """The lowest that your *minimum* Ripple can be before Ripplespace is logically accessible.
+    The default, 5, matches the actual game behavior."""
+    display_name = "Min Ripple target"
+    range_start = 5
+    range_end = 9
+    default = 5
+
+
+class RottedRegionTarget(Range):
+    """The number of regions that must be rotted for the Rot ending.
+    The default, 21, matches the unaltered game behavior."""
+    display_name = "Rotted region target"
+    range_start = 2
+    range_end = 21
+    default = 21
+
+
+class RandomizeWeaverAbility(Choice):
+    """Adds 4 progressive Weaver ability items to the item pool instead of gaining the ability naturally through Weaver encounters.
+    For related ending only, the endings in question are Weaver or True Ending.
+    The Weaver cannot be randomized if the Prince ending is chosen."""
+    display_name = "Randomize Weaver ability"
+    option_false = 0
+    option_related_ending_only = 1
+    option_true = 2
+
+    alias_off = 0
+    alias_on = 2
+    default = 0
+
+
+class SpinningTopKeys(Toggle):
+    """Whether keys are required to travel through Spinning Top warps."""
+    display_name = "Spinning Top keys"
+    default = True
+
+
+class DaemonKeys(Toggle):
+    """Whether keys are required to travel through Daemon warps."""
+    display_name = "Daemon keys"
+    default = False
+
+
+class PriorityThrone(Choice):
+    """Whether Prince checks should be normal, priority, or excluded locations."""
+    display_name = "Priority Throne"
+    option_normal = 1
+    option_priority = 2
+    option_excluded = 3
+    default = 1
+    # visibility = Visibility.none
+
+
 #################################################################
 # CHECK POOL SETTINGS
+class ChecksPassages(Toggle):
+    """When enabled, completing each passage achievement is a check."""
+    display_name = "Passages"
+    default = True
+
 class ChecksBroadcasts(Choice):
     """Which slugcats broadcasts should be available to.  Requires MSC."""
     display_name = "Broadcasts"
@@ -391,7 +361,7 @@ class ChecksBroadcasts(Choice):
 
 class ChecksFoodQuest(Choice):
     """Which slugcats the food quest should be available to.  Requires MSC."""
-    display_name = "Food quest"
+    display_name = "Food Quest"
     option_all_slugcats = 2
     option_only_gourmand = 1
     option_off = 0
@@ -405,7 +375,7 @@ class ChecksFoodQuestExpanded(Toggle):
     Specific food quest checks may be disabled by excluding the locations,
     and some slugcats will not be required to kill and eat extreme threats if that setting is enabled.
     Requires MSC."""
-    display_name = "Expanded food quest"
+    display_name = "Expanded Food Quest"
     default = False
 
 
@@ -418,13 +388,13 @@ class ChecksTokensPearls(Toggle):
 
 class ChecksDevTokens(Toggle):
     """Whether dev commentary tokens should be checks.  Requires MSC."""
-    display_name = "Dev tokens"
+    display_name = "Dev Tokens"
     default = False
 
 
 class ChecksSheltersanity(Toggle):
     """Whether each shelter is a check."""
-    display_name = "Sheltersanity"
+    display_name = "Shelters"
     default = False
 
 
@@ -448,6 +418,35 @@ class ChecksKarmaFlowers(Toggle):
     """Whether each static karma flower spawn is a check."""
     display_name = "Karma Flowers"
     default = False
+
+
+class ChecksSpreadRot(Choice):
+    """Whether spreading the Rot to new regions are checks.
+    This option will be force-disabled if "Randomize Weaver Ability" is set to true, or Weaver / True Ending is chosen.
+    For related ending only, the ending in question is the Prince ending."""
+    display_name = "Rot spread checks"
+    option_false = 0
+    option_related_ending_only = 1
+    option_true = 2
+
+    alias_off = 0
+    alias_prince_ending_only = 1
+    alias_on = 2
+    default = 1
+
+
+class ChecksWeaverEncounters(Choice):
+    """Whether each of the 4 Weaver encounters are checks.
+    This is separate from whether the ability itself is randomized.
+    For related ending only, the endings in question are Weaver or True Ending."""
+    display_name = "Weaver encounter checks"
+    option_false = 0
+    option_related_ending_only = 1
+    option_true = 2
+
+    alias_off = 0
+    alias_on = 2
+    default = 1
 
 
 #################################################################
@@ -553,6 +552,16 @@ class DifficultyEchoLowKarma(Choice):
 
 #################################################################
 # UPGRADE SETTINGS
+class RandomizePassageTokens(Toggle):
+    """When enabled, passage tokens will be found as items instead of awarded by completing passages.
+
+    When playing as Watcher, you will need the mod "Watcher Region Art" enabled in order to use passage tokens in-game.
+    It can be found on the Steam workshop: https://steamcommunity.com/sharedfiles/filedetails/?id=3660768308
+    """
+    display_name = "Randomize Passage Tokens"
+    default = True
+
+
 class UpgradesSpearDamage(Range):
     """Add an amount of items to the pool that permanently increase the damage of thrown spears.
     Each progressive upgrade adds 10% damage on top of the slugcat's base damage."""
@@ -561,11 +570,11 @@ class UpgradesSpearDamage(Range):
     range_end = 10
     default = 6
 
-#################################################################
-# FILLER SETTINGS
+
 class ExpeditionPerks(OptionList):
     """Choose which Expedition perks will be added to the item pool.
     If an ability in this list is given to a slugcat that innately has it, there is no effect.
+    Explosive Jump, Aquatic, and Agility may be used in logic if they are present in the item pool.
     Requires MSC.
 
     Valid Perks: Back Spear Perk, Dual Wielding Perk, Blast Resistance Perk, Explosive Parry Perk,
@@ -576,6 +585,8 @@ class ExpeditionPerks(OptionList):
     verify_item_name = True
 
 
+#################################################################
+# FILLER SETTINGS
 class PctTraps(Range):
     """The percentage of filler items that will be traps.  Set to 0 to remove traps entirely."""
     display_name = "Trap percentage"
@@ -1011,6 +1022,7 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
 
     #################################################################
     # ITEM POOL SETTINGS
+    randomize_passage_tokens: RandomizePassageTokens
     expedition_perks: ExpeditionPerks
     pct_traps: PctTraps
     weight_jitter: FillerJitter
@@ -1018,11 +1030,12 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     damage_upgrades: UpgradesSpearDamage
 
     group_itempool = [
-        ExtraKarmaCapIncreases, UpgradesSpearDamage, ExpeditionPerks, PctTraps, FillerJitter,
+        RandomizePassageTokens, ExtraKarmaCapIncreases, UpgradesSpearDamage, ExpeditionPerks, PctTraps, FillerJitter,
     ]
 
     #################################################################
     # CHECK POOL SETTINGS
+    checks_passages: ChecksPassages
     checks_broadcasts: ChecksBroadcasts
     checks_foodquest: ChecksFoodQuest
     checks_foodquest_expanded: ChecksFoodQuestExpanded
@@ -1034,8 +1047,8 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     checks_devtokens: ChecksDevTokens
 
     group_checkpool = [
-        ChecksBroadcasts, ChecksFoodQuest, ChecksFoodQuestExpanded, PassagePriority, ChecksTokensPearls,
-        ChecksDevTokens, ChecksSheltersanity, ChecksSubmerged, ChecksKarmaFlowers,
+        ChecksPassages, ChecksBroadcasts, ChecksFoodQuest, ChecksFoodQuestExpanded, PassagePriority,
+        ChecksTokensPearls, ChecksDevTokens, ChecksSheltersanity, ChecksSubmerged, ChecksKarmaFlowers,
     ]
 
     #################################################################
@@ -1049,11 +1062,10 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     spinning_top_keys: SpinningTopKeys
     daemon_keys: DaemonKeys
     priority_throne: PriorityThrone
-    watcher_passages: UseWatcherPassages
 
     group_watcher = [
         LogicRottedGeneration, LogicMinRippleTarget, RottedRegionTarget, RandomizeWeaverAbility, ChecksSpreadRot,
-        ChecksWeaverEncounters, SpinningTopKeys, DaemonKeys, PriorityThrone, UseWatcherPassages,
+        ChecksWeaverEncounters, SpinningTopKeys, DaemonKeys, PriorityThrone,
     ]
 
     #################################################################
