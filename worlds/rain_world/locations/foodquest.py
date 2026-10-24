@@ -1,6 +1,6 @@
 from BaseClasses import MultiWorld
+from rule_builder.rules import HasAny
 from .classes import LocationData, AbstractLocation
-from ..conditions.classes import Simple
 from ..game_data.general import extreme_threat_creatures, wiki_names
 from ..game_data.bitflag import ScugFlag
 from ..options import RainWorldOptions
@@ -19,7 +19,7 @@ class FoodQuestPip(AbstractLocation):
         _offset += 1
         self.scugflag = ScugFlag(gamestates)
         self.expanded = False
-        self.access_condition = Simple(items, 1)
+        self.access_condition = HasAny(*self.items)
 
     @staticmethod
     def names(items: list[str]) -> list[str]:
@@ -45,8 +45,12 @@ class FoodQuestPip(AbstractLocation):
             return False
         if self.expanded and not options.checks_foodquest_expanded:
             return False
-        # HARDCODE: Sofanthiel's only glow weed is in MS.  The interactive map is wrong.
-        if options.starting_scug == "Inv" and options.checks_submerged < 2 and self.items[0] == "GlowWeed":
+        # HARDCODE: Sofanthiel and Rivulet's only glow weed are in MS.  The interactive map is wrong.
+        if options.starting_scug in ["Inv", "Rivulet"] and not options.submerged_should_populate and self.items[0] == "GlowWeed":
+            return False
+        if options.starting_scug in ["White", "Yellow"] and not options.submerged_should_populate and self.items[0] == "RedCentipede":
+            return False
+        if options.starting_scug == "Watcher" and not options.logic_rotted_generation == 2 and self.items[0] == "RedCentipede":
             return False
         return True
 
@@ -69,7 +73,7 @@ pips: list[FoodQuestPip] = [
     FoodQuestPip(0b0_101_011_100, "YellowLizard"),
     FoodQuestPip(0b0_101_011_100, "TubeWorm"),
     FoodQuestPip(0b0_111_111_111, "SSOracleSwarmer"),
-    FoodQuestPip(0b0_101_111_111, "Centiwing"),
+    FoodQuestPip(0b1_101_111_111, "Centiwing"),
     FoodQuestPip(0b1_110_111_111, "DandelionPeach"),
     FoodQuestPip(0b0_101_011_100, "CyanLizard"),
     FoodQuestPip(0b1_110_111_111, "GooieDuck"),
@@ -105,6 +109,15 @@ pips: list[FoodQuestPip] = [
     FoodQuestPip(0b0_001_000_000, "TentaclePlant"),
     FoodQuestPip(0b0_001_000_000, "BigEel"),
     FoodQuestPip(0b0_001_000_000, "Inspector"),
+    FoodQuestPip(0b0_010_000_000, "FireBug"),
+    # -- Watcher Exclusive
+    FoodQuestPip(0b1_000_000_000, "Frog"),
+    FoodQuestPip(0b1_000_000_000, "Tardigrade"),
+    FoodQuestPip(0b1_000_000_000, "SandGrubNetwork"),
+    FoodQuestPip(0b1_000_000_000, "PlacedRats"),
+    FoodQuestPip(0b1_000_000_000, "PlacedBoxWorm"), # Fire Sprite Larva
+    FoodQuestPip(0b1_000_000_000, "Pomegranate"),
+    FoodQuestPip(0b1_000_000_000, "Barnacle"),
 ]
 
 for i in range(22, len(pips)):

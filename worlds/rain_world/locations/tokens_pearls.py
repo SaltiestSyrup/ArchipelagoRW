@@ -1,7 +1,7 @@
 from BaseClasses import MultiWorld
+from rule_builder.rules import Has
 from .classes import RoomLocation
 from ..conditions import GameStateFlag
-from ..conditions.classes import Simple
 from ..game_data.general import scugs_vanilla, scugs_msc, scugs_watcher, scugs_msc_watcher
 from ..options import RainWorldOptions
 from ..game_data import static_data
@@ -43,7 +43,7 @@ class TokenOrPearl(RoomLocation):
             return False
         # HARDCODE: This token is far underwater and GW doesn't have Bubble Weed.
         if self.client_name == "Token-RedLizard-GW":
-            self.access_condition = Simple("BubbleGrass")
+            self.access_condition = Has("BubbleGrass")
 
         self.region = room_to_region[self.room]
         return super().pre_generate(player, multiworld, options)
@@ -69,7 +69,7 @@ def initialize() -> dict[str, TokenOrPearl]:
     offset = 0
     ret = {}
 
-    for scuglist, (dlcstate, dlcstate_data) in zip((scugs_vanilla, scugs_msc, scugs_watcher, scugs_msc_watcher), static_data["1.11.1"].items()):
+    for scuglist, (dlcstate, dlcstate_data) in zip((scugs_vanilla, scugs_msc, scugs_watcher, scugs_msc_watcher), static_data.items()):
         for region, region_data in dlcstate_data.items():
             for room, room_data in region_data.items():
                 if "shinies" in room_data.keys():
@@ -81,7 +81,7 @@ def initialize() -> dict[str, TokenOrPearl]:
                             offset += 1
 
                         can_see = (
-                            room_data.get("whitelist", set(scuglist))
+                            room_data.get("whitelist", set() if "alt_whitelist" in shiny_data else set(scuglist))
                             .difference(room_data.get("blacklist", set()))
                             .difference(shiny_data.get("filter", set()))
                             .difference(room_data.get("alted", set()))

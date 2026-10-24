@@ -1,32 +1,17 @@
+from collections import Counter
 from dataclasses import dataclass
+from random import Random
 
 from Options import PerGameCommonOptions, Toggle, Range, OptionGroup, Choice, ProgressionBalancing, Accessibility, \
-    Visibility, DeathLinkMixin, DeathLink, FreeText, OptionList
+    Visibility, DeathLinkMixin, DeathLink, FreeText, OptionList, OptionCounter, OptionError
 from .conditions import GameStateFlag
 from .game_data import static_data
 from .game_data.bitflag import ScugFlagMap
+from .game_data.general import story_regions_watcher, story_regions_vanilla, all_regions
 
 
 #################################################################
 # IMPORTANT SETTINGS
-class PassageProgressWithoutSurvivor(Choice):
-    """How The Survivor affects earning other passages.
-
-    **Disabled**: Only The Martyr, The Mother, and The Pilgrim can be earned before The Survivor.
-
-    **Enabled**: The Dragon Slayer, The Friend, and The Wanderer can additionally be earned before The Survivor.
-
-    **Bypassed**: Every passage can be earned before The Survivor.
-
-    This will override the actual value of the corresponding setting in the Rain World Remix menu."""
-    display_name = "Passage progress without Survivor"
-    option_disabled = 0
-    option_enabled = 1
-    option_bypassed = 2
-
-    default = 2
-
-
 class IsMSCEnabled(Toggle):
     """Whether More Slugcats Expansion (Downpour) is enabled, regardless of which campaign you plan to play."""
     display_name = "More Slugcats Expansion?"
@@ -37,34 +22,6 @@ class IsWatcherEnabled(Toggle):
     """Whether The Watcher is enabled, regardless of which campaign you plan to play."""
     display_name = "The Watcher?"
     default = 0
-
-
-class WhichGameVersion(Choice):
-    """Which Rain World version you are using."""
-    display_name = "Game version"
-    option_1_9_15b = 1091503
-    alias_1_9_15_3 = 1091503
-    alias_1_9_15 = 1091503
-    alias_1_9 = 1091503
-    option_1_10_4 = 1100400
-    alias_1_10 = 1100400
-    alias_1_10_1 = 1100400
-    alias_1_10_2 = 1100400
-    alias_1_10_3 = 1100400
-    default = 1100400
-
-    displaying = {
-        1091503: ("v1.9.15b / v1.9.15.3", "1.9.15.3"),
-        1100400: ("v1.10.0 - v1.11.1", "1.11.1"),
-    }
-
-    @property
-    def string(self) -> str: return self.displaying[self.value][1]
-
-    @classmethod
-    def get_option_name(cls, value: int) -> str: return cls.displaying[value][0]
-
-    visibility = Visibility.none
 
 
 class WhichCampaign(Choice):
@@ -79,7 +36,7 @@ class WhichCampaign(Choice):
     option_spearmaster = 6
     option_saint = 7
     option_sofanthiel = 8
-    # option_watcher = 9
+    option_watcher = 9
 
     alias_yellow = 0
     alias_white = 1
@@ -131,21 +88,31 @@ class WhichVictoryCondition(Choice):
 
     **Hunter**: Use the green neuron on Looks to the Moon in Shoreline.
 
-    **Gourmand**: Receive the Mark and reach Journey's End in Outer Expanse.
+    **Gourmand**: Receive the Mark in order to reach Outer Expanse, and subsequently reach Journey's End.
 
-    **Artificer**: Receive the Mark and kill the Chieftain in Metropolis.
+    **Artificer**: Receive the Mark and the Citizen ID drone in order to reach Metropolis and kill the Chieftain Scavenger.
 
     **Rivulet**: Receive the Rarefaction Cell and deliver it to Submerged Superstructure,
     then meet Looks to the Moon.
 
-    **Spearmaster**: Receive the Mark, the SM pearl, and Moon's message,
-    then deliver it to Communications Array in Sky Islands.
+    **Spearmaster**: Receive the SM pearl and Moon's message, then deliver it to Communications Array in Sky Islands.
+
+    When playing as the Watcher, these options are different:
+    **Ascension** / **Spinning Top**: Complete the Spinning Top ending.
+    **Story** / **Prince**: Complete the Prince ending.
+    **Echoes** / **Weaver**: Complete the Weaver ending.
+    **True Ending**: Complete the True ending. If this is chosen on a non-Watcher slugcat, it will be interpreted as ascension.
     """
     display_name = "Victory condition"
     option_ascension = 0
     option_story = 1
     option_echoes = 2
     option_food_quest = 3
+
+    alias_spinning_top = 0
+    alias_prince = 1
+    alias_weaver = 2
+    option_true_ending = 4
 
 
 class WhichGateBehavior(Choice):
@@ -168,6 +135,14 @@ class WhichGateBehavior(Choice):
     option_karma_only = 3
     default = 0
 
+class SparseGates(Toggle):
+    """
+    When enabled, the world will only generate exactly as many gates / warps needed to reach every region.
+    Only applies when Gate Behavior is set to require keys.
+    """
+    display_name = "Sparse Gates"
+    default = False
+
 
 class DebugOutput(Toggle):
     """Whether to log extra information about the world and slot for debugging."""
@@ -176,209 +151,80 @@ class DebugOutput(Toggle):
 
 
 #################################################################
-# WATCHER SETTINGS
-class RippleWarpBehavior(Choice):
-    """How ripple warps behave.  See the settings documentation for explanation."""
-    display_name = "Ripple warp behavior"
-    option_unaltered = 0
-    option_no_ripple_warps = 1
-    alias_true = 1
-    alias_false = 0
-    default = 0
-    visibility = Visibility.none
-
-
-class NormalDynamicWarpBehavior(Choice):
-    """How normal dynamic warps behave.  See the Watcher documentation for explanation."""
-    display_name = "Normal dynamic warp behavior"
-    option_ignored = 0
-    option_visited = 1
-    option_static_pool = 2
-    option_unlockable_pool = 4
-    option_static_predetermined = 5
-    option_unlockable_predetermined = 6
-    default = 1
-    visibility = Visibility.none
-
-    @property
-    def unlockable(self) -> bool: return self.value in (4, 6)
-
-    @property
-    def predetermined(self) -> bool: return self.value in (5, 6)
-
-
-class PredeterminedDynamicWarpNetworkMinimumNecklaceLength(Range):
-    """The minimum length of a necklace in the derangement generator for the predetermined dynamic warp network."""
-    display_name = "Warp network parameter"
-    range_start = 2
-    range_end = 18
-    default = 3
-    visibility = Visibility.spoiler
-
-
-class ThroneDynamicWarpBehavior(Choice):
-    """How Throne dynamic warps behave.  See the Watcher documentation for explanation."""
-    display_name = "Throne dynamic warp behavior"
-    option_ignored = 0
-    option_visited = 1
-    option_static_predetermined = 5
-    default = 5
-    visibility = Visibility.none
-
-
-class DynamicWarpPoolSize(Range):
-    """Number of regions in the dynamic warp pool.  See the Watcher documentation for explanation."""
-    display_name = "Normal pool size"
-    range_start = 1
-    range_end = 18
-    default = 18
-    visibility = Visibility.none
-
-
-class LogicRottedGeneration(Choice):
-    """Controls the generation of Crumbling Fringes, Corrupted Factories, Decaying Tunnels, and Infested Wastes."""
-    display_name = "Permarotted accessibility"
-    option_none = 0
-    option_passthrough = 2
-    option_full = 3
-    alias_true = 3
-    alias_false = 0
-    default = 0
-    visibility = Visibility.none
-
-
-class LogicMinRippleTarget(Range):
-    """The lowest that your *minimum* Ripple can be before Ripplespace is logically accessible.
-    The default, 5, matches the actual game behavior."""
-    display_name = "Min Ripple target"
-    range_start = 5
-    range_end = 9
-    default = 5
-    visibility = Visibility.none
-
-
-class RottedRegionTarget(Range):
-    """The number of regions that must be rotted for the Rot ending.
-    The default, 18, matches the unaltered game behavior."""
-    display_name = "Rotted region target"
-    range_start = 2
-    range_end = 18
-    default = 18
-    visibility = Visibility.none
-
-
-class ChecksSpreadRot(Choice):
-    """Whether spreading the Rot to a new region is a check."""
-    display_name = "Rot spread checks"
-    option_off = 0
-    option_alternate_only = 1
-    option_on = 2
-    alias_true = 2
-    alias_false = 0
-    default = 1
-    visibility = Visibility.none
-
-
-class ChecksSpreadRotProgressive(Toggle):
-    """Whether rot spread checks are progressive instead of per-region."""
-    display_name = "Progressive rot spread"
-    default = True
-    visibility = Visibility.none
-
-
-class SpinningTopKeys(Choice):
-    """Whether Spinning Top warps require keys."""
-    display_name = "Spinning Top keys"
-    option_off = 0
-    option_on = 2
-    alias_true = 2
-    alias_false = 0
-    default = 2
-    visibility = Visibility.none
-
-
-class PriorityThrone(Choice):
-    """Whether Throne warp and Prince checks are priority locations."""
-    display_name = "Priority Throne"
-    option_normal = 1
-    option_priority = 2
-    option_excluded = 3
-    default = 2
-    visibility = Visibility.none
-
-
-class SoPeeping(FreeText):
-    """Temporary setting for allowing Watcher generation."""
-    visibility = Visibility.none
-
-
-#################################################################
 # GENERAL SETTINGS
 class RandomStartingRegion(Choice):
-    """Where Slugcat will initially spawn.
-    If not set to default, a random shelter in the region is selected."""
-    display_name = "Random starting shelter"
-    option_default_starting_point = 0
+    """Whether the starting region should be randomized.
 
-    option_outskirts = 1
-    option_industrial_complex = 2
-    option_drainage_system = 3
-    option_garbage_wastes = 4
-    option_shoreline = 5
-    option_shaded_citadel = 6
-    option_the_exterior = 7
-    option_five_pebbles = 8
-    option_chimney_canopy = 9
-    option_sky_islands = 10
-    option_farm_arrays = 11
-    option_subterranean = 12
-    option_pipeyard = 20
-    option_outer_expanse = 22
-    option_metropolis = 23
-    option_looks_to_the_moon = 24
+    **Default Start**: Do not randomize the starting region.
 
-    # option_sunlit_port = 30
+    **Weighted Choice**: Refer to "Possible Starting Regions" option to decide what starting regions can be chosen.
 
-    alias_undergrowth = 3
-    alias_waterfront_facility = 5
-    alias_silent_construct = 6
-    alias_the_rot = 8
+    **Any Valid**: The starting region is chosen among every accessible region in the selected game state.
+    """
+    display_name = "Randomize Starting Region"
+
+    option_default_start = 0
+    option_weighted_choice = 1
+    option_any_valid = 2
 
     default = 0
 
-    names = {
-        0: ("Default starting point", "!!!"),
-        1: ("Outskirts", "SU"),
-        2: ("Industrial Complex", "HI"),
-        3: ("Drainage System / Undergrowth", "DS"),
-        4: ("Garbage Wastes", "GW"),
-        5: ("Shoreline / Waterfront Facility", "SL"),
-        6: ("Shaded Citadel / Silent Construct", "SH"),
-        7: ("The Exterior", "UW"),
-        8: ("Five Pebbles / The Rot", "SS"),
-        9: ("Chimney Canopy", "CC"),
-        10: ("Sky Islands", "SI"),
-        11: ("Farm Arrays", "LF"),
-        12: ("Subterranean", "SB"),
-        20: ("Pipeyard", "VS"),
-        22: ("Outer Expanse", "OE"),
-        23: ("Metropolis", "LC"),
-        24: ("Looks to the Moon", "DM"),
 
-        30: ("Sunlit Port", "WSKB"),
+class PossibleStartingRegions(OptionCounter):
+    """Select which regions will be allowed as possible starting locations.
+    Only used when "Randomize Starting Region" option is set to "Weighted Choice".
+    The value on each region influences how likely it is to be selected.
+    Regions not in the list or with a value less than 1 are not selected.
+    """
+    display_name = "Possible Starting Regions"
+
+    resolved_name: str
+    resolved_code: str
+
+    names = {
+        "Outskirts": "SU",
+        "Industrial Complex": "HI",
+        "Drainage System / Undergrowth": "DS",
+        "Garbage Wastes": "GW",
+        "Shoreline / Waterfront Facility": "SL",
+        "Shaded Citadel / Silent Construct": "SH",
+        "The Exterior": "UW",
+        "Five Pebbles / The Rot": "SS",
+        "Chimney Canopy": "CC",
+        "Sky Islands": "SI",
+        "Farm Arrays": "LF",
+        "Subterranean": "SB",
+
+        "Pipeyard": "VS",
+        "Submerged Superstructure": "MS",
+        "Outer Expanse": "OE",
+        "Metropolis": "LC",
+        "Looks to the Moon": "DM",
+
+        "Sunbaked Alley": "WSKB",
+        "Coral Caves": "WRFA",
+        "Torrential Railways": "WSKA",
+        "Aether Ridge": "WARF",
+        "Badlands": "WBLA",
+        "Cold Storage": "WARD",
+        "Desolate Tract": "WTDB",
+        "Fetid Glen": "WARC",
+        "Fractured Gateways": "WVWB",
+        "Heat Ducts": "WARE",
+        "Migration Path": "WMPA",
+        "Pillar Grove": "WPGA",
+        "Rusted Wrecks": "WRRA",
+        "Salination": "WARB",
+        "Shrouded Stacks": "WSKD",
+        "Signal Spires": "WPTA",
+        "Stormy Coast": "WSKC",
+        "The Surface": "WARG",
+        "Torrid Desert": "WTDA",
+        "Turbulent Pump": "WRFB",
+        "Verdant Waterways": "WVWA",
     }
 
-    @classmethod
-    def get_option_name(cls, value: int) -> str:
-        return cls.names[value][0]
-
-    @property
-    def code(self) -> str:
-        return self.__class__.names[self.value][1]
-
-    @property
-    def name(self) -> str:
-        return self.__class__.names[self.value][0]
+    default = {name: 1 for name in names.keys()}
 
 
 class PassagePriority(Range):
@@ -393,15 +239,114 @@ class PassagePriority(Range):
 
 
 class ExtraKarmaCapIncreases(Range):
-    """Number of extra karma cap increases in the pool beyond the minimum required for ascension."""
+    """Number of extra karma cap increases in the pool beyond the minimum required for ascension.
+    For Watcher, this option will also apply to Ripple."""
     display_name = "Extra karma cap increases"
     range_start = 0
     range_end = 30
     default = 3
 
 
+class PassageProgressWithoutSurvivor(Choice):
+    """How The Survivor affects earning other passages.
+
+    **None**: No other passages can be earned before The Survivor.
+
+    **Disabled**: Only The Martyr, The Mother, and The Pilgrim can be earned before The Survivor.
+
+    **Enabled**: The Dragon Slayer, The Friend, and The Wanderer can additionally be earned before The Survivor.
+
+    **Bypassed**: Every passage can be earned before The Survivor.
+
+    This will override the actual value of the corresponding setting in the Rain World Remix menu."""
+    display_name = "Passage progress without Survivor"
+    option_none = 0
+    option_disabled = 1
+    option_enabled = 2
+    option_bypassed = 3
+
+    default = 3
+
+
+class LogicRottedGeneration(Choice):
+    """Controls the generation of Crumbling Fringes, Corrupted Factories, Decaying Tunnels, and Infested Wastes.
+
+    **None**: There will be no checks in rotted vanilla regions, and bad warping will not be required to reach Outer Rim.
+
+    **Passthrough**: There will be no checks in rotted vanilla regions, but you may still have to bad warp to reach Outer Rim.
+
+    **Full**: Checks will be present in rotted vanilla regions
+    """
+    display_name = "Permarotted accessibility"
+    option_none = 0
+    option_passthrough = 1
+    option_full = 2
+    alias_true = 2
+    alias_false = 0
+    default = 1
+
+
+class LogicMinRippleTarget(Range):
+    """The lowest that your *minimum* Ripple can be before Ripplespace is logically accessible.
+    The default, 5, matches the actual game behavior."""
+    display_name = "Min Ripple target"
+    range_start = 5
+    range_end = 9
+    default = 5
+
+
+class RottedRegionTarget(Range):
+    """The number of regions that must be rotted for the Rot ending.
+    The default, 21, matches the unaltered game behavior."""
+    display_name = "Rotted region target"
+    range_start = 2
+    range_end = 21
+    default = 21
+
+
+class RandomizeWeaverAbility(Choice):
+    """Adds 4 progressive Weaver ability items to the item pool instead of gaining the ability naturally through Weaver encounters.
+    For related ending only, the endings in question are Weaver or True Ending.
+    The Weaver cannot be randomized if the Prince ending is chosen."""
+    display_name = "Randomize Weaver ability"
+    option_false = 0
+    option_related_ending_only = 1
+    option_true = 2
+
+    alias_off = 0
+    alias_on = 2
+    default = 0
+
+
+class SpinningTopKeys(Toggle):
+    """Whether keys are required to travel through Spinning Top warps."""
+    display_name = "Spinning Top keys"
+    default = True
+
+
+class DaemonKeys(Toggle):
+    """Whether keys are required to travel through Daemon warps."""
+    display_name = "Daemon keys"
+    default = False
+
+
+class PriorityThrone(Choice):
+    """Whether Prince checks should be normal, priority, or excluded locations."""
+    display_name = "Priority Throne"
+    option_normal = 1
+    option_priority = 2
+    option_excluded = 3
+    default = 1
+    # visibility = Visibility.none
+
+
 #################################################################
 # CHECK POOL SETTINGS
+class ChecksPassages(Toggle):
+    """When enabled, completing each passage achievement is a check."""
+    display_name = "Passages"
+    default = True
+
 class ChecksBroadcasts(Choice):
     """Which slugcats broadcasts should be available to.  Requires MSC."""
     display_name = "Broadcasts"
@@ -416,7 +361,7 @@ class ChecksBroadcasts(Choice):
 
 class ChecksFoodQuest(Choice):
     """Which slugcats the food quest should be available to.  Requires MSC."""
-    display_name = "Food quest"
+    display_name = "Food Quest"
     option_all_slugcats = 2
     option_only_gourmand = 1
     option_off = 0
@@ -430,7 +375,7 @@ class ChecksFoodQuestExpanded(Toggle):
     Specific food quest checks may be disabled by excluding the locations,
     and some slugcats will not be required to kill and eat extreme threats if that setting is enabled.
     Requires MSC."""
-    display_name = "Expanded food quest"
+    display_name = "Expanded Food Quest"
     default = False
 
 
@@ -443,24 +388,29 @@ class ChecksTokensPearls(Toggle):
 
 class ChecksDevTokens(Toggle):
     """Whether dev commentary tokens should be checks.  Requires MSC."""
-    display_name = "Dev tokens"
+    display_name = "Dev Tokens"
     default = False
 
 
 class ChecksSheltersanity(Toggle):
     """Whether each shelter is a check."""
-    display_name = "Sheltersanity"
+    display_name = "Shelters"
     default = False
 
 
 class ChecksSubmerged(Choice):
-    """Whether Submerged Superstructure has any checks."""
+    """Whether Submerged Superstructure has any checks.
+    If only aquatic is chosen, checks will only be generated
+    if playing Rivulet or the Aquatic perk is in the item pool."""
     display_name = "Include Submerged"
     option_all_slugcats = 2
-    option_only_rivulet = 1
+    option_only_aquatic = 1
     option_off = 0
+
     alias_true = 2
     alias_false = 0
+    alias_only_rivulet = 1
+
     default = 1
 
 
@@ -468,6 +418,35 @@ class ChecksKarmaFlowers(Toggle):
     """Whether each static karma flower spawn is a check."""
     display_name = "Karma Flowers"
     default = False
+
+
+class ChecksSpreadRot(Choice):
+    """Whether spreading the Rot to new regions are checks.
+    This option will be force-disabled if "Randomize Weaver Ability" is set to true, or Weaver / True Ending is chosen.
+    For related ending only, the ending in question is the Prince ending."""
+    display_name = "Rot spread checks"
+    option_false = 0
+    option_related_ending_only = 1
+    option_true = 2
+
+    alias_off = 0
+    alias_prince_ending_only = 1
+    alias_on = 2
+    default = 1
+
+
+class ChecksWeaverEncounters(Choice):
+    """Whether each of the 4 Weaver encounters are checks.
+    This is separate from whether the ability itself is randomized.
+    For related ending only, the endings in question are Weaver or True Ending."""
+    display_name = "Weaver encounter checks"
+    option_false = 0
+    option_related_ending_only = 1
+    option_true = 2
+
+    alias_off = 0
+    alias_on = 2
+    default = 1
 
 
 #################################################################
@@ -530,14 +509,25 @@ class DifficultyExtremeThreats(Toggle):
     default = 0
 
 
-class DifficultySubmerged(Toggle):
-    """Whether Submerged Superstructure is logically locked behind advancing the story state for Rivulet.
-    Advancing the story state - normally done by removing the rarefaction cell from The Rot -
-    causes the cycle duration to increase significantly, making Submerged Superstructure significantly easier.
+class DifficultySubmerged(Choice):
+    """Changes the logical requirement for entering Submerged Superstructure.
 
-    This setting only impacts Rivulet."""
+    If off, Submerged has no additional requirement to enter.
+
+    If set to aquatic, access to Submerged will expect you to have longer breath time from the Aquatic perk
+    or to be playing as Rivulet. If the Aquatic perk is not in the item pool, this acts the same as "off".
+
+    If set to longer cycles, Rivulet will not be expected to enter Submerged until the Longer Cycles item is obtained."""
     display_name = "Late Submerged"
-    default = True
+    option_longer_cycles = 2
+    option_aquatic = 1
+    option_off = 0
+
+    alias_true = 2
+    alias_false = 0
+    alias_only_rivulet = 2
+
+    default = 1
 
 
 class DifficultyEchoLowKarma(Choice):
@@ -562,6 +552,16 @@ class DifficultyEchoLowKarma(Choice):
 
 #################################################################
 # UPGRADE SETTINGS
+class RandomizePassageTokens(Toggle):
+    """When enabled, passage tokens will be found as items instead of awarded by completing passages.
+
+    When playing as Watcher, you will need the mod "Watcher Region Art" enabled in order to use passage tokens in-game.
+    It can be found on the Steam workshop: https://steamcommunity.com/sharedfiles/filedetails/?id=3660768308
+    """
+    display_name = "Randomize Passage Tokens"
+    default = True
+
+
 class UpgradesSpearDamage(Range):
     """Add an amount of items to the pool that permanently increase the damage of thrown spears.
     Each progressive upgrade adds 10% damage on top of the slugcat's base damage."""
@@ -570,11 +570,11 @@ class UpgradesSpearDamage(Range):
     range_end = 10
     default = 6
 
-#################################################################
-# FILLER SETTINGS
+
 class ExpeditionPerks(OptionList):
     """Choose which Expedition perks will be added to the item pool.
     If an ability in this list is given to a slugcat that innately has it, there is no effect.
+    Explosive Jump, Aquatic, and Agility may be used in logic if they are present in the item pool.
     Requires MSC.
 
     Valid Perks: Back Spear Perk, Dual Wielding Perk, Blast Resistance Perk, Explosive Parry Perk,
@@ -585,6 +585,8 @@ class ExpeditionPerks(OptionList):
     verify_item_name = True
 
 
+#################################################################
+# FILLER SETTINGS
 class PctTraps(Range):
     """The percentage of filler items that will be traps.  Set to 0 to remove traps entirely."""
     display_name = "Trap percentage"
@@ -678,6 +680,13 @@ class WtDandelionPeach(WtGeneric):
     default = 20
 
 
+class WtGooieduck(WtGeneric):
+    """The relative weight of gooieducks in the non-trap filler item pool."""
+    display_name = "Gooieduck (MSC)"
+    item_name = "Gooieduck"
+    default = 20
+
+
 class WtFruit(WtGeneric):
     """The relative weight of blue fruit in the non-trap filler item pool."""
     display_name = "Blue Fruit"
@@ -722,8 +731,15 @@ class WtSlimeMold(WtGeneric):
 
 class WtFireEgg(WtGeneric):
     """The relative weight of firebug eggs in the non-trap filler item pool."""
-    display_name = "Firebug egg (MSC)"
+    display_name = "Firebug Egg (MSC)"
     item_name = "Fire Egg"
+    default = 5
+
+
+class WtHellSpear(WtGeneric):
+    """The relative weight of hell spears in the non-trap filler item pool."""
+    display_name = "Hell Spear (MSC)"
+    item_name = "Hell Spear"
     default = 5
 
 
@@ -769,6 +785,20 @@ class WtVultureMask(WtGeneric):
     default = 9
 
 
+class WtPearl(WtGeneric):
+    """The relative weight of pearls in the non-trap filler item pool."""
+    display_name = "Pearl"
+    item_name = "Pearl"
+    default = 9
+
+
+class WtBeehive(WtGeneric):
+    """The relative weight of beehives in the non-trap filler item pool."""
+    display_name = "Beehive"
+    item_name = "Beehive"
+    default = 15
+
+
 class WtJokeRifle(WtGeneric):
     """The relative weight of joke rifles in the non-trap filler item pool."""
     display_name = "Joke Rifle (MSC)"
@@ -776,118 +806,201 @@ class WtJokeRifle(WtGeneric):
     default = 1
 
 
+class WtBoomerang(WtGeneric):
+    """The relative weight of boomerangs in the non-trap filler item pool."""
+    display_name = "Boomerang (Watcher)"
+    item_name = "Boomerang"
+    default = 20
+
+
+class WtPoisonSpear(WtGeneric):
+    """The relative weight of poison spears in the non-trap filler item pool."""
+    display_name = "Poison Spear (Watcher)"
+    item_name = "Poison Spear"
+    default = 15
+
+
+class WtGraffitiBomb(WtGeneric):
+    """The relative weight of graffiti bombs in the non-trap filler item pool."""
+    display_name = "Graffiti Bomb (Watcher)"
+    item_name = "Graffiti Bomb"
+    default = 20
+
+
+class WtRotFruit(WtGeneric):
+    """The relative weight of rot fruits in the non-trap filler item pool."""
+    display_name = "Rot Fruit (Watcher)"
+    item_name = "Rot Fruit"
+    default = 0
+
+
+class WtFireSpriteLarva(WtGeneric):
+    """The relative weight of fire sprite larvae in the non-trap filler item pool."""
+    display_name = "Fire Sprite Larva (Watcher)"
+    item_name = "Fire Sprite Larva"
+    default = 30
+
+
 #################################################################
 # TRAP SETTINGS
 class WtTrapStun(WtGeneric):
-    """The relative weight of stun traps in the trap filler item pool."""
-    display_name = "Stun trap"
-    item_name = "Stun trap"
+    """The relative weight of stun traps in the trap filler item pool.
+    Stun traps will briefly stun the slugcat, as if they were hit with a rock."""
+    display_name = "Stun Trap"
+    item_name = "Stun Trap"
     default = 60
 
 
 class WtTrapZoomies(WtGeneric):
-    """The relative weight of zoomies traps in the trap filler item pool."""
-    display_name = "Zoomies trap"
-    item_name = "Zoomies trap"
+    """The relative weight of zoomies traps in the trap filler item pool.
+    Zoomies traps will make the slugcat update at double speed for a short time.
+    This will increase movement speed, but make platforming more difficult."""
+    display_name = "Zoomies Trap"
+    item_name = "Zoomies Trap"
     default = 50
 
 
 class WtTrapTimer(WtGeneric):
-    """The relative weight of timer traps in the trap filler item pool."""
-    display_name = "Timer trap"
-    item_name = "Timer trap"
+    """The relative weight of timer traps in the trap filler item pool.
+    Timer traps will reduce the remaining time left in the current cycle."""
+    display_name = "Timer Trap"
+    item_name = "Timer Trap"
     default = 50
 
 
 class WtTrapRedLizard(WtGeneric):
-    """The relative weight of red lizard traps in the trap filler item pool."""
-    display_name = "Red Lizard trap"
-    item_name = "Red Lizard trap"
+    """The relative weight of red lizard traps in the trap filler item pool.
+    Red lizard traps will spawn a red lizard in an adjacent room.
+    It will also know the slugcat's position for a short time."""
+    display_name = "Red Lizard Trap"
+    item_name = "Red Lizard Trap"
     default = 30
 
 
 class WtTrapRedCentipede(WtGeneric):
-    """The relative weight of red centipede traps in the trap filler item pool."""
-    display_name = "Red Centipede trap"
-    item_name = "Red Centipede trap"
+    """The relative weight of red centipede traps in the trap filler item pool.
+    Red centipede traps will spawn a red centipede in an adjacent room.
+    It will also know the slugcat's position for a short time."""
+    display_name = "Red Centipede Trap"
+    item_name = "Red Centipede Trap"
     default = 30
 
 
 class WtTrapSpitterSpider(WtGeneric):
-    """The relative weight of spitter spider traps in the trap filler item pool."""
-    display_name = "Spitter Spider trap"
-    item_name = "Spitter Spider trap"
+    """The relative weight of spitter spider traps in the trap filler item pool.
+    Spitter spider traps will spawn multiple spitter spiders in an adjacent room(s).
+    They will also know the slugcat's position for a short time."""
+    display_name = "Spitter Spider Trap"
+    item_name = "Spitter Spider Trap"
     default = 30
 
 
 class WtTrapBrotherLongLegs(WtGeneric):
-    """The relative weight of brother long legs traps in the trap filler item pool."""
-    display_name = "Brother Long Legs trap"
-    item_name = "Brother Long Legs trap"
+    """The relative weight of brother long legs traps in the trap filler item pool.
+    Brother long legs traps will spawn multiple BLLs in an adjacent room(s).
+    They will also know the slugcat's position for a short time."""
+    display_name = "Brother Long Legs Trap"
+    item_name = "Brother Long Legs Trap"
     default = 30
 
 
 class WtTrapDaddyLongLegs(WtGeneric):
-    """The relative weight of daddy long legs traps in the trap filler item pool."""
-    display_name = "Daddy Long Legs trap"
-    item_name = "Daddy Long Legs trap"
+    """The relative weight of daddy long legs traps in the trap filler item pool.
+    Daddy long legs traps will spawn a Daddy long legs in an adjacent room.
+    It will also know the slugcat's position for a short time."""
+    display_name = "Daddy Long Legs Trap"
+    item_name = "Daddy Long Legs Trap"
     default = 10
 
 
 class WtTrapRain(WtGeneric):
-    """The relative weight of rain traps in the trap filler item pool."""
-    display_name = "Rain trap"
-    item_name = "Rain trap"
+    """The relative weight of rain traps in the trap filler item pool.
+    Rain traps will activate strong pre-cycle rain for a short time.
+    If MSC is not enabled, this effect will only be visual."""
+    display_name = "Rain Trap"
+    item_name = "Rain Trap"
     default = 50
 
 
 class WtTrapGravity(WtGeneric):
-    """The relative *weight* of gravity traps in the trap filler item pool."""
-    display_name = "Gravity trap"
-    item_name = "Gravity trap"
+    """The relative *weight* of gravity traps in the trap filler item pool.
+    Gravity traps will disable gravity for a short time.
+    This has no effect in rooms with gravity effects already present (For example, in Five Pebbles)."""
+    display_name = "Gravity Trap"
+    item_name = "Gravity Trap"
     default = 10
 
 
 class WtTrapFog(WtGeneric):
     """The relative weight of fog traps in the trap filler item pool."""
-    display_name = "Fog trap"
-    item_name = "Fog trap"
+    display_name = "Fog Trap"
+    item_name = "Fog Trap"
     default = 0
     visibility = Visibility.none
 
 
 class WtTrapKillSquad(WtGeneric):
     """The relative weight of kill squad traps in the trap filler item pool."""
-    display_name = "Killsquad trap"
-    item_name = "Killsquad trap"
+    display_name = "Killsquad Trap"
+    item_name = "Killsquad Trap"
     default = 0
     visibility = Visibility.none
 
 
 class WtTrapAlarm(WtGeneric):
-    """The relative weight of alarm traps in the trap filler item pool."""
-    display_name = "Alarm trap"
-    item_name = "Alarm trap"
+    """The relative weight of alarm traps in the trap filler item pool.
+    Alarm traps will alert every creature in the region to the slugcats position for some time."""
+    display_name = "Alarm Trap"
+    item_name = "Alarm Trap"
     default = 30
+
+class WtTrapResponsibility(WtGeneric):
+    """The relative weight of responsibility traps in the trap filler item pool.
+    Responsibility traps will spawn a slugpup in an adjacent room.
+    It will also know the slugcat's position for a short time."""
+    display_name = "Responsibility Trap"
+    item_name = "Responsibility Trap"
+    default = 30
+
+class WtTrapRippleSpawn(WtGeneric):
+    """The relative weight of ripple spawn traps in the trap filler item pool.
+    Ripple spawn traps will spawn a large amount of Ripple amoeba in the current room that chase the slugcat.
+    Before the Glow is obtained these will be invisible, making them much more dangerous."""
+    display_name = "Ripple Spawn Trap"
+    item_name = "Ripple Spawn Trap"
+    default = 0
+
+class WtTrapBlizzardLizard(WtGeneric):
+    """The relative weight of blizzard lizard traps in the trap filler item pool.
+    Blizzard Lizard traps will spawn a blizzard lizard in an adjacent room.
+    It will also know the slugcat's position for a short time."""
+    display_name = "Blizzard Lizard Trap"
+    item_name = "Blizzard Lizard Trap"
+    default = 10
 
 
 @dataclass
 class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
+    starting_region_name = ""
+    starting_region_code = ""
+
     #################################################################
     # IMPORTANT SETTINGS
-    which_game_version: WhichGameVersion
     is_msc_enabled: IsMSCEnabled
     is_watcher_enabled: IsWatcherEnabled
     which_campaign: WhichCampaign
     passage_progress_without_survivor: PassageProgressWithoutSurvivor
     which_victory_condition: WhichVictoryCondition
     which_gate_behavior: WhichGateBehavior
-    random_starting_region: RandomStartingRegion
+    sparse_gates : SparseGates
+    randomize_starting_region: RandomStartingRegion
+    possible_starting_regions: PossibleStartingRegions
     debug_output: DebugOutput
 
     group_important = [
-        WhichGameVersion, IsMSCEnabled, IsWatcherEnabled, WhichCampaign,
-        PassageProgressWithoutSurvivor, WhichVictoryCondition, WhichGateBehavior, DeathLink, RandomStartingRegion
+        IsMSCEnabled, IsWatcherEnabled, WhichCampaign, PassageProgressWithoutSurvivor,
+        WhichVictoryCondition, WhichGateBehavior, SparseGates, DeathLink, RandomStartingRegion,
+        PossibleStartingRegions, DebugOutput,
     ]
 
     #################################################################
@@ -909,6 +1022,7 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
 
     #################################################################
     # ITEM POOL SETTINGS
+    randomize_passage_tokens: RandomizePassageTokens
     expedition_perks: ExpeditionPerks
     pct_traps: PctTraps
     weight_jitter: FillerJitter
@@ -916,11 +1030,12 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     damage_upgrades: UpgradesSpearDamage
 
     group_itempool = [
-        ExtraKarmaCapIncreases, UpgradesSpearDamage, ExpeditionPerks, PctTraps, FillerJitter
+        RandomizePassageTokens, ExtraKarmaCapIncreases, UpgradesSpearDamage, ExpeditionPerks, PctTraps, FillerJitter,
     ]
 
     #################################################################
     # CHECK POOL SETTINGS
+    checks_passages: ChecksPassages
     checks_broadcasts: ChecksBroadcasts
     checks_foodquest: ChecksFoodQuest
     checks_foodquest_expanded: ChecksFoodQuestExpanded
@@ -932,29 +1047,25 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     checks_devtokens: ChecksDevTokens
 
     group_checkpool = [
-        ChecksBroadcasts, ChecksFoodQuest, ChecksFoodQuestExpanded, PassagePriority, ChecksTokensPearls,
-        ChecksDevTokens, ChecksSheltersanity, ChecksSubmerged, ChecksKarmaFlowers,
+        ChecksPassages, ChecksBroadcasts, ChecksFoodQuest, ChecksFoodQuestExpanded, PassagePriority,
+        ChecksTokensPearls, ChecksDevTokens, ChecksSheltersanity, ChecksSubmerged, ChecksKarmaFlowers,
     ]
 
     #################################################################
     # WATCHER-SPECIFIC SETTINGS
     logic_rotted_generation: LogicRottedGeneration
     logic_ripplespace_min_req: LogicMinRippleTarget
-    normal_dynamic_warp_behavior: NormalDynamicWarpBehavior
-    throne_dynamic_warp_behavior: ThroneDynamicWarpBehavior
-    predetermined_dynamic_warp_network_minimum_necklace_length: PredeterminedDynamicWarpNetworkMinimumNecklaceLength
-    dynamic_warp_pool_size: DynamicWarpPoolSize
     rotted_region_target: RottedRegionTarget
+    randomize_weaver: RandomizeWeaverAbility
     checks_spread_rot: ChecksSpreadRot
-    checks_spread_rot_progressive: ChecksSpreadRotProgressive
+    checks_weaver_encounters: ChecksWeaverEncounters
     spinning_top_keys: SpinningTopKeys
+    daemon_keys: DaemonKeys
     priority_throne: PriorityThrone
-    so_peeping: SoPeeping
 
     group_watcher = [
-        LogicRottedGeneration, LogicMinRippleTarget, NormalDynamicWarpBehavior, ThroneDynamicWarpBehavior,
-        DynamicWarpPoolSize, RottedRegionTarget, ChecksSpreadRot, ChecksSpreadRotProgressive,
-        SpinningTopKeys, PriorityThrone,
+        LogicRottedGeneration, LogicMinRippleTarget, RottedRegionTarget, RandomizeWeaverAbility, ChecksSpreadRot,
+        ChecksWeaverEncounters, SpinningTopKeys, DaemonKeys, PriorityThrone,
     ]
 
     #################################################################
@@ -969,11 +1080,17 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     wt_bubble_weed: WtBubbleWeed
     wt_lanterns: WtLantern
     wt_vulture_masks: WtVultureMask
+    wt_pearls: WtPearl
+    wt_beehives: WtBeehive
     wt_lilypucks: WtLillyPuck
     wt_dandelion_peaches: WtDandelionPeach
+    wt_gooieducks: WtGooieduck
     wt_electric_spears: WtElectricSpear
     wt_singularity_bombs: WtSingularityBomb
     wt_joke_rifles: WtJokeRifle
+    wt_boomerangs: WtBoomerang
+    wt_poison_spears: WtPoisonSpear
+    wt_graffiti_bombs: WtGraffitiBomb
 
     wt_fruit: WtFruit
     wt_bubblefruit: WtBubbleFruit
@@ -983,14 +1100,20 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     wt_slimemold: WtSlimeMold
     wt_karma_flowers: WtKarmaFlower
     wt_fireeggs: WtFireEgg
+    wt_hellspears: WtHellSpear
     wt_glowweed: WtGlowWeed
+    wt_rot_fruit: WtRotFruit
+    wt_fire_sprite_larva: WtFireSpriteLarva
 
     group_filler = [
         WtRock, WtSpear, WtExplosiveSpear, WtGrenade, WtFlashbang, WtSporePuff, WtCherrybomb, WtBubbleWeed, WtLantern,
-        WtVultureMask, WtFruit, WtBubbleFruit, WtEggbugEgg, WtJellyfish, WtMushroom, WtSlimeMold, WtKarmaFlower,
+        WtVultureMask, WtPearl, WtBeehive, WtFruit, WtBubbleFruit, WtEggbugEgg, WtJellyfish, WtMushroom, WtSlimeMold,
+        WtKarmaFlower,
 
-        WtLillyPuck, WtDandelionPeach, WtElectricSpear, WtSingularityBomb, WtJokeRifle,
-        WtFireEgg, WtGlowWeed
+        WtLillyPuck, WtDandelionPeach, WtGooieduck, WtElectricSpear, WtSingularityBomb, WtJokeRifle,
+        WtFireEgg, WtHellSpear, WtGlowWeed,
+
+        WtBoomerang, WtPoisonSpear, WtGraffitiBomb, WtRotFruit, WtFireSpriteLarva,
     ]
 
     #################################################################
@@ -1010,17 +1133,24 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     wt_spitterspider: WtTrapSpitterSpider
     wt_brotherlonglegs: WtTrapBrotherLongLegs
     wt_daddylonglegs: WtTrapDaddyLongLegs
+    wt_responsibility: WtTrapResponsibility
+    wt_ripplespawn: WtTrapRippleSpawn
+    wt_blizzardlizard: WtTrapBlizzardLizard
 
     group_traps = [
         WtTrapStun, WtTrapZoomies, WtTrapTimer, WtTrapAlarm, WtTrapKillSquad,
         WtTrapGravity, WtTrapRain, WtTrapFog,
 
         WtTrapRedLizard, WtTrapRedCentipede, WtTrapSpitterSpider,
-        WtTrapBrotherLongLegs, WtTrapDaddyLongLegs
+        WtTrapBrotherLongLegs, WtTrapDaddyLongLegs, WtTrapResponsibility,
+        WtTrapRippleSpawn, WtTrapBlizzardLizard,
     ]
 
     @property
     def msc_enabled(self) -> bool: return self.is_msc_enabled == 1
+
+    @property
+    def any_dlc_enabled(self) -> bool: return self.is_msc_enabled == 1 or self.is_watcher_enabled == 1
 
     @property
     def dlcstate(self) -> str:
@@ -1035,21 +1165,63 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
             return "Vanilla"
 
     @property
-    def starting_scug(self) -> str: return "Watcher" if self.so_peeping == "OAOAOA!" else self.which_campaign.scug_id
-
-    @property
-    def worldstate(self) -> tuple[str, str]: return self.which_game_version.string, self.dlcstate
+    def starting_scug(self) -> str: return self.which_campaign.scug_id
 
     @property
     def which_gamestate_integer(self) -> int:
         return int(self.which_campaign) + (10 if self.is_msc_enabled else 0)
 
-    def general_validity_check(self) -> str | None:
-        if self.is_watcher_enabled and self.which_game_version < 1100000:
-            return "The Watcher cannot be enabled with a game version before 1.10.0."
-        if self.is_msc_enabled and self.which_game_version < 1090000:
-            return "More Slugcats Expansion cannot be enabled with a game version before 1.9.0."
+    def find_starting_region(self, random: Random):
+        if self.randomize_starting_region == 0:
+            return
+        elif self.randomize_starting_region == 1:
+            choice_counter = Counter({reg: self.possible_starting_regions[reg] for reg in self.possible_starting_regions.keys()
+                 if reg in self.possible_starting_regions.names})
+        else:
+            choice_counter = Counter(self.possible_starting_regions.default)
+        valid_codes = {self.possible_starting_regions.names[reg] for reg in choice_counter.keys()}
 
+        def choose_weighted():
+            weighted_choices = [reg for reg in choice_counter.elements() if self.possible_starting_regions.names[reg] in valid_codes]
+            if not weighted_choices:
+                raise OptionError(f"None of the selected regions in \"Possible Starting Regions\" are valid with these options.")
+            self.starting_region_name = random.choice(weighted_choices)
+            self.starting_region_code = self.possible_starting_regions.names[self.starting_region_name]
+
+        # Filter Watcher regions
+        if self.starting_scug == "Watcher":
+            valid_codes.intersection_update(story_regions_watcher)
+            choose_weighted()
+            return
+        else:
+            valid_codes.difference_update(story_regions_watcher)
+
+        # No Shaded if difficulty_glow
+        if self.difficulty_glow:
+            valid_codes.difference_update({"SH"})
+
+        # Return vanilla regions if no MSC
+        if not self.msc_enabled:
+            valid_codes.intersection_update(story_regions_vanilla)
+            choose_weighted()
+            return
+
+        # Don't spawn in the final region for story endings
+        if self.which_victory_condition == "story":
+            if self.starting_scug == "Artificer":
+                valid_codes.difference_update({"LC"})
+            valid_codes.difference_update({"OE"})
+
+        if not self.submerged_should_populate:
+            valid_codes.difference_update({"MS"})
+        elif self.difficulty_submerged > (1 if self.starting_scug == "Rivulet" else 0):
+            valid_codes.difference_update({"MS"})
+
+        # Filter to slugcat's regions
+        valid_codes.intersection_update(all_regions["MSC"][self.starting_scug])
+        choose_weighted()
+
+    def general_validity_check(self) -> str | None:
         if not self.is_watcher_enabled and self.starting_scug == "Watcher":
             return "Watcher's campaign cannot be selected without The Watcher enabled."
         if not self.is_msc_enabled and self.starting_scug in [
@@ -1072,7 +1244,7 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
         )
 
         if optional_check_score < 2:
-            start = self.random_starting_region.code
+            start = self.starting_region_code
             sphere_1_too_small = False
             solutions = [
                 "Pick a different starting region.",
@@ -1094,6 +1266,9 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
                 return ("Sphere 1 is too small with these settings.  "
                         f"Do at least one of the following: \n{solution_string}")
 
+        if self.which_victory_condition == 1 and self.starting_scug == "Rivulet" and not self.submerged_should_populate:
+            return f"Rivulet's story ending requires checks in Submerged Superstructure to be enabled."
+
         if self.which_victory_condition == 3:
             if not self.msc_enabled:
                 return (f"Food quest victory condition cannot be selected "
@@ -1101,47 +1276,88 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
             if (self.starting_scug == "Gourmand") + self.checks_foodquest.value < 2:
                 return "Food quest checks must be enabled to use food quest victory condition."
 
+        if self.starting_scug != "Watcher" and self.which_victory_condition == 4:
+            return "Victory condition 'True Ending' is not valid for any slugcat other than Watcher."
+
         return None
 
     @property
-    def data_block(self) -> dict: return static_data[self.which_game_version.string][self.dlcstate]
+    def data_block(self) -> dict: return static_data[self.dlcstate]
 
     @property
-    def submerged_should_populate(self) -> bool: return self.checks_submerged + (self.starting_scug == "Rivulet") > 1
+    def submerged_should_populate(self) -> bool:
+        return self.checks_submerged + (self.starting_scug == "Rivulet" or "Aquatic Perk" in self.expedition_perks.value) > 1
 
     def get_nontrap_weight_dict(self) -> dict[str, float]:
         ret = {a.item_name: a.value for a in [
             self.wt_rocks, self.wt_spears, self.wt_explosive_spears, self.wt_grenades,
             self.wt_flashbangs, self.wt_sporepuffs, self.wt_cherrybombs, self.wt_bubble_weed,
-            self.wt_lilypucks, self.wt_dandelion_peaches, self.wt_fruit, self.wt_bubblefruit,
+            self.wt_lilypucks, self.wt_dandelion_peaches, self.wt_gooieducks, self.wt_fruit, self.wt_bubblefruit,
             self.wt_eggbugeggs, self.wt_jellyfish, self.wt_mushrooms, self.wt_slimemold,
-            self.wt_fireeggs, self.wt_glowweed, self.wt_electric_spears, self.wt_singularity_bombs,
-            self.wt_lanterns, self.wt_karma_flowers, self.wt_vulture_masks, self.wt_joke_rifles,
+            self.wt_fireeggs, self.wt_hellspears, self.wt_glowweed, self.wt_electric_spears, self.wt_singularity_bombs,
+            self.wt_lanterns, self.wt_karma_flowers, self.wt_vulture_masks, self.wt_pearls, self.wt_beehives,
+            self.wt_joke_rifles, self.wt_boomerangs, self.wt_poison_spears, self.wt_graffiti_bombs, self.wt_rot_fruit,
+            self.wt_fire_sprite_larva,
         ]}
         if not self.msc_enabled:
-            for key in ("Lilypuck", "Dandelion Peach", "Fire Egg", "Glow Weed", "Electric Spear", "Singularity Bomb", "Joke Rifle"):
+            for key in ("Fire Egg", "Electric Spear", "Joke Rifle", "Hell Spear"):
+                ret[f"{key}"] = 0
+        if not self.is_watcher_enabled:
+            for key in ("Boomerang", "Poison Spear", "Graffiti Bomb", "Rot Fruit", "Fire Sprite Larva"):
+                ret[f"{key}"] = 0
+        if not self.any_dlc_enabled:
+            for key in ("Lilypuck", "Dandelion Peach", "Glow Weed", "Singularity Bomb", "Gooieduck"):
                 ret[f"{key}"] = 0
 
         return ret
 
     def get_trap_weight_dict(self) -> dict[str, float]:
-        return {a.item_name: a.value for a in [
+        ret = {a.item_name: a.value for a in [
             self.wt_stuns, self.wt_zoomies, self.wt_timers, self.wt_alarms, self.wt_killsquads,
             self.wt_gravity, self.wt_rains, self.wt_fogs,
 
             self.wt_redcentipede, self.wt_redlizard, self.wt_spitterspider,
-            self.wt_brotherlonglegs, self.wt_daddylonglegs
+            self.wt_brotherlonglegs, self.wt_daddylonglegs, self.wt_responsibility,
+            self.wt_ripplespawn, self.wt_blizzardlizard,
         ]}
+        if not self.msc_enabled:
+            ret["Responsibility Trap"] = 0
+        if not self.is_watcher_enabled:
+            for key in ("Ripple Spawn Trap", "Blizzard Lizard Trap"):
+                ret[f"{key}"] = 0
+
+        return ret
 
     def satisfies(self, flag: GameStateFlag): return flag[self.dlcstate, self.starting_scug]
 
     def satisfies_flagmap(self, d: ScugFlagMap) -> bool:
-        return self.starting_scug in d.get(self.which_game_version.string, self.dlcstate)
+        return self.starting_scug in d.get(self.dlcstate)
 
     @property
     def should_have_rot_spread_checks(self):
-        return (self.starting_scug == "Watcher" and
+        """Whether spread rot checks are included, considering chosen victory condition."""
+        return (self.starting_scug == "Watcher" and not self.will_be_weaving and
                 (self.checks_spread_rot + (self.which_victory_condition == "story")) > 1)
+
+    @property
+    def should_have_weaver_checks(self):
+        """Whether weaver encounter checks are included, considering chosen victory condition."""
+        return (self.starting_scug == "Watcher" and self.will_be_weaving and
+                (self.checks_weaver_encounters + (self.which_victory_condition == "echoes")) > 1)
+
+    @property
+    def will_be_weaving(self):
+        """Whether the player will end up sealing portals during this run
+        (Watcher with Weaver or True Ending goal or randomized Weaver ability)"""
+        return self.starting_scug == "Watcher" and (self.which_victory_condition == 2 or self.which_victory_condition == 4
+                                                    or self.weaver_randomized)
+
+    @property
+    def weaver_randomized(self):
+        """Whether Weaver ability is randomized, considering chosen victory condition."""
+        return (self.starting_scug == "Watcher"
+                and (self.randomize_weaver + (self.which_victory_condition == 2 or self.which_victory_condition == 4) > 1)
+                and self.which_victory_condition != 1)
 
 
 option_groups = [
@@ -1149,7 +1365,7 @@ option_groups = [
     OptionGroup("Difficulty settings", RainWorldOptions.group_difficulty, True),
     OptionGroup("Check pool settings", RainWorldOptions.group_checkpool, True),
     OptionGroup("Item pool settings", RainWorldOptions.group_itempool, True),
-    # OptionGroup("Watcher-specific settings (spoilers)", RainWorldOptions.group_watcher, True),
+    OptionGroup("Watcher-specific settings", RainWorldOptions.group_watcher, True),
     OptionGroup("Filler item relative weights", RainWorldOptions.group_filler, True),
     OptionGroup("Trap relative weights", RainWorldOptions.group_traps, True),
 ]

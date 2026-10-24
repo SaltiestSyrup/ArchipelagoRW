@@ -1,32 +1,54 @@
+from rule_builder.field_resolvers import FromOption
+from rule_builder.rules import Has, HasFromList, HasAll, And, CanReachLocation
 from .classes import EventData, VictoryEvent
 from .. import RainWorldOptions
-from ..conditions.classes import Simple, AllOf
 from ..game_data.watcher import normal_regions
 from ..locations.passages import generate_cond_pilgrim
 from ..locations.foodquest import pips as fq_items
+from ..options import RottedRegionTarget
+
 
 def generate(options: RainWorldOptions) -> list[EventData]:
+    ascension = options.which_victory_condition == 0
     story = options.which_victory_condition == 1
+    echoes = options.which_victory_condition == 2
+    food_quest = options.which_victory_condition == 3
+    true_ending = options.which_victory_condition == 4
 
     if options.starting_scug == "Watcher":
-        if story:
-            cond = AllOf(
-                Simple("Ripple", 8),
-                # For now, I'm just assuming that if you can access a region, you can rot it.
-                # I can't think of any circumstance where this isn't the case,
-                # even considering all the different dynamic warp options,
-                # but I'm leaving this note here as a thing to investigate later just in case.
-                Simple([f"Access-{r}" for r in normal_regions], options.rotted_region_target.value)
-            )
-            return [VictoryEvent("Purpose", "Outer Rim", cond)]
-        else:
-            return [VictoryEvent("Peace", "Ancient Urban")]
+        if ascension: # Spinning Top
+            return [VictoryEvent("Spinning Top", "Ancient Urban")]
+        if story: # Rot
+            cond = (Has("Ripple", 3 + options.logic_ripplespace_min_req)
+                    & HasFromList(*[f"Access-{r}" for r in normal_regions], count=FromOption(RottedRegionTarget)))
+            return [VictoryEvent("The Prince", "Outer Rim", cond)]
+        if echoes: # Weaver
+            cond = HasAll(*[f"Access-{r}" for r in [*normal_regions, "WARA"]])
+            if options.weaver_randomized:
+                cond = cond & Has("Progressive Weaver", 4)
+            else:
+                # Ripple 9 not technically required, but is needed to find Weaver spots "naturally" rather than looking at a map
+                cond = cond & Has("Ripple", 3 + options.logic_ripplespace_min_req)
+
+            return [VictoryEvent("An Understanding", "Events", cond)]
+        if true_ending: # True Ending
+            # Must be able to reach Ancient Urban for Spinning Top ending,
+            # Outer Rim and enough Ripple to wake the Prince,
+            # Weaver ability if it was randomized,
+            # And every normal region for warp sealing.
+            # Ripple requirement handled by Daemon access
+            cond = HasAll(*[f"Access-{r}" for r in [*normal_regions, "WARA", "WAUA", "WORA"]])
+            if options.weaver_randomized:
+                cond = cond & Has("Progressive Weaver", 4)
+
+            return [VictoryEvent("The Choice", "Daemon", cond)]
+
 
     # Watcher victory conditions should end with this one
     if options.which_victory_condition == 3:
         foods = [item.full_name for item in fq_items if item.should_generate(options)]
         # I sincerely apologize, the achievement based naming convention has been broken.
-        return [VictoryEvent("Glutton", "Events", Simple(foods, locations=True))]
+        return [VictoryEvent("Glutton", "Events", And(*[CanReachLocation(f) for f in foods]))]
 
     # For Saint, the MS echo can be substituted in place of a normal echo.
     # For better or worse, this is not accounted for in logic.
@@ -35,41 +57,34 @@ def generate(options: RainWorldOptions) -> list[EventData]:
 
     # Saint's victory condition is different regardless of setting.
     if options.starting_scug == "Saint":
-        return [VictoryEvent("Ascension", "Rubicon", Simple("Karma", 8))]
+        return [VictoryEvent("Ascension", "Rubicon", Has("Karma", 8))]
 
     # Sofanthiel has no alternate, and no alternate exists without MSC.
     if not story or not options.msc_enabled or options.starting_scug == "Inv":
-        return [VictoryEvent("Ascension", "Subterranean Depths", Simple("Karma", 8))]
+        return [VictoryEvent("Ascension", "Subterranean Depths", Has("Karma", 8))]
 
     if options.starting_scug in ["Yellow", "White"]:
         return [VictoryEvent("Journey's End", "Outer Expanse")]
 
     if options.starting_scug == "Red":
-        return [VictoryEvent("A Helping Hand", "Shoreline", Simple("Slag Key"))]
+        return [VictoryEvent("A Helping Hand", "Shoreline", Has("Slag Key"))]
 
     if options.starting_scug == "Rivulet":
         return [
             EventData("Install rarefaction cell", "Submerged Superstucture Heart", "Submerged Superstructure",
-                      condition=Simple("Rarefaction Cell")),
-            VictoryEvent("Old Friend", "Shoreline", Simple("Install rarefaction cell"))
+                      condition=Has("Rarefaction Cell")),
+            VictoryEvent("Old Friend", "Shoreline", Has("Install rarefaction cell"))
         ]
-
-    ret = [EventData("MeetFP", "MeetFP", "Five Pebbles above puppet")]
 
     if options.starting_scug == "Gourmand":
-        ret.append(VictoryEvent("Migration", "Outer Expanse", Simple(["The Mark", "MeetFP"])))
+        return [VictoryEvent("Migration", "Outer Expanse")]
 
     if options.starting_scug == "Artificer":
-        ret.append(VictoryEvent("Closure", "Metropolis", Simple(["The Mark", "MeetFP"])))
+        return [VictoryEvent("Closure", "Metropolis")]
 
     if options.starting_scug == "Spear":
-        ret += [
-            EventData("MeetLttM", "MeetLttM", "Looks to the Moon"),
-            VictoryEvent("Messenger", "Sky Islands", Simple(
-                ["The Mark", "MeetFP", "MeetLttM", "Moon's Final Message", "Spearmaster's Pearl"]
-            ))
-        ]
+        return [VictoryEvent("Messenger", "Sky Islands", HasAll("Moon's Final Message", "Spearmaster's Pearl"))]
 
-    return ret
+    return []
 
 

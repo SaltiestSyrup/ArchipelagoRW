@@ -1,6 +1,6 @@
 from Options import OptionError
 from ..options import RainWorldOptions
-from .general import alternate_regions, story_regions_vanilla
+from .general import alternate_regions, story_regions_vanilla, story_regions_watcher
 
 all_shelters = {
     'CC': ['CC_S04', 'CC_S05', 'CC_S01', 'CC_S03', 'CC_S06', 'CC_S07'],
@@ -37,6 +37,7 @@ start_shelters = {
     'LC': ['LC_SHELTER_ABOVE', 'LC_A05', 'LC_S03', 'LC_S01', 'LC_SHELTERTRAIN1', 'LC_S04'],
     'LF': ['LF_S02', 'LF_S01', 'LF_S07', 'LF_S05', 'LF_S03'],
     'LM': ['LM_S05', 'LM_S11', 'LM_S13', 'LM_S06'],
+    'MS': ['MS_S01', 'MS_S06', 'MS_S05', 'MS_S03', 'MS_S09'],
     'OE': ['OE_S01', 'OE_S04', 'OE_EXSHELTER', 'OE_S06'],
     'RM': ['RM_S01', 'RM_LCS2', 'RM_LCS1'],
     'SB': ['SB_S06', 'SB_S07', 'SB_S04', 'SB_S05', 'SB_S02'],
@@ -47,7 +48,29 @@ start_shelters = {
     'SU': ['SU_S04', 'SU_S01', 'SU_S03', 'SU_S05'],
     'UG': ['UG_S01R', 'UG_S04', 'UG_S02L'],
     'UW': ['UW_S04', 'UW_S01', 'UW_S02', 'UW_S07', 'UW_S06', 'UW_S05'],
-    'VS': ['VS_S04', 'VS_S01', 'VS_S05', 'VS_S08']
+    'VS': ['VS_S04', 'VS_S01', 'VS_S05', 'VS_S08'],
+    # Watcher Regions
+    'WARB': ['WARB_F03', 'WARB_F11', 'WARB_J07'],
+    'WARC': ['WARC_C06', 'WARC_B08', 'WARC_A04', 'WARC_A02'],
+    'WARD': ['WARD_E03', 'WARD_D27', 'WARD_R07', 'WARD_R16', 'WARD_E02'],
+    'WARE': ['WARE_H01', 'WARE_H02'],
+    'WARF': ['WARF_B23', 'WARF_B07', 'WARF_A01', 'WARF_D29'],
+    'WARG': ['WARG_G30', 'WARG_G28', 'WARG_G05', 'WARG_W02', 'WARG_G21', 'WARG_O06_FUTURE'],
+    'WBLA': ['WBLA_C05', 'WBLA_D02', 'WBLA_F04', 'WBLA_C02'],
+    'WMPA': ['WMPA_A07', 'WMPA_D03'],
+    'WPGA': ['WPGA_B12', 'WPGA_B09'],
+    'WPTA': ['WPTA_D03', 'WPTA_F01', 'WPTA_G01', 'WPTA_B06'],
+    'WRFA': ['WRFA_A12', 'WRFA_A07', 'WRFA_SK02', 'WRFA_A08', 'WRFA_A05'],
+    'WRFB': ['WRFB_B08', 'WRFB_B05', 'WRFB_D02', 'WRFB_B11'],
+    'WRRA': ['WRRA_D05', 'WRRA_D03', 'WRRA_D04', 'WRRA_B06'],
+    'WSKA': ['WSKA_D27', 'WSKA_D18', 'WSKA_D06', 'WSKA_D10', 'WSKA_D01'],
+    'WSKB': ['WSKB_C15', 'WSKB_C03', 'WSKB_N16', 'WSKB_N12'],
+    'WSKC': ['WSKC_A19', 'WSKC_A05'],
+    'WSKD': ['WSKD_B18', 'WSKD_B31', 'WSKD_B05', 'WSKD_B35'],
+    'WTDA': ['WTDA_Z08', 'WTDA_Z04', 'WTDA_B01'],
+    'WTDB': ['WTDB_A17', 'WTDB_A15', 'WTDB_A13', 'WTDB_A10', 'WTDB_A06'],
+    'WVWA': ['WVWA_F02', 'WVWA_D01'],
+    'WVWB': ['WVWB_H01'],
 }
 
 ingame_capitalization = {
@@ -57,6 +80,7 @@ ingame_capitalization = {
     "UG_S02L": "UG_S02l",
     "LC_SHELTER_ABOVE": "LC_shelter_above",
     "LC_SHELTERTRAIN1": "LC_ShelterTrain1",
+    "WARG_O06_FUTURE": "WARG_O06_Future",
 }
 
 
@@ -82,41 +106,16 @@ def get_default_start(scug: str) -> str:
 
 
 def get_starts(options: RainWorldOptions) -> list[str]:
-    code, name = options.random_starting_region.code, options.random_starting_region.name
+    code, name = options.starting_region_code, options.starting_region_name
     scug, scug_name = options.starting_scug, options.which_campaign.scug_name
 
-    if code == "!!!":
+    if code == "":
         return [get_default_start(scug)]
 
     code = alternate_regions.get(code, {}).get(scug, code)
 
-    # All possible Watcher starts should be a room with a Warp Destination for the client to place the player correctly.
-    if scug == "Watcher":
-        if code != "WSKB":
-            raise OptionError("Watcher must start in Sunlit Port (for now)")
-        return ["WSKB_C15"]  # TODO
-
     if code is None:
         raise OptionError(f"{scug_name} cannot start in {name}")
-
-    if code == "SH" and options.difficulty_glow:
-        raise OptionError("Cannot start in Shaded Citadel with 'Glow required for dark places' enabled")
-
-    if not options.msc_enabled and code not in story_regions_vanilla:
-        raise OptionError(f"Cannot start in {name} with MSC disabled")
-
-    if code == "LC":
-        if scug != "Artificer":
-            raise OptionError(f"{scug_name} cannot start in Metropolis")
-        elif options.which_victory_condition == "story":
-            raise OptionError(f"Artificer starting in Metropolis with alternate victory condition is moot")
-    elif code == "OE":
-        if scug not in ["White", "Yellow", "Gourmand"]:
-            raise OptionError(f"{scug_name} cannot start in Outer Expanse")
-        elif options.which_victory_condition == "story":
-            raise OptionError(f"{scug_name} starting in {name} with alternate victory condition is moot")
-    elif code == "DM" and scug != "Spear":
-        raise OptionError(f"{scug_name} cannot start in Looks to the Moon")
 
     ret = list(start_shelters[code])
 

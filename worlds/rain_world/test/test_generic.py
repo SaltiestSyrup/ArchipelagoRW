@@ -8,25 +8,88 @@ if RUN_GENERAL_AP_UNITTESTS := False:
 class TestMonkVanilla(RainWorldTestBase):
     options = {"which_campaign": "monk"}
 
+    def test_regions(self):
+        self.assertRegionsNotPopulated(
+            {
+                "Outer Expanse",
+                "Outskirts filtration",
+                "Pipeyard",
+                "Broken Precipice",
+                "Shoreline near gate to Submerged",
+            }
+        )
+
 
 class TestSurvivorVanilla(RainWorldTestBase):
     options = {"which_campaign": "survivor"}
+
+    def test_regions(self):
+        self.assertRegionsNotPopulated(
+            {
+                "Outer Expanse",
+                "Outskirts filtration",
+                "Pipeyard",
+                "Broken Precipice",
+                "Shoreline near gate to Submerged",
+            }
+        )
 
 
 class TestHunterVanilla(RainWorldTestBase):
     options = {"which_campaign": "hunter"}
 
+    def test_regions(self):
+        self.assertRegionsNotPopulated(
+            {
+                "Outer Expanse",
+                "Outskirts filtration",
+                "Pipeyard",
+                "Broken Precipice",
+                "Shoreline near gate to Submerged",
+            }
+        )
+
 
 class TestMonkMSC(RainWorldTestBase):
     options = {"which_campaign": "monk", "is_msc_enabled": True}
+
+    def test_regions(self):
+        self.assertRegionsPopulated(
+            {
+                "Outer Expanse",
+                "Pipeyard",
+                "Broken Precipice",
+                "Outskirts filtration",
+            }
+        )
 
 
 class TestSurvivorMSC(RainWorldTestBase):
     options = {"which_campaign": "survivor", "is_msc_enabled": True}
 
+    def test_regions(self):
+        self.assertRegionsPopulated(
+            {
+                "Outer Expanse",
+                "Pipeyard",
+                "Broken Precipice",
+                "Outskirts filtration",
+            }
+        )
+
 
 class TestHunterMSC(RainWorldTestBase):
     options = {"which_campaign": "hunter", "is_msc_enabled": True}
+
+    def test_regions(self):
+        self.assertRegionsPopulated(
+            {
+                "Pipeyard",
+                "Broken Precipice",
+            }
+        )
+
+        self.assertRegionsNotPopulated({"Outer Expanse"})
 
     def test_check_generation(self):
         locs = [loc.name for loc in self.multiworld.get_locations(self.player)]
@@ -49,17 +112,58 @@ class TestHunterMSCShadedCitadel(RainWorldTestBase):
 class TestGourmand(RainWorldTestBase):
     options = {"which_campaign": "gourmand", "is_msc_enabled": True}
 
+    def test_regions(self):
+        self.assertRegionsPopulated(
+            {
+                "Outer Expanse",
+                "Outskirts filtration",
+            }
+        )
+
 
 class TestArtificer(RainWorldTestBase):
     options = {"which_campaign": "artificer", "is_msc_enabled": True}
+
+    def test_regions(self):
+        self.assertRegionsPopulated(
+            {
+                "Metropolis",
+                "Waterfront Facility",
+                "Outskirts filtration",
+            }
+        )
+
+        self.assertRegionsNotPopulated(
+            {
+                "Broken Precipice",
+                "Shoreline",
+                "Submerged Superstructure",
+            }
+        )
 
     def test_check_generation(self):
         locs = [loc.name for loc in self.multiworld.get_locations(self.player)]
         self.assertNotIn("Garbage Wastes - Arena Token - BrotherLongLegs", locs)
 
+    def test_connections(self):
+        connections = [con.name for con in self.multiworld.get_entrances(self.player)]
+        self.assertIn("Westward from SU_A22 to SU_A43", connections)
+        self.assertIn("Westward from SU_C04 to SU_CAVE01", connections)
+
 
 class TestRivulet(RainWorldTestBase):
     options = {"which_campaign": "rivulet", "is_msc_enabled": True}
+
+    def test_regions(self):
+        self.assertRegionsPopulated(
+            {
+                "The Rot",
+                "Submerged Superstructure",
+                "Shoreline above puppet"
+            }
+        )
+
+        self.assertRegionsNotPopulated({"Five Pebbles"})
 
     def test_86(self):
         # https://github.com/alphappy/ArchipelagoRW/issues/86
@@ -69,6 +173,22 @@ class TestRivulet(RainWorldTestBase):
 
 class TestSpear(RainWorldTestBase):
     options = {"which_campaign": "spearmaster", "is_msc_enabled": True}
+
+    def test_regions(self):
+        self.assertRegionsPopulated(
+            {
+                "Waterfront Facility",
+                "Looks to the Moon",
+            }
+        )
+
+        self.assertRegionsNotPopulated(
+            {
+                "Broken Precipice",
+                "Shoreline",
+                "Submerged Superstructure",
+            }
+        )
 
     def test_check_generation(self):
         locs = [loc.name for loc in self.multiworld.get_locations(self.player)]
@@ -81,6 +201,32 @@ class TestSpear(RainWorldTestBase):
 
 class TestSaint(RainWorldTestBase):
     options = {"which_campaign": "saint", "is_msc_enabled": True}
+
+    def test_regions(self):
+        self.assertRegionsPopulated(
+            {
+                "Outskirts filtration",
+                "Shoreline above puppet",
+                "Undergrowth",
+                "Silent Construct",
+                "Rubicon",
+            }
+        )
+
+        self.assertRegionsNotPopulated(
+            {
+                "Drainage System",
+                "Shaded Citadel",
+                "The Exterior",
+                "Five Pebbles",
+                "Broken Precipice",
+            }
+        )
+
+    def test_connections(self):
+        connections = [con.name for con in self.multiworld.get_entrances(self.player)]
+        self.assertIn("Westward from SU_A22 to SU_A43", connections)
+        self.assertIn("Westward from SU_C04 to SU_CAVE01", connections)
 
 
 class TestSofanthiel(RainWorldTestBase):
@@ -156,5 +302,17 @@ class TestSaintFoodQuest(RainWorldTestBase):
 
 
 class TestWatcher(RainWorldTestBase):
-    options = {"so_peeping": "OAOAOA!", "is_watcher_enabled": True, "is_msc_enabled": True,
-               "checks_foodquest": "all_slugcats"}
+    options = {"which_campaign": "watcher", "is_watcher_enabled": True, "is_msc_enabled": True}
+
+class TestWatcherRot(RainWorldTestBase):
+    options = {"which_campaign": "watcher", "is_watcher_enabled": True, "is_msc_enabled": True,
+               "which_victory_condition": "story"}
+
+class TestWatcherWeaver(RainWorldTestBase):
+    options = {"which_campaign": "watcher", "is_watcher_enabled": True, "is_msc_enabled": True,
+               "which_victory_condition": "weaver"}
+
+class TestWatcherTrueEnding(RainWorldTestBase):
+    options = {"which_campaign": "watcher", "is_watcher_enabled": True, "is_msc_enabled": True,
+               "which_victory_condition": "true_ending"}
+

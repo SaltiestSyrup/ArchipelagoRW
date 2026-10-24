@@ -1,41 +1,41 @@
-from BaseClasses import ItemClassification, MultiWorld, Item, Location, CollectionState
-from worlds.generic.Rules import add_rule
+from BaseClasses import ItemClassification, Item, Location
+from rule_builder.rules import True_, Rule
 from ..options import RainWorldOptions
 from ..game_data.general import scugs_all
-from ..conditions.classes import Condition, ConditionBlank
 from ..regions.classes import room_to_region, RainWorldRegion
 from ..utils_ap import try_get_region
+from ...AutoWorld import World
 
 
 class EventData:
     def __init__(self, item_name: str, location_name: str, region: str,
                  classification: ItemClassification = ItemClassification.progression,
-                 condition: Condition = None):
+                 condition: Rule = True_()):
         self.item_name = item_name
         self.location_item = location_name
         self.region = region
         self.classification = classification
         self.condition = condition
 
-    def make(self, player: int, multiworld: MultiWorld, _: RainWorldOptions):
-        if (region := try_get_region(multiworld, self.region, player)) and region.populate:
-            item = Item(self.item_name, self.classification, None, player)
-            location = Location(player, self.location_item, None, region)
+    def make(self, world: World, _: RainWorldOptions):
+        if (region := try_get_region(world.multiworld, self.region, world.player)) and region.populate:
+            item = Item(self.item_name, self.classification, None, world.player)
+            location = Location(world.player, self.location_item, None, region)
             location.show_in_spoiler = False
             region.locations.append(location)
             location.place_locked_item(item)
             if self.condition is not None:
-                add_rule(location, self.condition.check(player))
+                world.set_rule(location, self.condition)
 
 
 class VictoryEvent(EventData):
-    def __init__(self, location_name: str, region: str, condition: Condition = None):
+    def __init__(self, location_name: str, region: str, condition: Rule = True_()):
         # Note: events have to be progression even if they're not used in the condition for another conn/loc
         super().__init__("Victory", location_name, region, condition=condition)
 
 
 class StaticWorldEvent:
-    def __init__(self, item_name: str, location_name: str, region: str, condition: Condition = ConditionBlank,
+    def __init__(self, item_name: str, location_name: str, region: str, condition: Rule = True_(),
                  scugs: set[str] = scugs_all):
         self.item_name = item_name
         self.location_item = location_name
@@ -44,33 +44,35 @@ class StaticWorldEvent:
         self.condition = condition
         self.scugs = scugs
 
-    def make(self, player: int, multiworld: MultiWorld, options: RainWorldOptions):
+    def make(self, world: World, options: RainWorldOptions):
         if options.starting_scug not in self.scugs:
             return
         try:
-            region = multiworld.get_region(self.region, player)
+            region = world.multiworld.get_region(self.region, world.player)
         except KeyError:
             return
 
         if region.populate:
-            item = Item(self.item_name, self.classification, None, player)
-            location = Location(player, self.location_item, None, region)
+            item = Item(self.item_name, self.classification, None, world.player)
+            location = Location(world.player, self.location_item, None, region)
             location.show_in_spoiler = False
             region.locations.append(location)
             location.place_locked_item(item)
-            add_rule(location, self.condition.check(player))
+            world.set_rule(location, self.condition)
+            # add_rule(location, self.condition.check(player))
 
 
 class StaticWorldEventDetached:
     def __init__(self, name: str, rooms: list[str]):
-        self.name, self.rooms = name, rooms
+        self.item_name, self.rooms = name, rooms
 
-    def make(self, player: int, multiworld: MultiWorld, _: RainWorldOptions):
-        regions = {try_get_region(multiworld, name, player) for name in {room_to_region[room] for room in self.rooms}}.difference({None})
+    def make(self, world: World, _: RainWorldOptions):
+        regions = {try_get_region(world.multiworld, name, world.player) for name in {room_to_region[room] for room in self.rooms}}.difference({None})
         if regions := {r for r in regions if r.populate}:
-            multiworld.regions.append(event_region := RainWorldRegion(self.name, player, multiworld, True))
-            event_region.locations.append(location := Location(player, self.name, None, event_region))
-            location.place_locked_item(Item(self.name, ItemClassification.progression, None, player))
+            world.multiworld.regions.append(event_region := RainWorldRegion(self.item_name, world.player, world.multiworld, True))
+            event_region.locations.append(location := Location(world.player, self.item_name, None, event_region))
+            location.place_locked_item(Item(self.item_name, ItemClassification.progression, None, world.player))
             location.show_in_spoiler = False
             for region in regions:
-                region.connect(event_region, f"{self.name} in {region.name}")
+                world.create_entrance(region, event_region, True_(), f"{self.item_name} in {region.name}")
+                # region.connect(event_region, f"{self.item_name} in {region.name}")

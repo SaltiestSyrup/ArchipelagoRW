@@ -1,13 +1,15 @@
-from ..game_data.general import region_code_to_name, scugs_all
+from rule_builder.options import OptionFilter
+from rule_builder.rules import Has, True_
+from ..conditions import rule_helper
+from ..game_data.general import region_code_to_name
 from ..game_data import static_data
-from ..conditions.classes import Simple, AnyOf, AllOf, ConditionBlank
-from ..options import RainWorldOptions
+from ..options import RainWorldOptions, WhichCampaign, DifficultySubmerged, ExpeditionPerks
 from .classes import ConnectionData, PhysicalRegion
 
 
 def _generate(options: RainWorldOptions) -> list[PhysicalRegion | ConnectionData]:
     ret = []
-    for region, region_data in static_data["1.11.1"]["MSC_Watcher"].items():
+    for region, region_data in static_data["MSC_Watcher"].items():
         rooms = set(region_data.keys())
 
         match region:
@@ -18,6 +20,8 @@ def _generate(options: RainWorldOptions) -> list[PhysicalRegion | ConnectionData
                 filt = {r for r in rooms if "CAVE" in r or "PUMP" in r or r in ("SU_VR1", "SU_PS1", "SU_S05", "SU_PMPSTATION01")}
                 remainder = rooms.difference(filt).difference(tutorial).difference(spearspawn)
 
+                filtration_cond = rule_helper.can_explosive_jump | rule_helper.saint
+
                 ret += [
                     PhysicalRegion("Outskirts", "SU", remainder),
                     PhysicalRegion("Outskirts filtration", "SU^", filt),
@@ -25,10 +29,12 @@ def _generate(options: RainWorldOptions) -> list[PhysicalRegion | ConnectionData
                     PhysicalRegion("Spearmaster spawn area", "SU^3", spearspawn),
 
                     ConnectionData("Survivor tutorial area", "Outskirts", "Eastward from SU_A43 to SU_A22"),
-                    ConnectionData("Outskirts", "Survivor tutorial area", "Westward from SU_A22 to SU_A43", Simple("Scug-Saint")),
                     ConnectionData("Outskirts filtration", "Survivor tutorial area", "Eastward from SU_CAVE01 to SU_C04"),
-                    ConnectionData("Survivor tutorial area", "Outskirts filtration", "Westward from SU_C04 to SU_CAVE01", Simple("Scug-Saint")),
                     ConnectionData("Spearmaster spawn area", "Outskirts filtration", "Upward from SU_INTRO01 to SU_PMPSTATION01"),
+                    ConnectionData("Outskirts", "Survivor tutorial area", "Westward from SU_A22 to SU_A43",
+                                   filtration_cond),
+                    ConnectionData("Survivor tutorial area", "Outskirts filtration",
+                                   "Westward from SU_C04 to SU_CAVE01", filtration_cond),
                 ]
 
             case "OE":
@@ -45,18 +51,24 @@ def _generate(options: RainWorldOptions) -> list[PhysicalRegion | ConnectionData
                 # Not in logic to access Bitter Aerie except as Rivulet.
                 bitter = {name for name in rooms if "BITTER" in name or "SEWER" in name or "AERIE" in name
                           or name in ("MS_WILLSNAGGING01", "MS_S07", "MS_PUMPS", "MS_SCAVTRADER", "MS_JTRAP",
-                                      "MS_COMMS", "GATE_SL_MS[MS]")}
+                                      "MS_COMMS", "GATE_SL_MS[MS]", "MS_X02", "MS_S10")}
                 ret += [
                     PhysicalRegion("Submerged Superstructure", "MS", rooms.difference(bitter)),
                     PhysicalRegion("Bitter Aerie", "MS^", bitter),
-                    ConnectionData("Submerged Superstructure", "Bitter Aerie", "Rarefaction cell deposit cutscene",
-                                   Simple(["Scug-Rivulet", "Rarefaction Cell"])),
+
+                    ConnectionData("Submerged Superstructure", "Bitter Aerie",
+                                   "Rarefaction cell deposit cutscene",
+                                   Has("Rarefaction Cell") & rule_helper.rivulet),
+                    ConnectionData("Submerged Superstructure", "Bitter Aerie", "Enter Bitter Aerie",
+                                   rule_helper.saint),
+                    ConnectionData("Bitter Aerie", "Submerged Superstructure", "Leave Bitter Aerie",
+                                   rule_helper.saint)
                 ]
 
             case "SB":
                 # Not in logic (except for Saint) to go back up the SB ravine.
                 ravine = {"SB_A10", "SB_F03", "SB_TOPSIDE", "SB_S09", "GATE_LF_SB[SB]"}
-                filt = {"SB_C05", "SB_C06", "SB_S03", "SB_S04", "SB_D04", "SB_F02", "SB_I01", "SB_E07", "SB_C10",
+                filt = {"SB_C05", "SB_C06", "SB_S03", "SB_S04", "SB_D04", "SB_F02", "SB_I01", "SB_E07", "SB_C10", "SB_S01",
                         "SB_B04", "SB_S10", "SB_G04", "GATE_SB_VS[SB]", "SB_F01", "SB_J03", "GATE_DS_SB[SB]", "SB_S02"}
                 depths = {"SB_E05", "SB_A14", "SB_D02", "SB_E03", "SB_A07", "SB_A02", "SB_J04", "SB_A08", "SB_B03",
                           "SB_D05", "SB_A06", "SB_A05", "SB_D03", "SB_D07", "SB_D01", "SB_C08", "SB_E01", "SB_E06",
@@ -65,17 +77,18 @@ def _generate(options: RainWorldOptions) -> list[PhysicalRegion | ConnectionData
                     PhysicalRegion("Subterranean", "SB", rooms.difference(ravine.union(filt).union(depths))),
                     PhysicalRegion("Subterranean ravine", "SB^", ravine),
                     ConnectionData("Subterranean ravine", "Subterranean", "Down the ravine"),
-                    ConnectionData("Subterranean", "Subterranean ravine", "Up the ravine",
-                                   Simple("Scug-Saint")),
 
                     PhysicalRegion("Filtration System", "SB^2", filt),
                     ConnectionData("Subterranean", "Filtration System", "Enter Filtration System",
-                                   Simple("The Glow") if options.difficulty_glow else ConditionBlank),
+                                   Has("The Glow", options=rule_helper.glow_logic, filtered_resolution=True)),
                     ConnectionData("Filtration System", "Subterranean", "Exit Filtration System"),
 
                     PhysicalRegion("Subterranean Depths", "SB^3", depths),
-                    ConnectionData("Filtration System", "Subterranean Depths", "Enter Depths")
+                    ConnectionData("Filtration System", "Subterranean Depths", "Enter Depths"),
+                    ConnectionData("Subterranean", "Subterranean ravine", "Up the ravine",
+                                   rule_helper.saint)
                 ]
+
 
             case "SS":
                 # Not in logic to go backwards through Five Pebbles puppet room.
@@ -92,22 +105,19 @@ def _generate(options: RainWorldOptions) -> list[PhysicalRegion | ConnectionData
                         "VS_B18", "VS_D05", "VS_C08", "VS_E01", "VS_B05", "VS_D02", "VS_S02", "GATE_SL_VS[VS]"}
                 filt = {"VS_C10", "VS_C12", "VS_C11", "VS_E02", "VS_B06", "BS_S03", "VS_H01", "GATE_SB_VS[VS]",
                         "VS_S03"}
+
+                sump_cond = Has("Aquatic Perk",
+                                options=[OptionFilter(WhichCampaign, WhichCampaign.option_artificer)],
+                                filtered_resolution=True)
+
                 ret += [
                     PhysicalRegion("Pipeyard", "VS", rooms.difference(sump.union(filt))),
                     PhysicalRegion("Sump Tunnel", "VS^", sump),
-                    ConnectionData("Pipeyard", "Sump Tunnel", "Enter Sump Tunnel",
-                                   AnyOf(
-                                       Simple(list(set(scugs_all).difference({"Artificer"})), 1),
-                                       Simple("Aquatic Perk")
-                                   )),
-                    ConnectionData("Sump Tunnel", "Pipeyard", "Exit Sump Tunnel",
-                                   AnyOf(
-                                       Simple(list(set(scugs_all).difference({"Artificer"})), 1),
-                                       Simple("Aquatic Perk")
-                                   )),
+                    ConnectionData("Pipeyard", "Sump Tunnel", "Enter Sump Tunnel", sump_cond),
+                    ConnectionData("Sump Tunnel", "Pipeyard", "Exit Sump Tunnel", sump_cond),
                     PhysicalRegion("Pipeyard filtration", "VS^2", filt),
                     ConnectionData("Pipeyard", "Pipeyard filtration", "Enter dark filtration area",
-                                   Simple("The Glow") if options.difficulty_glow else ConditionBlank),
+                                   Has("The Glow", options=rule_helper.glow_logic, filtered_resolution=True)),
                     ConnectionData("Pipeyard filtration", "Pipeyard", "Exit dark filtration area"),
                 ]
 
@@ -129,14 +139,14 @@ def _generate(options: RainWorldOptions) -> list[PhysicalRegion | ConnectionData
 
                     # Going into Underhang from the west requires a grapple worm.
                     # In Vanilla Survivor and Monk worldstates, there isn't one in D06 (but there is in CC).
-                    ConnectionData("The Exterior", "Western Underhang", "UW_D06 to UW_C04", Simple("TubeWorm")),
+                    ConnectionData("The Exterior", "Western Underhang", "UW_D06 to UW_C04", Has("TubeWorm")),
                     ConnectionData("Western Underhang", "The Exterior", "UW_C04 to UW_D06"),
                     ConnectionData("Western Underhang", "Eastern Underhang + The Leg", "UW_C02 to UW_A05"),
-                ]
 
-                # Westward through Underhang is not terribly reasonable for Rivulet.
-                if options.starting_scug != "Rivulet":
-                    ret += [ConnectionData("Eastern Underhang + The Leg", "Western Underhang", "UW_A05 to UW_C02")]
+                    # Westward through Underhang is not terribly reasonable for Rivulet.
+                    ConnectionData("Eastern Underhang + The Leg", "Western Underhang", "UW_A05 to UW_C02",
+                                   True_() & OptionFilter(WhichCampaign, WhichCampaign.option_rivulet, operator="ne")),
+                ]
 
             case "SL":
                 broken_precipice = {"GATE_UW_SL[SL]", "SL_BRIDGEEND", "SL_S13", "SL_EDGE01", "SL_EDGE02", "SL_BRIDGE01"}
@@ -144,28 +154,30 @@ def _generate(options: RainWorldOptions) -> list[PhysicalRegion | ConnectionData
                     "SL_MOONTOP", "SL_ROOF04", "SL_ACCSHAFT", "SL_ROOF03", "GATE_SL_MS[SL]", "SL_TEMPLE", "SL_STOP",
                     "SL_ROOF01", "SL_WALL06"
                 }
-                remainder = rooms.difference(broken_precipice).difference(above_moon)
+                near_submerged_gate = {"SL_C15", "SL_WALL02", "SL_WALL05", "SL_S15", "GATE_MS_SL[SL]"}
+                remainder = rooms.difference(broken_precipice).difference(above_moon).difference(near_submerged_gate)
+
+                submerged_cond = (rule_helper.submerged_should_populate
+                        & (Has("Aquatic Perk",
+                               options=[OptionFilter(ExpeditionPerks, "Aquatic Perk", operator="contains")],
+                               filtered_resolution=True)
+                           | rule_helper.rivulet
+                           | OptionFilter(DifficultySubmerged, DifficultySubmerged.option_off)))
 
                 ret += [
                     PhysicalRegion("Shoreline", "SL", remainder),
                     PhysicalRegion("Broken Precipice", "SL^", broken_precipice),
                     PhysicalRegion("Shoreline above puppet", "SL^2", above_moon),
+                    PhysicalRegion("Shoreline near gate to Submerged", "SL^3", near_submerged_gate),
 
-                    ConnectionData("Shoreline above puppet", "Shoreline", "Enter puppet room")
-                ]
+                    ConnectionData("Shoreline above puppet", "Shoreline", "Enter puppet room"),
+                    ConnectionData("Shoreline near gate to Submerged", "Shoreline", "Leaving Submerged"),
 
-                if options.starting_scug == "Saint":
-                    ret += [ConnectionData("Shoreline", "Shoreline above puppet", "Exit top of puppet room")]
-
-            case "WRFA":
-                western = {"WRFA_S08", "WRFA_C11", "WRFA_A21"}
-                remainder = rooms.difference(western)
-
-                ret += [
-                    PhysicalRegion("Coral Caves", "WRFA", remainder),
-                    PhysicalRegion("Coral Caves far west", "WRFA^1", western),
-                    ConnectionData("Coral Caves", "Coral Caves far west", "WRFA_E04 to WRFA_C11", Simple("Ripple", 8)),
-                    ConnectionData("Coral Caves far west", "Coral Caves", "WRFA_C11 to WRFA_E04", Simple("Ripple", 8)),
+                    ConnectionData("Shoreline", "Shoreline above puppet", "Exit top of puppet room",
+                                   rule_helper.saint),
+                    # If Submerged has no checks, swimming down towards the gate is not in logic.
+                    ConnectionData("Shoreline", "Shoreline near gate to Submerged",
+                                   "Entering towards Submerged", submerged_cond)
                 ]
 
             case "WARA":
@@ -175,25 +187,81 @@ def _generate(options: RainWorldOptions) -> list[PhysicalRegion | ConnectionData
                 ret += [
                     PhysicalRegion("Shattered Terrace", "WARA", remainder),
                     PhysicalRegion("Western Shattered Terrace", "WARA^1", western),
-                    ConnectionData("Shattered Terrace", "Western Shattered Terrace", "WARA_P20 to WARA_P19", Simple("Ripple", 8)),
-                    ConnectionData("Western Shattered Terrace", "Shattered Terrace", "WARA_P20 to WARA_P01", Simple("Ripple", 8)),
+                    # Rightwards through WARA_P20 just needs the minimum amount of float
+                    ConnectionData("Western Shattered Terrace", "Shattered Terrace", "WARA_P20 to WARA_P01",
+                                   Has("Ripple", 4)),
+                    # Leftwards can be jumped easily
+                    ConnectionData("Shattered Terrace", "Western Shattered Terrace", "WARA_P20 to WARA_P19"),
                 ]
 
-            case "WBLA":
-                silo = {"WBLA_E02"}
-                remainder = rooms.difference(silo)
+            case "WMPA":
+                western = {f"WMPA_{r}" for r in {"A09", "A06", "A04", "A02", "A05", "S01", "A03", "A01", "A07", "A08"}}
+                eastern = rooms.difference(western)
 
                 ret += [
-                    PhysicalRegion("Badlands", "WBLA", remainder),
-                    PhysicalRegion("Badlands inside silo", "WBLA^1", silo),
-                    ConnectionData("Badlands", "Badlands inside silo", "WBLA_F03 to WBLA_E02", Simple("Ripple", 8)),
+                    PhysicalRegion("Migration Path", "WMPA", eastern),
+                    PhysicalRegion("Western Migration Path", "WMPA^1", western),
+                    # Leftwards through the top of WMPA_B01 needs maximum float ability to cross
+                    ConnectionData("Migration Path", "Western Migration Path", "WMPA_B01 to WMPA_A08",
+                                   Has("Ripple", 8)),
+                    # Rightwards is just a drop-down
+                    ConnectionData("Western Migration Path", "Migration Path", "WMPA_A08 to WMPA_B01"),
+                ]
+
+            # Yes I know it's kinda cursed
+            case "WORA":
+                # Path from WORA_START up through the throne
+                western = {f"WORA_{r}" for r in {
+                    "AI", "THRONE02", "THRONES01", "THRONE06", "THRONE08", "THRONE04", "THRONE12", "THRONE11",
+                    "THRONE03", "THRONE1", "S03", "DESERT10", "DESERT9", "DESERT8", "DESERT7", "DESERT6", "DESERT3X",
+                    "DESERT11", "START"
+                }}
+                # Egg
+                egg = {f"WORA_{r}" for r in {"STARCATCHER08", "STARCATCHER06", "STARCATCHER07", "EGG03", "EGG04", "EGG02x", "EGG"}}
+                # Throne rooms locked by ripple requirements
+                ripple_locked_3 = {"WORA_THRONE10"}
+                ripple_locked_5 = {"WORA_THRONE05"}
+                ripple_locked_7 = {"WORA_THRONE07"}
+                ripple_locked_9 = {"WORA_THRONE09", "WORA_THRONES01"}
+                remainder = rooms.difference({*western, *egg, *ripple_locked_3, *ripple_locked_5, *ripple_locked_7, *ripple_locked_9})
+
+                ret += [
+                    PhysicalRegion("Outer Rim", "WORA", remainder),
+                    PhysicalRegion("Western Outer Rim", "WORA^1", western),
+                    PhysicalRegion("Eastern Outer Rim", "WORA^2", egg),
+                    PhysicalRegion("The Throne 1", "WORA^3", ripple_locked_3),
+                    PhysicalRegion("The Throne 2", "WORA^4", ripple_locked_5),
+                    PhysicalRegion("The Throne 3", "WORA^5", ripple_locked_7),
+                    PhysicalRegion("The Throne 4", "WORA^6", ripple_locked_9),
+                    # Can't climb up into the rest of WORA from the initial spawn point (at WORA_DESERT8)
+                    ConnectionData("Outer Rim", "Western Outer Rim", "WORA_DESERT5 TO WORA_DESERT8"),
+                    # Kinda jank, but this handles the logic of warp target into WORA changing as you open more throne rooms
+                    # Second encounter requires Ripple 5, at which point warps will go to central WORA
+                    # TODO: If warps are changed to be able to send player to WORA more often, this will only need first encounter
+                    ConnectionData("Western Outer Rim", "Outer Rim", "Prince encounter opens middle WORA",
+                                   Has("Ripple", 4)),
+                    # Crossing the bridge doesn't technically require float, but reaching WORA_EGG does
+                    # Simpler and more convenient to just gate all the nearby checks
+                    ConnectionData("Outer Rim", "Eastern Outer Rim", "WORA_COLBRIDGE to WORA_STARCATCHER08",
+                                   Has("Ripple", 4)),
+                    ConnectionData("Eastern Outer Rim", "Outer Rim", "WORA_COLBRIDGE to WORA_STARCATCHER09",
+                                   Has("Ripple", 4)),
+                    # Ripple requirements to enter throne rooms
+                    ConnectionData("Western Outer Rim", "The Throne 1", "Throne to WORA_THRONE10",
+                                   Has("Ripple", 2)),
+                    ConnectionData("Western Outer Rim", "The Throne 2", "Throne to WORA_THRONE05",
+                                   Has("Ripple", 4)),
+                    ConnectionData("Western Outer Rim", "The Throne 3", "Throne to WORA_THRONE07",
+                                   Has("Ripple", 6)),
+                    ConnectionData("Western Outer Rim", "The Throne 4", "Throne to WORA_THRONE09",
+                                   Has("Ripple", 8)),
                 ]
 
             case _:
                 ret.append(PhysicalRegion(region_code_to_name[region], region, rooms))
 
     ret.append(ConnectionData("Subterranean", "Rubicon", "Enter Rubicon",
-                              AllOf(Simple("Karma", 8), Simple("Scug-Saint"))))
+                              Has("Karma", 8) & rule_helper.saint))
 
     return ret
 

@@ -5,7 +5,7 @@ from ..game_data.general import region_code_to_name
 class PortalData:
     def __init__(self, source_room: str, data: dict, kind: str):
         self.source_room = source_room
-        self.oneway, self.spinning_top, self.check_spinning_top = False, False, False
+        self.oneway, self.spinning_top, self.check_spinning_top, self.check_warp = False, False, False, True
 
         if kind == "WarpPoint":
             oneway, entrance, self.ripple = [(data['flags'] >> i) & 1 != 0 for i in range(3)]
@@ -17,17 +17,17 @@ class PortalData:
             self.oneway = True  # TODO
             self.target_room = data['to'].upper()
             self.spinning_top = True
-            self.check_spinning_top = not self.source_room.startswith("WAUA")
+            self.check_spinning_top = not self.source_room == "WAUA_BATH"
+            self.check_warp = not self.source_room.startswith("WAUA")
 
         # See `OverWorld.InitiateSpecialWarp_WarpPoint`.
         if self.target_room == "NULL":
             if self.source_room[3] == "R":  # rotted FP region
-                self.target_room = "WORA_START"  # TODO this needs to be a room in lower WORA
+                self.target_room = "WORA_START"
             elif self.source_room.startswith("WARA"):
                 self.target_room = "WAUA_E01"  # first WAUA spawn
             elif self.source_room.startswith("WAUA"):
                 # WAUA STs logically don't go anywhere.
-                # At time of writing, not sure what's up with the SB_D07 target. TODO
                 self.target_room = self.source_room
             elif self.ripple:
                 self.target_room = "WRSA_L01"  # Daemon
@@ -99,6 +99,21 @@ portals, keys, targets = initialize()
 normal_regions = [
     'WVWA', 'WRFB', 'WRFA', 'WSKA', 'WPTA', 'WRRA', 'WSKB', 'WARF', 'WTDB',
     'WARE', 'WTDA', 'WSKC', 'WARD', 'WARB', 'WARC', 'WBLA', 'WARG', 'WSKD',
+    'WVWB', 'WMPA', 'WPGA',
 ]
 
 abnormal_regions = {"WSUR", "WHIR", "WGWR", "WDSR", "WSSR", "WORA", "WRSA", "WARA", "WAUA"}
+
+# Defines karma flowers that should not generate for whatever reason
+watcher_blacklisted_flowers = {
+    "WORA_CITY2X", "WORA_CITY10X", "WORA_DESERT4X", "WORA_DESERT8", "WORA_EGG02X", # Post rot ending
+    "WTDA_B12", # Inaccessible ogscule room
+    # "WARB_F01", "WSKD_B01", "WPTA_B10", "WBLA_C01", # Flowers that vanish when a static warp is created
+}
+
+# Defines tokens and pearls that require float or some other vertical mobility to reach
+watcher_high_up_shinies = {
+    "Token-ScavengerTemplar-WARA", "Token-Angler-WARB", "Token-ProtoLizard-WARD", "Token-Frog-WPGA",
+    "Token-L-WVWB", "Pearl-AUDIO_GROOVE-WARG", "Pearl-ABSTRACT-WSKC", "Pearl-AUDIO_JAM3-WTDB",
+    "Pearl-TEXT_NOTIONOFSELF-WMPA", "Flower-WSKD_B40",
+}

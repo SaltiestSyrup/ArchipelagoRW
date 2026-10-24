@@ -1,32 +1,42 @@
-from BaseClasses import MultiWorld
+from BaseClasses import Region
+from rule_builder.rules import True_, Has
 from .classes import ConnectionData
-from ..conditions.classes import AllOf, Simple
 from ..game_data.watcher import portals, PortalData
-from ..game_data.general import region_code_to_name
 from ..options import RainWorldOptions
 from ..regions.classes import room_to_region
+from ...AutoWorld import World
 
 
 class PortalConnection(ConnectionData):
     def __init__(self, data: PortalData):
         self.data = data
-        s = "Spinning Top" if data.spinning_top else "Fixed warp"
-        super().__init__(data.source_room, data.target_room, f"{s} in {data.source_room}")
+        super().__init__(data.source_room, data.target_room, self.entrance_name)
 
-    def make(self, player: int, multiworld: MultiWorld, options: RainWorldOptions):
+    @property
+    def entrance_name(self) -> str:
+        s = "Spinning Top" if self.data.spinning_top else "Fixed Warp"
+        return f"{s} in {self.data.source_room}"
+
+    @property
+    def key_name(self) -> str:
+        return self.data.key_name
+
+    def make(self, world: World, options: RainWorldOptions, regions: dict[str, Region]):
         self.source, self.dest = room_to_region[self.data.source_room], room_to_region[self.data.target_room]
+        self.condition = True_()
 
-        if not options.logic_rotted_generation >= 2 and self.data.source_room[:4] in ["WHIR", "WDSR", "WGWR", "WSUR"]:
-            return
+        if self.data.source_room[:4] in ["WHIR", "WDSR", "WGWR", "WSUR"]:
+            # Warps to WORA need specifically Ripple 3 (In case dynamic warp ability was acquired another way)
+            self.condition &= Has("Ripple", 2)
 
-        conds = []
-        if self.data.should_have_key and (not self.data.spinning_top or options.spinning_top_keys == 2):
-            conds.append(Simple(self.data.key_name))
+        if (self.data.should_have_key
+                and (not self.data.spinning_top or options.spinning_top_keys)
+                and ("Daemon" not in self.data.key_name or options.daemon_keys)):
+            self.condition &= Has(self.data.key_name)
         if self.data.ripple:
-            conds.append(Simple("Ripple", 3 + options.logic_ripplespace_min_req))
-        self.condition = AllOf(*conds)
+            self.condition &= Has("Ripple", 3 + options.logic_ripplespace_min_req)
 
-        super().make(player, multiworld, options)
+        super().make(world, options, regions)
 
 
 def generate(options: RainWorldOptions) -> list[PortalConnection]:
