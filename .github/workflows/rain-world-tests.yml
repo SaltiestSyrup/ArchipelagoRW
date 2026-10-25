@@ -5,10 +5,10 @@ on:
 
 jobs:
   tests:
-  runs-on: ubuntu-latest
-  steps:
-    - uses: Eijebong/ap-actions/ap-tests@main
-      with:
-        apworld-path: worlds/rain_world
-        ap-version: latest
-        python-version: '3.12'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: Eijebong/ap-actions/ap-tests@main
+        with:
+          apworld-path: worlds/rain_world
+          ap-version: latest
+          python-version: '3.12'
