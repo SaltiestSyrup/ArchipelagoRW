@@ -14,5 +14,5 @@ jobs:
           python-version: '3.12'
           runs: 1000
           yamls-per-run: 1
-          meta: archipelago/fuzz_meta/meta.yaml
+          meta: fuzz_meta.yaml
           dump-ignored: false
