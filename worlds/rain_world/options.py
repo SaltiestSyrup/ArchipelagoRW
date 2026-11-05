@@ -337,7 +337,6 @@ class PriorityThrone(Choice):
     option_priority = 2
     option_excluded = 3
     default = 1
-    # visibility = Visibility.none
 
 
 #################################################################
@@ -346,6 +345,7 @@ class ChecksPassages(Toggle):
     """When enabled, completing each passage achievement is a check."""
     display_name = "Passages"
     default = True
+
 
 class ChecksBroadcasts(Choice):
     """Which slugcats broadcasts should be available to.  Requires MSC."""
@@ -531,7 +531,7 @@ class DifficultySubmerged(Choice):
 
 
 class DifficultyEchoLowKarma(Choice):
-    """How echo apperances work below 5 max karma.
+    """How echo appearances work below 5 max karma.
     Does not affect the echoes in Subterranean and The Exterior, which can always be visited.
 
     **Unaltered**: Vanilla behavior.  Artificer needs a karma flower and other slugcats do not.
@@ -549,6 +549,7 @@ class DifficultyEchoLowKarma(Choice):
     option_without_karma_flower = 2
     option_unaltered = 3
     default = 3
+
 
 #################################################################
 # UPGRADE SETTINGS
@@ -583,6 +584,17 @@ class ExpeditionPerks(OptionList):
     valid_keys = ["Back Spear Perk", "Dual Wielding Perk", "Blast Resistance Perk", "Explosive Parry Perk",
                   "Explosive Jump Perk", "Crafting Perk", "Aquatic Perk", "Agility Perk"]
     verify_item_name = True
+
+
+class ArtificerScavengerKarmaItems(Toggle):
+    """Whether 5 Scavenger Karma items will be added to the item pool when playing as Artificer.
+
+    When enabled, holding scavenger corpses will always give karma equal to the amount of Scavenger Karma items you have.
+    In logic, Scavenger Karma is equivalent to normal Karma when determining if you can pass through gates or ascend.
+
+    When disabled, logic will pretend that no extra karma can be obtained from scavenger corpses."""
+    display_name = "Scavenger Karma (Artificer)"
+    default = True
 
 
 #################################################################
@@ -1023,14 +1035,16 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     #################################################################
     # ITEM POOL SETTINGS
     randomize_passage_tokens: RandomizePassageTokens
+    extra_karma_cap_increases: ExtraKarmaCapIncreases
+    artificer_scavenger_karma: ArtificerScavengerKarmaItems
+    damage_upgrades: UpgradesSpearDamage
     expedition_perks: ExpeditionPerks
     pct_traps: PctTraps
     weight_jitter: FillerJitter
-    extra_karma_cap_increases: ExtraKarmaCapIncreases
-    damage_upgrades: UpgradesSpearDamage
 
     group_itempool = [
-        RandomizePassageTokens, ExtraKarmaCapIncreases, UpgradesSpearDamage, ExpeditionPerks, PctTraps, FillerJitter,
+        RandomizePassageTokens, ExtraKarmaCapIncreases, ArtificerScavengerKarmaItems,
+        UpgradesSpearDamage, ExpeditionPerks, PctTraps, FillerJitter,
     ]
 
     #################################################################

@@ -1,5 +1,5 @@
 from BaseClasses import Region
-from rule_builder.rules import True_, Has, False_, HasAll, Rule
+from rule_builder.rules import True_, Has, False_, HasAll, Rule, HasGroup
 from .classes import room_to_region
 from ..options import RainWorldOptions
 from ..game_data.general import scugs_all, accessible_gates, region_code_to_name, direct_alternate_regions
@@ -21,8 +21,8 @@ class GateData:
         for effective_name, scugs in self.effective_names(options).items():
             _, left_name, right_name = effective_name.split("_")
             key_rule = True_() if self.item_name is None else Has(self.item_name)
-            karma_rule_left = Has("Karma", self.left - 1 if self.left < 6 else 2)
-            karma_rule_right = Has("Karma", self.right - 1 if self.right < 6 else 2)
+            karma_rule_left = HasGroup("Any Karma", self.left - 1 if self.left < 6 else 2)
+            karma_rule_right = HasGroup("Any Karma", self.right - 1 if self.right < 6 else 2)
 
             left_reg = regions[room_to_region[f'{self.name}[{left_name}]']]
             right_reg = regions[room_to_region[f'{self.name}[{right_name}]']]

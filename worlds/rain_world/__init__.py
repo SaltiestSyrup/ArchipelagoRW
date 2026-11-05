@@ -196,6 +196,8 @@ class RainWorldWorld(World):
                 "The Glow": 1,
                 "Slag Key": 1 if self.options.starting_scug == "Red" else 0,
                 "Citizen ID Drone": 1 if self.options.starting_scug == "Artificer" else 0,
+                "Scavenger Karma": 5 if self.options.starting_scug == "Artificer"
+                                        and self.options.artificer_scavenger_karma else 0,
                 "Longer Cycles": 1 if self.options.starting_scug == "Rivulet" else 0,
                 "Disable Five Pebbles": 1 if self.options.starting_scug == "Rivulet" else 0,
                 "Rarefaction Cell": 1 if self.options.starting_scug == "Rivulet" else 0,
@@ -291,12 +293,13 @@ class RainWorldWorld(World):
             "checks_weaver_encounters", # ...whether encountering the Weaver should be checks.
             "randomize_weaver", # ...whether the Weaver ability is randomized.
             "randomize_passage_tokens", #...whether passage tokens are included in the item pool.
+            "artificer_scavenger_karma", #...whether Artificer's scavenger karma is randomized.
 
             # External tracker needs to know...
             "difficulty_glow", "difficulty_monk", "difficulty_hunter", "difficulty_outlaw", "difficulty_chieftain",
             "difficulty_nomad", "difficulty_extreme_threats", "checks_submerged", "difficulty_submerged",
             "checks_foodquest_expanded", "logic_rotted_generation", "logic_ripplespace_min_req",
-            "expedition_perks", "daemon_keys"
+            "expedition_perks", "daemon_keys",
         )
         # ...which room to spawn in.  Empty string for default.
         d["starting_room"] = ("" if self.start_is_default

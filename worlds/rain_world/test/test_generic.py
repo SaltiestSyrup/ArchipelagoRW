@@ -1,3 +1,4 @@
+from rule_builder.rules import HasGroup
 from .bases import RainWorldTestBase
 
 if RUN_GENERAL_AP_UNITTESTS := False:
@@ -122,7 +123,7 @@ class TestGourmand(RainWorldTestBase):
 
 
 class TestArtificer(RainWorldTestBase):
-    options = {"which_campaign": "artificer", "is_msc_enabled": True}
+    options = {"which_campaign": "artificer", "is_msc_enabled": True, "artificer_scavenger_karma": True}
 
     def test_regions(self):
         self.assertRegionsPopulated(
@@ -149,6 +150,10 @@ class TestArtificer(RainWorldTestBase):
         connections = [con.name for con in self.multiworld.get_entrances(self.player)]
         self.assertIn("Westward from SU_A22 to SU_A43", connections)
         self.assertIn("Westward from SU_C04 to SU_CAVE01", connections)
+
+    def test_scavenger_karma(self):
+        self.collect_by_name(["Karma", "Scavenger Karma"])
+        self.assertTrue(HasGroup("Any Karma", 2).resolve(self.world)._evaluate(self.multiworld.state))
 
 
 class TestRivulet(RainWorldTestBase):

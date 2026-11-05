@@ -14,10 +14,13 @@ class RainWorldItem(Item):
 
 class RainWorldItemData:
     def __init__(self, name: str, client_name: str, code: Optional[int],
-                 item_type: ItemClassification = ItemClassification.filler):
+                 item_type: ItemClassification = ItemClassification.filler,
+                 hints : list[str] | None = None):
+        if hints is None:
+            hints = []
         self.name = name
         self.client_name = client_name
-        self.hints: list[str] = []
+        self.hints = hints
         self.code = code
         self.item_type = item_type
         item_client_names[client_name] = name
@@ -65,7 +68,7 @@ offset: int = constants.FIRST_ID
 all_items: Dict[str, RainWorldItemData] = {
     #################################################################
     # PROGRESSION
-    "Karma": RainWorldItemData("Karma", "Karma", offset, ItemClassification.progression),
+    "Karma": RainWorldItemData("Karma", "Karma", offset, ItemClassification.progression, ["Any Karma"]),
     "The Mark": RainWorldItemData("The Mark", "The Mark", offset + 1, ItemClassification.progression),
     "Citizen ID Drone": RainWorldItemData("Citizen ID Drone", "IdDrone", offset + 2, ItemClassification.progression),
     "Rarefaction Cell": RainWorldItemData("Rarefaction Cell", "Object-EnergyCell", offset + 3, ItemClassification.progression),
@@ -74,6 +77,7 @@ all_items: Dict[str, RainWorldItemData] = {
     "Slag Key": RainWorldItemData("Slag Key", "Object-NSHSwarmer", offset + 6, ItemClassification.progression),
     "Ripple": RainWorldItemData("Ripple", "Ripple", offset + 7, ItemClassification.progression),
     "Progressive Weaver": RainWorldItemData("Progressive Weaver", "Weaver_Increment", offset + 8, ItemClassification.progression),
+    "Scavenger Karma": RainWorldItemData("Scavenger Karma", "Scavenger_Karma", offset + 9, ItemClassification.progression, ["Any Karma"]),
 
     #################################################################
     # PASSAGE TOKENS

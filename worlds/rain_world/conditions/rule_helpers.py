@@ -6,6 +6,7 @@ from worlds.rain_world.options import WhichCampaign, DifficultyGlow, ChecksSubme
 def perk_in_pool(perk: str) -> OptionFilter:
     return OptionFilter(ExpeditionPerks, perk, operator="contains")
 
+
 def has_perk(perk: str) -> Rule:
     return Has(perk, options=[perk_in_pool(perk)])
 

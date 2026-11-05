@@ -1,5 +1,5 @@
 from rule_builder.field_resolvers import FromOption
-from rule_builder.rules import Has, HasFromList, HasAll, And, CanReachLocation
+from rule_builder.rules import Has, HasFromList, HasAll, And, CanReachLocation, HasGroup
 from .classes import EventData, VictoryEvent
 from .. import RainWorldOptions
 from ..game_data.watcher import normal_regions
@@ -57,11 +57,11 @@ def generate(options: RainWorldOptions) -> list[EventData]:
 
     # Saint's victory condition is different regardless of setting.
     if options.starting_scug == "Saint":
-        return [VictoryEvent("Ascension", "Rubicon", Has("Karma", 8))]
+        return [VictoryEvent("Ascension", "Rubicon", HasGroup("Any Karma", 8))]
 
     # Sofanthiel has no alternate, and no alternate exists without MSC.
     if not story or not options.msc_enabled or options.starting_scug == "Inv":
-        return [VictoryEvent("Ascension", "Subterranean Depths", Has("Karma", 8))]
+        return [VictoryEvent("Ascension", "Subterranean Depths", HasGroup("Any Karma", 8))]
 
     if options.starting_scug in ["Yellow", "White"]:
         return [VictoryEvent("Journey's End", "Outer Expanse")]

@@ -5,7 +5,7 @@ from rule_builder.options import OptionFilter
 from rule_builder.rules import Rule, Has, HasAny, HasAll, HasFromList, CanReachLocation, And
 from .classes import Passage, LocationData, AbstractLocation
 from .. import game_data
-from ..conditions import rule_helper
+from ..conditions import rule_helpers
 from ..game_data.general import watcher_pearls
 from ..options import RainWorldOptions, DifficultyChieftain, DifficultyHunter, \
     DifficultyMonk, DifficultyNomad, DifficultyOutlaw
@@ -13,7 +13,7 @@ from ..options import RainWorldOptions, DifficultyChieftain, DifficultyHunter, \
 
 #################################################################
 # SURVIVOR
-cond_survivor = Has("Karma", 4) | rule_helper.watcher
+cond_survivor = Has("Karma", 4) | rule_helpers.watcher
 
 
 #################################################################
