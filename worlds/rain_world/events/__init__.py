@@ -8,5 +8,5 @@ def get_events(options: RainWorldOptions, regions: list[RainWorldRegion]):
     return sorted([
         *world.generate_events_for_one_gamestate(options, regions),
         *victory.generate(options),
-        *misc.generate_events(),
+        *misc.generate_events(options),
     ], key=lambda e: e.item_name)

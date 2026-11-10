@@ -278,11 +278,13 @@ class RainWorldWorld(World):
             "passage_progress_without_survivor",  # ...if this setting doesn't match Remix.
             "death_link",  # ...whether to listen for death link notifications.
             "checks_passages",  # ...whether passages are randomized.
+            "checks_tokens",  # ...whether tokens are checks.
+            "checks_pearls",  # ...whether pearls are checks.
+            "checks_echoes",  # ...whether echoes are checks.
             "checks_foodquest",  # ...whether the food quest should be available.
             "checks_broadcasts",  # ...whether broadcasts should be available.
-            "checks_tokens_pearls",  # ...whether all tokens should be available.
-            "checks_sheltersanity",  # ...whether shelters are checks.
-            "checks_flowersanity",  # ...whether karma flowers are checks.
+            "checks_shelters",  # ...whether shelters are checks.
+            "checks_flowers",  # ...whether karma flowers are checks.
             "checks_devtokens",  # ...whether dev tokens should be checks.
             "which_victory_condition",  # ...which victory condition is a win.
             "which_gate_behavior",  # ...how gates should behave.

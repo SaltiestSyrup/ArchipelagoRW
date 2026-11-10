@@ -175,7 +175,7 @@ Shelters which do not function in a given worldstate are not counted.
 | Waterfront Facility      |                       | 10                | 1 is only accessible for Spearmaster.                                                                                  |
 
 ## Karma flowers
-If `checks_flowersanity` is enabled, eating a fixed karma flower spawn is a check.
+If `checks_flowers` is enabled, eating a fixed karma flower spawn is a check.
 If two karma flowers exist in the same room, they are not two separate checks.
 
 ## Notes

@@ -10,8 +10,8 @@ These fields can only be `0` (false) or `1` (true).
 |------------------------|-------------------------------------------------------------------------------|
 | `checks_broadcasts`    | Whether broadcast checks are in the pool.                                     |
 | `checks_devtokens`     | Whether developer commentary token checks are in the pool.                    |
-| `checks_flowersanity`  | Whether karma flower checks are in the pool.                                  |
-| `checks_sheltersanity` | Whether shelter checks are in the pool.                                       |
+| `checks_flowers`       | Whether karma flower checks are in the pool.                                  |
+| `checks_shelters`      | Whether shelter checks are in the pool.                                       |
 | `death_link`           | Whether deathlink is enabled.                                                 |
 | `difficulty_chieftain` | Whether a Scavenger Toll must be accessible for The Chieftain to be in logic. |
 | `difficulty_glow`      | Whether The Glow is required for dark places.                                 |
@@ -60,7 +60,7 @@ These fields can only contain a string.
 
 ## List
 These fields can only contain a list/array.
-The values contained within that list are decribed in the third column.
+The values contained within that list are described in the third column.
 
 | Field       | Description                                      | Valid contained values             |
 |-------------|--------------------------------------------------|------------------------------------|

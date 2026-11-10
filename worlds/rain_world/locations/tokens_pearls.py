@@ -28,14 +28,21 @@ class TokenOrPearl(RoomLocation):
         self.kind = kind
 
     def pre_generate(self, player: int, multiworld: MultiWorld, options: RainWorldOptions) -> bool:
-        if self.kind == "DevToken" and not options.checks_devtokens:
-            return False
-        if self.kind == "WhiteToken":
+        # Option filtering
+        if self.kind == "DevToken":
+            if not options.checks_devtokens:
+                return False
+        elif self.kind == "WhiteToken":
             if not (options.msc_enabled and (options.starting_scug == "Spear") + options.checks_broadcasts.value >= 2):
                 return False
+        elif "Token" in self.kind:
+            if not options.checks_tokens:
+                return False
+        elif "Pearl" in self.kind:
+            if not options.checks_pearls or (not options.msc_enabled and options.starting_scug == "Yellow"):
+                return False
+            
         if not options.satisfies(self.generation_flag):
-            return False
-        if "Pearl" in self.kind and not options.msc_enabled and options.starting_scug == "Yellow":
             return False
 
         # HARDCODE: This specific token doesn't appear for Hunter - not sure why.

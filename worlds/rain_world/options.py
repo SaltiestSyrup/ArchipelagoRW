@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from random import Random
 
 from Options import PerGameCommonOptions, Toggle, Range, OptionGroup, Choice, ProgressionBalancing, Accessibility, \
-    Visibility, DeathLinkMixin, DeathLink, FreeText, OptionList, OptionCounter, OptionError
+    Visibility, DeathLinkMixin, DeathLink, OptionCounter, OptionError, OptionSet
 from .conditions import GameStateFlag
 from .game_data import static_data
 from .game_data.bitflag import ScugFlagMap
@@ -135,6 +135,7 @@ class WhichGateBehavior(Choice):
     option_karma_only = 3
     default = 0
 
+
 class SparseGates(Toggle):
     """
     When enabled, the world will only generate exactly as many gates / warps needed to reach every region.
@@ -243,7 +244,7 @@ class ExtraKarmaCapIncreases(Range):
     For Watcher, this option will also apply to Ripple."""
     display_name = "Extra karma cap increases"
     range_start = 0
-    range_end = 30
+    range_end = 15
     default = 3
 
 
@@ -347,6 +348,30 @@ class ChecksPassages(Toggle):
     default = True
 
 
+class ChecksTokens(Toggle):
+    """
+    When enabled, collectible unlock tokens are checks.
+    This includes blue, green, yellow, and red tokens.
+    """
+    display_name = "Sandbox Tokens"
+    default = True
+
+
+class ChecksPearls(Toggle):
+    """When enabled, unique colored pearls award checks when brought to a shelter."""
+    display_name = "Pearls"
+    default = True
+
+
+class ChecksEchoes(Toggle):
+    """
+    When enabled, visiting an Echo will award a check.
+    Regardless of this setting, the Karma you would get from Echoes is randomized.
+    """
+    display_name = "Echoes"
+    default = True
+
+
 class ChecksBroadcasts(Choice):
     """Which slugcats broadcasts should be available to.  Requires MSC."""
     display_name = "Broadcasts"
@@ -379,20 +404,13 @@ class ChecksFoodQuestExpanded(Toggle):
     default = False
 
 
-class ChecksTokensPearls(Toggle):
-    """Whether all tokens and pearls should be visible to all slugcats."""
-    display_name = "All tokens and pearls"
-    default = False
-    visibility = Visibility.none
-
-
 class ChecksDevTokens(Toggle):
     """Whether dev commentary tokens should be checks.  Requires MSC."""
     display_name = "Dev Tokens"
     default = False
 
 
-class ChecksSheltersanity(Toggle):
+class ChecksShelters(Toggle):
     """Whether each shelter is a check."""
     display_name = "Shelters"
     default = False
@@ -572,7 +590,7 @@ class UpgradesSpearDamage(Range):
     default = 6
 
 
-class ExpeditionPerks(OptionList):
+class ExpeditionPerks(OptionSet):
     """Choose which Expedition perks will be added to the item pool.
     If an ability in this list is given to a slugcat that innately has it, there is no effect.
     Explosive Jump, Aquatic, and Agility may be used in logic if they are present in the item pool.
@@ -1050,19 +1068,22 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     #################################################################
     # CHECK POOL SETTINGS
     checks_passages: ChecksPassages
+    checks_tokens: ChecksTokens
+    checks_pearls: ChecksPearls
+    checks_echoes: ChecksEchoes
     checks_broadcasts: ChecksBroadcasts
     checks_foodquest: ChecksFoodQuest
     checks_foodquest_expanded: ChecksFoodQuestExpanded
     passage_priority: PassagePriority
-    checks_tokens_pearls: ChecksTokensPearls
-    checks_sheltersanity: ChecksSheltersanity
+    checks_shelters: ChecksShelters
     checks_submerged: ChecksSubmerged
-    checks_flowersanity: ChecksKarmaFlowers
+    checks_flowers: ChecksKarmaFlowers
     checks_devtokens: ChecksDevTokens
 
     group_checkpool = [
-        ChecksPassages, ChecksBroadcasts, ChecksFoodQuest, ChecksFoodQuestExpanded, PassagePriority,
-        ChecksTokensPearls, ChecksDevTokens, ChecksSheltersanity, ChecksSubmerged, ChecksKarmaFlowers,
+        ChecksPassages, ChecksTokens, ChecksPearls, ChecksEchoes, ChecksBroadcasts, ChecksFoodQuest,
+        ChecksFoodQuestExpanded, PassagePriority, ChecksDevTokens, ChecksShelters, ChecksSubmerged,
+        ChecksKarmaFlowers,
     ]
 
     #################################################################
@@ -1251,8 +1272,8 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
                     "To disable traps, set `pct_traps` to 0.")
 
         optional_check_score = (
-            (2 if self.checks_sheltersanity else 0)
-            + (1 if self.checks_flowersanity else 0)
+            (2 if self.checks_shelters else 0)
+            + (1 if self.checks_flowers else 0)
             + (1 if self.checks_devtokens and self.msc_enabled else 0)
             + (1 if self.checks_foodquest and self.msc_enabled else 0)
         )
@@ -1262,8 +1283,8 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
             sphere_1_too_small = False
             solutions = [
                 "Pick a different starting region.",
-                "Enable sheltersanity.",
-                "Enable MSC and at least two of flowersanity, devtokens, and foodquest."
+                "Enable shelters.",
+                "Enable MSC and at least two of flowers, devtokens, and foodquest."
             ]
 
             if (start == "SS" and self.starting_scug != "Rivulet") or start == "UW":

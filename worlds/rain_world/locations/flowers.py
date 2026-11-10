@@ -41,4 +41,4 @@ locations = initialize()
 
 
 def select(options: RainWorldOptions) -> list[FlowerLocation]:
-    return locations if options.checks_flowersanity else []
+    return locations if options.checks_flowers else []

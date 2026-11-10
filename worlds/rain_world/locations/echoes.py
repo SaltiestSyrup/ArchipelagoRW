@@ -10,6 +10,9 @@ class Echo(RoomLocation):
         self.free = free
         
     def pre_generate(self, player: int, multiworld: MultiWorld, options: RainWorldOptions) -> bool:
+        if not options.checks_echoes:
+            return False
+
         if not self.free:
             match options.difficulty_echo_low_karma:
                 case "never":
