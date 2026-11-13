@@ -48,9 +48,14 @@ class FoodQuestPip(AbstractLocation):
         # HARDCODE: Sofanthiel and Rivulet's only glow weed are in MS.  The interactive map is wrong.
         if options.starting_scug in ["Inv", "Rivulet"] and not options.submerged_should_populate and self.items[0] == "GlowWeed":
             return False
+        # Aquapede near submerged is the only one accessible for these slugcats
         if options.starting_scug in ["White", "Yellow"] and not options.submerged_should_populate and self.items[0] == "RedCentipede":
             return False
+        # Red Centipede in Infested Wastes is the only one accessible for Watcher
         if options.starting_scug == "Watcher" and not options.logic_rotted_generation == 2 and self.items[0] == "RedCentipede":
+            return False
+        # Dandelion Peach is only in Rubicon for Saint, which isn't fair to expect for FQ ending.
+        if options.starting_scug == "Saint" and options.which_victory_condition == 3 and self.items[0] == "DandelionPeach":
             return False
         return True
 
