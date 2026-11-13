@@ -1,5 +1,6 @@
 __all__ = ["RainWorldWorld", "RainWorldWebWorld"]
 
+import logging
 from typing import Mapping, Any, TextIO
 
 from Options import OptionError
@@ -236,6 +237,14 @@ class RainWorldWorld(World):
         for name, count in precollect.items():
             for i in range(count):
                 self.multiworld.push_precollected(self.create_item(name))
+
+        # if self.options.debug_output:
+        logger = logging.getLogger()
+
+        logger.info(self.location_count)
+        logger.info(self.get_locations())
+        logger.info(added_items)
+        logger.info(pool)
 
         #################################################################
         # FILLER POPULATION

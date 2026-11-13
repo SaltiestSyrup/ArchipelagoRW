@@ -1,8 +1,24 @@
 Rain World:
-  random_starting_region: any_valid
+  randomize_starting_region: any_valid
+  debug_output: true
 
   # Ignore issues with more priority locations than progression items
   passage_priority: 0
+
+  # Low check settings
+  which_campaign: "monk"
+  is_msc_enabled: false
+
+  checks_passages: false
+  checks_tokens: true
+  checks_pearls: false
+  checks_echoes: false
+  checks_broadcasts: false
+  checks_foodquest: false
+  checks_foodquest_expanded: false
+  checks_shelters: false
+  checks_flowers: false
+  checks_devtokens: false
 
   fuzz_constraints:
     # ---Victory Conditions
