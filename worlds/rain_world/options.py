@@ -607,6 +607,17 @@ class PctTraps(Range):
     default = 30
 
 
+class ReducedFoodFiller(Toggle):
+    """
+    When enabled, most food items will not be used as filler in favor of Blue Fruits.
+    This prevents Food Quest checks from being obtained trivially from random filler.
+
+    The weights of all other food items will be summed together and added to the Blue Fruit weight option.
+    """
+    display_name = "No Unique Food"
+    default = False
+
+
 class FillerJitter(Range):
     """Each non-zero filler weight receives a random number, up to this jitter value, added to it.
     The lower the setting, the less likely it is that items with small weights appear in the pool at all.
@@ -1040,11 +1051,12 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     damage_upgrades: UpgradesSpearDamage
     expedition_perks: ExpeditionPerks
     pct_traps: PctTraps
+    reduced_food_filler: ReducedFoodFiller
     weight_jitter: FillerJitter
 
     group_itempool = [
         RandomizePassageTokens, ExtraKarmaCapIncreases, ArtificerScavengerKarmaItems,
-        UpgradesSpearDamage, ExpeditionPerks, PctTraps, FillerJitter,
+        UpgradesSpearDamage, ExpeditionPerks, PctTraps, ReducedFoodFiller, FillerJitter,
     ]
 
     #################################################################
@@ -1303,16 +1315,26 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
         return self.checks_submerged + (self.starting_scug == "Rivulet" or "Aquatic Perk" in self.expedition_perks.value) > 1
 
     def get_nontrap_weight_dict(self) -> dict[str, float]:
+
+        food = [
+            self.wt_lilypucks, self.wt_dandelion_peaches, self.wt_gooieducks,
+            self.wt_fruit, self.wt_bubblefruit, self.wt_eggbugeggs, self.wt_jellyfish,
+            self.wt_slimemold, self.wt_glowweed, self.wt_rot_fruit, self.wt_fire_sprite_larva
+        ]
+
         ret = {a.item_name: a.value for a in [
             self.wt_rocks, self.wt_spears, self.wt_explosive_spears, self.wt_grenades,
-            self.wt_flashbangs, self.wt_sporepuffs, self.wt_cherrybombs, self.wt_bubble_weed,
-            self.wt_lilypucks, self.wt_dandelion_peaches, self.wt_gooieducks, self.wt_fruit, self.wt_bubblefruit,
-            self.wt_eggbugeggs, self.wt_jellyfish, self.wt_mushrooms, self.wt_slimemold,
-            self.wt_fireeggs, self.wt_hellspears, self.wt_glowweed, self.wt_electric_spears, self.wt_singularity_bombs,
+            self.wt_flashbangs, self.wt_sporepuffs, self.wt_cherrybombs, self.wt_bubble_weed, self.wt_mushrooms,
+            self.wt_fireeggs, self.wt_hellspears, self.wt_electric_spears, self.wt_singularity_bombs,
             self.wt_lanterns, self.wt_karma_flowers, self.wt_vulture_masks, self.wt_pearls, self.wt_beehives,
-            self.wt_joke_rifles, self.wt_boomerangs, self.wt_poison_spears, self.wt_graffiti_bombs, self.wt_rot_fruit,
-            self.wt_fire_sprite_larva,
+            self.wt_joke_rifles, self.wt_boomerangs, self.wt_poison_spears, self.wt_graffiti_bombs,
         ]}
+
+        if self.reduced_food_filler:
+            ret[self.wt_fruit.item_name] = sum([f.value for f in food])
+        else:
+            ret.update({f.item_name: f.value for f in food})
+
         if not self.msc_enabled:
             for key in ("Fire Egg", "Electric Spear", "Joke Rifle", "Hell Spear"):
                 ret[f"{key}"] = 0
