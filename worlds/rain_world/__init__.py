@@ -288,7 +288,7 @@ class RainWorldWorld(World):
             "which_gate_behavior",  # ...how gates should behave.
             "difficulty_echo_low_karma",  # ...how low-karma echo appearances should be handled.
             "rotted_region_target",  # ...how many regions must be rotted for Watcher's alt ending.
-            "spinning_top_keys",  # ...whether Spinning Top should appear without a key.
+            "spinning_top_keys",  # ...whether Spinning Top warps need keys to open.
             "checks_spread_rot", # ...whether spreading rot should be checks.
             "checks_weaver_encounters", # ...whether encountering the Weaver should be checks.
             "randomize_weaver", # ...whether the Weaver ability is randomized.
@@ -299,7 +299,7 @@ class RainWorldWorld(World):
             "difficulty_glow", "difficulty_monk", "difficulty_hunter", "difficulty_outlaw", "difficulty_chieftain",
             "difficulty_nomad", "difficulty_extreme_threats", "checks_submerged", "difficulty_submerged",
             "checks_foodquest_expanded", "logic_rotted_generation", "logic_ripplespace_min_req",
-            "expedition_perks", "daemon_keys",
+            "expedition_perks", "daemon_keys", "sparse_gates",
         )
         # ...which room to spawn in.  Empty string for default.
         d["starting_room"] = ("" if self.start_is_default
