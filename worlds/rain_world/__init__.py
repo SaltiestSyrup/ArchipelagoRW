@@ -192,7 +192,7 @@ class RainWorldWorld(World):
                 **{f"Passage Token - {passage_proper_names[p]}": 1
                    for p in ([] if not self.options.randomize_passage_tokens
                              else passages_all if self.options.msc_enabled else passages_vanilla)},
-                "The Mark": 1,
+                "The Mark": 1 if self.options.starting_scug != "Saint" else 0,
                 "The Glow": 1,
                 "Slag Key": 1 if self.options.starting_scug == "Red" else 0,
                 "Citizen ID Drone": 1 if self.options.starting_scug == "Artificer" else 0,

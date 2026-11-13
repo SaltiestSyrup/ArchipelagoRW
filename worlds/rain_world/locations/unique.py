@@ -17,6 +17,7 @@ locations = {
     "Meet_LttM": RoomLocationSimpleAccess("Meet Looks to the Moon", ["Meet_LttM"], 4903, "SL_AI", Has("The Mark")),
     "Meet_LttM_Red": RoomLocationSimpleAccess("Meet Looks to the Moon", ["Meet_LttM"], 4903, "SL_AI", HasAll("The Mark", "Slag Key")),
     "Meet_LttM_Spear": RoomLocationSimpleAccess("Meet Looks to the Moon", ["Meet_LttM_Spear"], 4904, "DM_AI"),
+    "Meet_LttM_Saint": RoomLocationSimpleAccess("Meet Looks to the Moon", ["Meet_LttM"], 4903, "SL_AI"),
     "Kill_FP": RoomLocationSimpleAccess("Remove Rarefaction Cell", ["Kill_FP"], 4905, "RM_CORE"),
     "Save_LttM": RoomLocationSimpleAccess("Revive Looks to the Moon", ["Save_LttM"], 4906, "SL_AI", Has("Slag Key")),
     "Ascend_FP": RoomLocationSimpleAccess("Ascend Five Pebbles", ["Ascend_FP"], 4907, "CL_AI", Has("Karma", 8)),
@@ -36,7 +37,7 @@ def generate(options: RainWorldOptions) -> list[LocationData]:
     if options.starting_scug in ["Yellow", "White", "Red", "Gourmand", "Artificer", "Spear", "Inv"]:
         keys.append("Meet_FP")
 
-    if options.starting_scug in ["Yellow", "White", "Gourmand", "Rivulet", "Saint"]:
+    if options.starting_scug in ["Yellow", "White", "Gourmand", "Rivulet"]:
         keys.append("Meet_LttM")
 
     if options.starting_scug == "Red":
@@ -50,6 +51,6 @@ def generate(options: RainWorldOptions) -> list[LocationData]:
         keys.append("Kill_FP")
 
     if options.starting_scug == "Saint":
-        keys += ["Ascend_FP", "Ascend_LttM"]
+        keys += ["Meet_LttM_Saint", "Ascend_FP", "Ascend_LttM"]
 
     return [locations[key] for key in keys]

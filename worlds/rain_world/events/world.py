@@ -44,7 +44,4 @@ def generate_events_for_one_gamestate(options: RainWorldOptions, regions: list[R
     for event_type, event_rooms in detached.items():
         ret.append(StaticWorldEventDetached(event_type, event_rooms))
 
-    if options.starting_scug in {"Yellow", "White", "Red", "Gourmand", "Rivulet", "Saint"}:
-        ret.append(StaticWorldEvent("Meet LttM", f'Meet LttM', room_to_region["SL_AI"], Has("The Mark")))
-
     return ret
