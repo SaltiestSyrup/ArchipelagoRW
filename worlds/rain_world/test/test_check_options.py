@@ -1,3 +1,4 @@
+from BaseClasses import CollectionState
 from .bases import RainWorldTestBase
 
 if RUN_GENERAL_AP_UNITTESTS := False:
@@ -92,5 +93,51 @@ class TestChecksSubmergedLongerCycles(RainWorldTestBase):
         regions = [region.name for region in self.multiworld.get_regions(self.player)]
         self.assertIn("Submerged Superstructure", regions)
         self.assertIn("Shoreline near gate to Submerged", regions)
-        self.assertAccessDependency(["Submerged Superstructure - Arena Token - Rivulet"],
-                                    [["Longer Cycles"]], True)
+        self.assertAccessDependency(["Access-MS"],[["Longer Cycles"]], True)
+
+
+class TestChecksMetropolisAllSlugcats(RainWorldTestBase):
+    options = {"checks_metropolis": "all_slugcats", "is_msc_enabled": True, "which_campaign": "survivor"}
+
+    def test_check_generation(self):
+        regions = [region.name for region in self.multiworld.get_regions(self.player)]
+        self.assertIn("Metropolis", regions)
+
+
+class TestChecksMetropolisExpJump(RainWorldTestBase):
+    options = {"checks_metropolis": "only_explosive_jump", "is_msc_enabled": True, "which_campaign": "survivor",
+               "expedition_perks": ["Explosive Jump Perk"]}
+
+    def test_check_generation(self):
+        regions = [region.name for region in self.multiworld.get_regions(self.player)]
+        self.assertIn("Metropolis", regions)
+        self.assertAccessDependency(["Access-LC"], [["Explosive Jump Perk"]], True)
+
+
+class TestChecksMetropolisExpJumpArty(RainWorldTestBase):
+    options = {"checks_metropolis": "only_explosive_jump", "is_msc_enabled": True, "which_campaign": "artificer",
+               "expedition_perks": ["Explosive Jump Perk"]}
+
+    def test_check_generation(self):
+        regions = [region.name for region in self.multiworld.get_regions(self.player)]
+        self.assertIn("Metropolis", regions)
+        # Assert that Metropolis can be reached without the Explosive Jump Perk (because Arty has it innately)
+        state = CollectionState(self.multiworld)
+        self.collect_all_but("Explosive Jump Perk", state)
+        self.assertTrue(state.can_reach("Access-LC", "Location", self.player))
+
+
+class TestChecksMetropolisOnlyArty(RainWorldTestBase):
+    options = {"checks_metropolis": "only_artificer", "is_msc_enabled": True, "which_campaign": "survivor"}
+
+    def test_check_generation(self):
+        regions = [region.name for region in self.multiworld.get_regions(self.player)]
+        self.assertNotIn("Metropolis", regions)
+
+
+class TestChecksMetropolisOnlyArtyArty(RainWorldTestBase):
+    options = {"checks_metropolis": "only_artificer", "is_msc_enabled": True, "which_campaign": "artificer"}
+
+    def test_check_generation(self):
+        regions = [region.name for region in self.multiworld.get_regions(self.player)]
+        self.assertIn("Metropolis", regions)

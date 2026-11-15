@@ -90,7 +90,8 @@ gates_vanilla = {
     "SH_SL", "SB_SL", "SH_UW", "CC_UW", "SS_UW", "UW_SS", "SI_CC", "SI_LF", "LF_SB"
 }
 
-gates_msc_red = gates_vanilla.union({"HI_VS", "GW_SH", "DS_CC", "SL_VS", "SL_MS", "MS_SL", "SI_VS", "SB_VS", "UW_SL"})
+gates_msc_red = gates_vanilla.union({"HI_VS", "GW_SH", "DS_CC", "SL_VS", "SL_MS",
+                                     "MS_SL", "SI_VS", "SB_VS", "UW_SL", "UW_LC"})
 
 accessible_gates = {
     "Vanilla": {
@@ -102,11 +103,11 @@ accessible_gates = {
         "White": gates_vanilla.union(gates_msc_red).union({"SB_OE", "OE_SU"}),
         "Red": gates_vanilla.union(gates_msc_red),
         "Gourmand": gates_vanilla.union(gates_msc_red).union({"SB_OE", "OE_SU"}),
-        "Artificer": gates_vanilla.union(gates_msc_red).union({"UW_LC"}).difference({"SL_MS", "MS_SL"}),
+        "Artificer": gates_vanilla.union(gates_msc_red).difference({"SL_MS", "MS_SL"}),
         "Rivulet": gates_vanilla.union(gates_msc_red),
         "Spear": gates_vanilla.union(gates_msc_red).union({"SL_DM", "DM_SL"}).difference({"SL_MS", "MS_SL"}),
         "Saint": gates_vanilla.union(gates_msc_red).union({"SL_CL"}).difference(
-            {"SH_SL", "UW_SS", "SS_UW", "CC_UW", "SH_UW", "UW_SL"}
+            {"SH_SL", "UW_SS", "SS_UW", "CC_UW", "SH_UW", "UW_SL", "UW_LC"}
         ),
         "Inv": gates_vanilla.union(gates_msc_red),
         "Watcher": set()
