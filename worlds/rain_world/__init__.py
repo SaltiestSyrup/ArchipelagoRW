@@ -307,6 +307,9 @@ class RainWorldWorld(World):
         # ...which food quest checks are accessible.
         d["checks_foodquest_accessibility"] = (
             self.foodquest_accessibility_flag if self.options.checks_foodquest_expanded else 0)
+        # ...the actual status of these regions
+        d["submerged_populated"] = int(self.options.submerged_should_populate)
+        d["metropolis_populated"] = int(self.options.metropolis_should_populate)
 
         d["which_campaign"] = self.options.starting_scug
         d["apworld_version"] = self.world_version.as_simple_string()
