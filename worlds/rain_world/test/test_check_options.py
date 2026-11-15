@@ -82,3 +82,15 @@ class TestChecksSubmergedOff(RainWorldTestBase):
         regions = [region.name for region in self.multiworld.get_regions(self.player)]
         self.assertNotIn("Submerged Superstructure", regions)
         self.assertNotIn("Shoreline near gate to Submerged", regions)
+
+
+class TestChecksSubmergedLongerCycles(RainWorldTestBase):
+    options = {"checks_submerged": "all_slugcats", "difficulty_submerged": "longer_cycles",
+               "is_msc_enabled": True, "which_campaign": "Rivulet", "which_victory_conditon": "story"}
+
+    def test_check_generation(self):
+        regions = [region.name for region in self.multiworld.get_regions(self.player)]
+        self.assertIn("Submerged Superstructure", regions)
+        self.assertIn("Shoreline near gate to Submerged", regions)
+        self.assertAccessDependency(["Submerged Superstructure - Arena Token - Rivulet"],
+                                    [["Longer Cycles"]], True)

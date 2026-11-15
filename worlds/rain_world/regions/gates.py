@@ -128,7 +128,7 @@ class GateData:
                 left = False_()
                 right = False_()
             elif options.starting_scug == "Rivulet" and options.difficulty_submerged == 2:
-                left = Has("Disconnect_FP")
+                right = Has("Longer Cycles")
 
         if gg == "SL_MS":
             left = False_()

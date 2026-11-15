@@ -399,9 +399,11 @@ class ChecksShelters(Toggle):
 
 
 class ChecksSubmerged(Choice):
-    """Whether Submerged Superstructure has any checks.
+    """
+    Whether Submerged Superstructure has any checks.
     If only aquatic is chosen, checks will only be generated
-    if playing Rivulet or the Aquatic perk is in the item pool."""
+    if playing Rivulet or the Aquatic perk is in the item pool.
+    """
     display_name = "Include Submerged"
     option_all_slugcats = 2
     option_only_aquatic = 1
