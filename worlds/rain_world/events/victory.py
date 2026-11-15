@@ -45,14 +45,14 @@ def generate(options: RainWorldOptions) -> list[EventData]:
 
 
     # Watcher victory conditions should end with this one
-    if options.which_victory_condition == 3:
+    if food_quest:
         foods = [item.full_name for item in fq_items if item.should_generate(options)]
         # I sincerely apologize, the achievement based naming convention has been broken.
         return [VictoryEvent("Glutton", "Events", And(*[CanReachLocation(f) for f in foods]))]
 
     # For Saint, the MS echo can be substituted in place of a normal echo.
     # For better or worse, this is not accounted for in logic.
-    if options.which_victory_condition == 2:
+    if echoes:
         return [VictoryEvent("Pilgrimage", "Events", generate_cond_pilgrim(options))]
 
     # Saint's victory condition is different regardless of setting.

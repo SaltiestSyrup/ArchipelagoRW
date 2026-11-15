@@ -1302,9 +1302,6 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
             if (self.starting_scug == "Gourmand") + self.checks_foodquest.value < 2:
                 return "Food quest checks must be enabled to use food quest victory condition."
 
-        if self.starting_scug != "Watcher" and self.which_victory_condition == 4:
-            return "Victory condition 'True Ending' is not valid for any slugcat other than Watcher."
-
         return None
 
     @property
