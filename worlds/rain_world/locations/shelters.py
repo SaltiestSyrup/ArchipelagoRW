@@ -35,6 +35,6 @@ locations: dict[str, Shelter] = initialize()
 
 
 def select(options: RainWorldOptions) -> list[LocationData]:
-    if options.checks_sheltersanity:
+    if options.checks_shelters:
         return list(locations.values())
     return []

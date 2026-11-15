@@ -281,8 +281,8 @@ class RainWorldWorld(World):
             "checks_foodquest",  # ...whether the food quest should be available.
             "checks_broadcasts",  # ...whether broadcasts should be available.
             "checks_tokens_pearls",  # ...whether all tokens should be available.
-            "checks_sheltersanity",  # ...whether shelters are checks.
-            "checks_flowersanity",  # ...whether karma flowers are checks.
+            "checks_shelters",  # ...whether shelters are checks.
+            "checks_flowers",  # ...whether karma flowers are checks.
             "checks_devtokens",  # ...whether dev tokens should be checks.
             "which_victory_condition",  # ...which victory condition is a win.
             "which_gate_behavior",  # ...how gates should behave.
@@ -308,9 +308,12 @@ class RainWorldWorld(World):
         d["checks_foodquest_accessibility"] = (
             self.foodquest_accessibility_flag if self.options.checks_foodquest_expanded else 0)
 
-        # temp override
         d["which_campaign"] = self.options.starting_scug
         d["apworld_version"] = self.world_version.as_simple_string()
+
+        # Backwards compatibility
+        d["checks_flowersanity"] = d["checks_flowers"]
+        d["checks_sheltersanity"] = d["checks_shelters"]
 
         return d
 

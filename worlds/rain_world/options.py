@@ -392,7 +392,7 @@ class ChecksDevTokens(Toggle):
     default = False
 
 
-class ChecksSheltersanity(Toggle):
+class ChecksShelters(Toggle):
     """Whether each shelter is a check."""
     display_name = "Shelters"
     default = False
@@ -1067,14 +1067,14 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     checks_foodquest_expanded: ChecksFoodQuestExpanded
     passage_priority: PassagePriority
     checks_tokens_pearls: ChecksTokensPearls
-    checks_sheltersanity: ChecksSheltersanity
+    checks_shelters: ChecksShelters
     checks_submerged: ChecksSubmerged
-    checks_flowersanity: ChecksKarmaFlowers
+    checks_flowers: ChecksKarmaFlowers
     checks_devtokens: ChecksDevTokens
 
     group_checkpool = [
         ChecksPassages, ChecksBroadcasts, ChecksFoodQuest, ChecksFoodQuestExpanded, PassagePriority,
-        ChecksTokensPearls, ChecksDevTokens, ChecksSheltersanity, ChecksSubmerged, ChecksKarmaFlowers,
+        ChecksTokensPearls, ChecksDevTokens, ChecksShelters, ChecksSubmerged, ChecksKarmaFlowers,
     ]
 
     #################################################################
@@ -1263,8 +1263,8 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
                     "To disable traps, set `pct_traps` to 0.")
 
         optional_check_score = (
-            (2 if self.checks_sheltersanity else 0)
-            + (1 if self.checks_flowersanity else 0)
+            (2 if self.checks_shelters else 0)
+            + (1 if self.checks_flowers else 0)
             + (1 if self.checks_devtokens and self.msc_enabled else 0)
             + (1 if self.checks_foodquest and self.msc_enabled else 0)
         )
