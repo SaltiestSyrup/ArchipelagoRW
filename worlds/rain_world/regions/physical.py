@@ -91,12 +91,14 @@ def _generate(options: RainWorldOptions) -> list[PhysicalRegion | ConnectionData
 
 
             case "SS":
-                # Not in logic to go backwards through Five Pebbles puppet room.
+                # Citizen ID Drone needed to guarantee Five Pebbles can't kill you trying to backtrack through the chamber.
                 above = {"GATE_SS_UW[SS]", "SS_D08", "SS_S04", "SS_E08", "SS_D07", "SS_AI"}
                 ret += [
                     PhysicalRegion("Five Pebbles", "SS", rooms.difference(above)),
                     PhysicalRegion("Five Pebbles above puppet", "SS^", above),
-                    ConnectionData("Five Pebbles", "Five Pebbles above puppet", "Out the access shaft")
+                    ConnectionData("Five Pebbles", "Five Pebbles above puppet", "Out the access shaft"),
+                    ConnectionData("Five Pebbles above puppet", "Five Pebbles", "Backwards through puppet room",
+                                   Has("Citizen ID Drone"))
                 ]
 
             case "VS":
