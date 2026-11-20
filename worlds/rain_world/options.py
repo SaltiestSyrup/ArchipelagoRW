@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from random import Random
 
 from Options import PerGameCommonOptions, Toggle, Range, OptionGroup, Choice, ProgressionBalancing, Accessibility, \
-    Visibility, DeathLinkMixin, DeathLink, FreeText, OptionList, OptionCounter, OptionError
+    Visibility, DeathLinkMixin, DeathLink, FreeText, OptionList, OptionCounter, OptionError, OptionSet
 from .conditions import GameStateFlag
 from .game_data import static_data
 from .game_data.bitflag import ScugFlagMap
@@ -574,7 +574,7 @@ class UpgradesSpearDamage(Range):
     default = 6
 
 
-class ExpeditionPerks(OptionList):
+class ExpeditionPerks(OptionSet):
     """Choose which Expedition perks will be added to the item pool.
     If an ability in this list is given to a slugcat that innately has it, there is no effect.
     Explosive Jump, Aquatic, and Agility may be used in logic if they are present in the item pool.
