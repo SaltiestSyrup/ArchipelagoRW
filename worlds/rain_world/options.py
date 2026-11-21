@@ -1333,6 +1333,8 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
 
     @property
     def metropolis_should_populate(self) -> bool:
+        if self.starting_scug == "Saint":
+            return False
         if self.checks_metropolis == 2:
             return True
         if self.checks_metropolis == 1:
