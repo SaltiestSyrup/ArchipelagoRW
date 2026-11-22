@@ -118,10 +118,12 @@ class GateData:
                 left = Has("The Mark")
 
         if gg == "UW_LC":
-            if not (options.msc_enabled and options.starting_scug == "Artificer"):
-                left = False_()
-            else:
+            if options.metropolis_should_populate:
                 left = HasAll("The Mark", "Citizen ID Drone")
+                if options.checks_metropolis == 1 and options.starting_scug != "Artificer":
+                    left &= Has("Explosive Jump Perk")
+            else:
+                left = False_()
 
         if gg == "MS_SL":
             if not options.submerged_should_populate:

@@ -24,6 +24,8 @@ These fields can only be `0` (false) or `1` (true).
 | `daemon_keys`                | Whether Daemon warps need keys to open.                                       |
 | `sparse_gates`               | Whether the amount of gates in the item pool is minimized.                    |
 | `artificer_scavenger_karma`  | Whether Artificer's scavenger karma is randomized.                            |
+| `submerged_populated`        | Whether any checks were generated inside Submerged Superstructure.            |
+| `metropolis_populated`       | Whether any checks were generated inside Metropolis.                          |
 | `checks_tokens_pearls`       | Currently unused.                                                             |
 | `checks_broadcasts`          | Currently unused.                                                             |
 
@@ -36,8 +38,9 @@ Cells without a description are not valid values for that setting.
 |-------------------------------------|-------------------------------------------------------------------|--------------------------|---------------------|-----------------|------------|------------------------|---------------|---------------------------------|
 | `which_victory_condition`           | The win condition for the seed.                                   | Ascension / Spinning Top | Story / Prince      | Echoes / Weaver | Food Quest | Watcher True Ending    |               |                                 |
 | `which_gate_behavior`               | The requirement for a gate to be unlocked.                        | Key only                 | Key and karma       | Key or karma    | Karma only |                        |               |                                 |
-| `checks_foodquest`                  | Whether food quest checks are in the pool.                        | Off                      | Gourmand only       | All slugcats    |            |                        |               |                                 |
-| `checks_submerged`                  | Whether Submerged Superstructure checks are generated.            | Off                      | Aquatic only        | All slugcats    |            |                        |               |                                 |
+| `checks_foodquest`                  | Condition for food quest checks to be in the pool.                | Off                      | Gourmand only       | All slugcats    |            |                        |               |                                 |
+| `checks_submerged`                  | Condition for Submerged Superstructure checks to be generated.    | Off                      | Aquatic only        | All slugcats    |            |                        |               |                                 |
+| `checks_metropolis`                 | Condition for Metropolis checks to be generated.                  | Artificer only           | Explosive Jump only | All slugcats    |            |                        |               |                                 |
 | `difficulty_submerged`              | The condition needed to logically enter Submerged Superstructure. | None                     | Aquatic             | Longer Cycles   |            |                        |               |                                 |
 | `difficulty_echo_low_karma`         | The spawn condition for Echoes below Karma 5.                     | Never                    | With flower         | Without flower  | Unaltered  |                        |               |                                 |
 | `passage_progress_without_survivor` | Passage progress without Survivor behavior.                       | None                     | Disabled            | Enabled         | Bypassed   |                        |               |                                 |

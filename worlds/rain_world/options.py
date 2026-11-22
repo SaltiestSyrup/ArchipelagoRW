@@ -416,6 +416,23 @@ class ChecksSubmerged(Choice):
     default = 1
 
 
+class ChecksMetropolis(Choice):
+    """
+    Whether Metropolis can be accessed. When enabled, the Citizen ID Drone is added to the item pool. Both the drone and the Mark are required to open the gate.
+
+    If only explosive jump is chosen, the region will only generate if the Explosive Jump Perk is in the item pool (unless playing Artificer).
+    You will not be expected to enter the region until you acquire it.
+    """
+    display_name = "Include Metropolis"
+    option_all_slugcats = 2
+    option_only_explosive_jump = 1
+    option_only_artificer = 0
+
+    alias_true = 2
+    alias_false = 0
+    default = 0
+
+
 class ChecksKarmaFlowers(Toggle):
     """Whether each static karma flower spawn is a check."""
     display_name = "Karma Flowers"
@@ -1071,12 +1088,13 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     checks_tokens_pearls: ChecksTokensPearls
     checks_shelters: ChecksShelters
     checks_submerged: ChecksSubmerged
+    checks_metropolis: ChecksMetropolis
     checks_flowers: ChecksKarmaFlowers
     checks_devtokens: ChecksDevTokens
 
     group_checkpool = [
         ChecksPassages, ChecksBroadcasts, ChecksFoodQuest, ChecksFoodQuestExpanded, PassagePriority,
-        ChecksTokensPearls, ChecksDevTokens, ChecksShelters, ChecksSubmerged, ChecksKarmaFlowers,
+        ChecksTokensPearls, ChecksDevTokens, ChecksShelters, ChecksKarmaFlowers, ChecksSubmerged, ChecksMetropolis,
     ]
 
     #################################################################
@@ -1312,6 +1330,16 @@ class RainWorldOptions(PerGameCommonOptions, DeathLinkMixin):
     @property
     def submerged_should_populate(self) -> bool:
         return self.checks_submerged + (self.starting_scug == "Rivulet" or "Aquatic Perk" in self.expedition_perks.value) > 1
+
+    @property
+    def metropolis_should_populate(self) -> bool:
+        if self.starting_scug == "Saint":
+            return False
+        if self.checks_metropolis == 2:
+            return True
+        if self.checks_metropolis == 1:
+            return self.starting_scug == "Artificer" or "Explosive Jump Perk" in self.expedition_perks.value
+        return self.starting_scug == "Artificer"
 
     def get_nontrap_weight_dict(self) -> dict[str, float]:
 

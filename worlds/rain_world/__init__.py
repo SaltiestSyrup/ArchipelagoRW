@@ -195,7 +195,7 @@ class RainWorldWorld(World):
                 "The Mark": 1 if self.options.starting_scug != "Saint" else 0,
                 "The Glow": 1,
                 "Slag Key": 1 if self.options.starting_scug == "Red" else 0,
-                "Citizen ID Drone": 1 if self.options.starting_scug == "Artificer" else 0,
+                "Citizen ID Drone": 1 if self.options.metropolis_should_populate else 0,
                 "Scavenger Karma": 5 if self.options.starting_scug == "Artificer"
                                         and self.options.artificer_scavenger_karma else 0,
                 "Longer Cycles": 1 if self.options.starting_scug == "Rivulet" else 0,
@@ -289,16 +289,16 @@ class RainWorldWorld(World):
             "difficulty_echo_low_karma",  # ...how low-karma echo appearances should be handled.
             "rotted_region_target",  # ...how many regions must be rotted for Watcher's alt ending.
             "spinning_top_keys",  # ...whether Spinning Top warps need keys to open.
-            "checks_spread_rot", # ...whether spreading rot should be checks.
-            "checks_weaver_encounters", # ...whether encountering the Weaver should be checks.
-            "randomize_weaver", # ...whether the Weaver ability is randomized.
-            "randomize_passage_tokens", #...whether passage tokens are included in the item pool.
-            "artificer_scavenger_karma", #...whether Artificer's scavenger karma is randomized.
+            "checks_spread_rot",  # ...whether spreading rot should be checks.
+            "checks_weaver_encounters",  # ...whether encountering the Weaver should be checks.
+            "randomize_weaver",  # ...whether the Weaver ability is randomized.
+            "randomize_passage_tokens",  #...whether passage tokens are included in the item pool.
+            "artificer_scavenger_karma",  #...whether Artificer's scavenger karma is randomized.
 
             # External tracker needs to know...
             "difficulty_glow", "difficulty_monk", "difficulty_hunter", "difficulty_outlaw", "difficulty_chieftain",
             "difficulty_nomad", "difficulty_extreme_threats", "checks_submerged", "difficulty_submerged",
-            "checks_foodquest_expanded", "logic_rotted_generation", "logic_ripplespace_min_req",
+            "checks_metropolis", "checks_foodquest_expanded", "logic_rotted_generation", "logic_ripplespace_min_req",
             "expedition_perks", "daemon_keys", "sparse_gates",
         )
         # ...which room to spawn in.  Empty string for default.
@@ -307,6 +307,9 @@ class RainWorldWorld(World):
         # ...which food quest checks are accessible.
         d["checks_foodquest_accessibility"] = (
             self.foodquest_accessibility_flag if self.options.checks_foodquest_expanded else 0)
+        # ...the actual status of these regions
+        d["submerged_populated"] = int(self.options.submerged_should_populate)
+        d["metropolis_populated"] = int(self.options.metropolis_should_populate)
 
         d["which_campaign"] = self.options.starting_scug
         d["apworld_version"] = self.world_version.as_simple_string()

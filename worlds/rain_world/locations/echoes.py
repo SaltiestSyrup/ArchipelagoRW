@@ -46,7 +46,7 @@ def generate(options: RainWorldOptions) -> list[LocationData]:
         case "Watcher":
             return []
         case _:
-            # The LC echo does appear for every scug, but the region doesn't populate except for Artificer.
+            # The LC echo does appear for every scug, but the region doesn't always populate.
             keys = ["CC", "LF", "SI", "SB", "SH", "UW", "LC"]
 
     return [locations[key] for key in keys]
